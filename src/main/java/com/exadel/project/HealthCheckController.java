@@ -14,5 +14,4 @@ public class HealthCheckController {
     public ResponseEntity<String> get() {
         return ResponseEntity.ok("Hello World!");
     }
-
 }
