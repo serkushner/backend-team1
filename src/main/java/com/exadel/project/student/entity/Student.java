@@ -10,33 +10,37 @@ import javax.validation.constraints.*;
 @Table(name = "trainees")
 @Data
 @NoArgsConstructor
-public class Student {
+public class Trainees {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "trainee_id")
     private Long id;
 
+    @NotBlank
     @Size(min = 2,max = 30,message ="name should be from 2 to 30 symbols" )
     @Column(name = "name")
     private String name;
 
+    @NotBlank
     @Size(min = 2,max = 30,message ="surname should be from 2 to 30 symbols" )
     @Column(name = "surname")
     private String surname;
 
-    @NotEmpty(message = "Email should not be empty")
+    @NotBlank(message = "Email should not be empty")
     @Email(message = "Email should be valid")
-    @Column(name = "email")
+    @Column(name = "email",unique = true)
     private String email;
 
-    @NotNull
+    @NotBlank(message = "Phone should not be empty")
     @Column(name = "phone")
     private String phoneNumber;
 
+    @NotNull
     @Column(name = "country_id")
     private Long countryId;
 
+    @NotNull
     @Column(name = "status_id")
     private Long statusId;
 
@@ -47,7 +51,6 @@ public class Student {
     private String github;
 
     @Column(name = "linkedin")
-    @NotNull
     private String linkedin;
 
     @Column(name = "skype")
