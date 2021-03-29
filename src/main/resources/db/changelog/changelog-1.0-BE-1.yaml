@@ -1,0 +1,136 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-table-skill
+      author: fadin-sergey
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                  name: id
+                  type: bigint
+              - column:
+                  constraints:
+                    nullable: false
+                  name: skill_name
+                  type: VARCHAR(30)
+            tableName: skill
+  - changeSet:
+      id: create-table-internship
+      author: fadin-sergey
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                  name: id
+                  type: bigint
+            tableName: internship
+  - changeSet:
+      id: create-table-trainee
+      author: fadin-sergey
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                  name: id
+                  type: bigint
+            tableName: trainee
+  - changeSet:
+      id: create-table-additional-info
+      author: fadin-sergey
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                  name: id
+                  type: bigint
+              - column:
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: fk_trainee
+                    references: trainee(id)
+                  name: trainee_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: fk_internship
+                    references: internship(id)
+                  name: internship_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: additional_info
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: cv
+                  type: VARCHAR(30)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: github
+                  type: MEDIUMBLOB
+            tableName: additional_info
+  - changeSet:
+      id: create-table-internship_skill
+      author: fadin-sergey
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    primaryKey: true
+                    foreignKeyName: fk_internship_skill
+                    references: internship(id)
+                  name: internship_id
+                  type: bigint
+              - column:
+                  constraints:
+                    primaryKey: true
+                    foreignKeyName: fk_skill_internship
+                    references: skill(id)
+                  name: skill_id
+                  type: bigint
+              - column:
+                  constraints:
+                    nullable: false
+                  name: priority
+                  type: ENUM('HIGH', 'LOW')
+            tableName: internship_skill
+  - changeSet:
+      id: create-table-trainee_skill
+      author: fadin-sergey
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    primaryKey: true
+                    foreignKeyName: fk_trainee_skill
+                    references: trainee(id)
+                  name: trainee_id
+                  type: bigint
+              - column:
+                  constraints:
+                    primaryKey: true
+                    foreignKeyName: fk_skill_trainee
+                    references: skill(id)
+                  name: skill_id
+                  type: bigint
+            tableName: trainee_skill
