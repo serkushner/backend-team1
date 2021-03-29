@@ -1,0 +1,106 @@
+databaseChangeLog:
+  - logicalFilePath: data/changelog/db.changelog.master.yaml
+  - changeSet:
+      id: 111
+      author: Dima
+      changes:
+        - createTable:
+            tableName: administrators
+            columns:
+              - column:
+                  name: admin_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: login
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: password
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: phone
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: skype
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: surname
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role
+                  type: ENUM('admin','superadmin')
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 222
+      author: Dima
+      changes:
+        - createTable:
+            tableName: interview_periods
+            columns:
+              - column:
+                  name: interview_period_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: start
+                  type: Time
+                  constraints:
+                    nullable: false
+              - column:
+                  name: end
+                  type: Time
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 333
+      author: Dima
+      changes:
+        - createTable:
+            tableName: interview_period_trainee
+            columns:
+              - column:
+                  name: interview_period_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: interview_period_id
+                    references: interview_periods(interview_period_id)
+              - column:
+                  name: trainee_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    foreignKeyName: trainee_id
+                    references: trainees(trainee_id)
+
+
