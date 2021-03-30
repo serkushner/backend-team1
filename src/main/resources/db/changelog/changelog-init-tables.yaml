@@ -1,7 +1,12 @@
 databaseChangeLog:  
   -  changeSet:
-      id: 1
-      author: aleksei
+      id: 20210330.[BE-14]-create-interviewer-table
+      author: alekseikaliada@gmail.com
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: interviewer      
       changes:
         -  createTable:
             tableName: interviewer
@@ -36,13 +41,18 @@ databaseChangeLog:
                     nullable:  false
               -  column:
                   name: type
-                  type: enum('HR','tech')
+                  type: enum('HR','TECH')
                   constraints:
                     nullable:  false
   -  changeSet:  
-      id:  2  
-      author:  aleksei  
-      changes:  
+      id:  20210330.[BE-14]-create-interview_time-table
+      author:  alekseikaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: interview_time       
+      changes:     
         -  createTable:  
             tableName: interview_time 
             columns:  
@@ -54,19 +64,24 @@ databaseChangeLog:
                     primaryKey:  true  
                     nullable:  false  
               -  column:  
-                  name:  start
+                  name:  start_date
                   type:  datetime
                   constraints:
                     nullable: false
               -  column:  
-                  name:  end
+                  name:  end_date
                   type:  datetime
                   constraints:  
                     nullable:  false  
 
   -  changeSet:  
-      id:  3  
-      author:  aleksei  
+      id:  20210330.[BE-14]-create-interviewer_time-table
+      author:  alekseikaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: interviewer_time       
       changes:  
         -  createTable:  
             tableName:  interviewer_time  
@@ -91,8 +106,13 @@ databaseChangeLog:
                     nullable: false
                  
   - changeSet:
-      id: 4
-      author: fadin-sergey
+      id: 20210330.[BE-14]-create-skill-table
+      author: alekseikaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: skill        
       changes:
         - createTable:
             tableName: skill 
@@ -110,8 +130,13 @@ databaseChangeLog:
                   type: VARCHAR(30)
                             
   - changeSet:
-      id: 5
-      author: Dima
+      id: 20210330.[BE-14]-create-administrator-table
+      author: aliaksekaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: administrator      
       changes:
         - createTable:
             tableName: administrator
@@ -159,13 +184,18 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: role
-                  type: ENUM('admin','superadmin')
+                  type: ENUM('ADMIN','SUPERADMIN')
                   constraints:
                     nullable: false                 
                  
   - changeSet:
-      id: 6
-      author: Dima
+      id: 20210330.[BE-14]-create-interview_period-table
+      author: aliaksekaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: interview_period      
       changes:
         - createTable:
             tableName: interview_period
@@ -178,19 +208,24 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: start
+                  name: start_time
                   type: Time
                   constraints:
                     nullable: false
               - column:
-                  name: end
+                  name: end_time
                   type: Time
                   constraints:
                     nullable: false                 
                     
   - changeSet:
-      id: 7
-      author: aleksei
+      id: 20210330.[BE-14]-create-internship_type-table
+      author: aliaksekaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: internship_type       
       changes:
         - createTable:
             tableName: internship_type        
@@ -210,8 +245,13 @@ databaseChangeLog:
                     nullable:  false                     
                  
   - changeSet:
-      id: 8
-      author: naz-furdychka
+      id: 20210330.[BE-14]-create-internship-table
+      author: aliaksekaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: internship      
       changes:
         - createTable:
             tableName: internship          
@@ -236,33 +276,33 @@ databaseChangeLog:
               - column:
                   constraints:
                     nullable: false
-                  name: start_internship
+                  name: start_date
                   type: date                  
               - column:
                   constraints:
                     nullable: false
-                  name: end_internship
+                  name: end_date
                   type: date
               - column:
-                  name: start_request
+                  name: start_request_date
                   type: date
               - column:
-                  name: end_request
+                  name: end_request_date
                   type: date
               - column:
                   constraints:
                     nullable: false
                   name: description
-                  type: varchar(250)
+                  type: varchar(256)
               - column:
                   name: additional_info
-                  type: varchar(250)
+                  type: varchar(256)
               - column:
                   name: image
-                  type: varchar(250)
+                  type: varchar(256)
               - column:
                   name: format
-                  type: enum('online','offline')  
+                  type: enum('ONLINE','OFFLINE')  
               -  column:  
                   name:  type_id 
                   type:  bigint
@@ -274,8 +314,13 @@ databaseChangeLog:
                     nullable: false                  
                  
   - changeSet:
-      id: 9
-      author: naz-furdychka
+      id: 20210330.[BE-14]-create-subject-table
+      author: aliaksekaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: subject      
       changes:
         - createTable:
             tableName: subject
@@ -295,8 +340,13 @@ databaseChangeLog:
                   type: varchar(30)
                 
   - changeSet:
-      id: 10
-      author: naz-furdychka
+      id: 20210330.[BE-14]-create-country-table
+      author: aliaksekaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: country      
       changes:
         - createTable:
             tableName: country          
@@ -312,18 +362,23 @@ databaseChangeLog:
                   constraints:
                     unique: true                    
                     nullable: false
-                  name: country_code
+                  name: code
                   type: int
               - column:
                   constraints:
                     unique: true                    
                     nullable: false
-                  name: title
+                  name: name
                   type: varchar(30)
 
   - changeSet:
-      id: 11
-      author: naz-furdychka
+      id: 20210330.[BE-14]-create-internship_subject-table
+      author: aliaksekaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: internship_subject        
       changes:
         - createTable:
             tableName: internship_subject            
@@ -348,8 +403,13 @@ databaseChangeLog:
                   type: bigint
                  
   - changeSet:
-      id: 12
-      author: naz-furdychka
+      id: 20210330.[BE-14]-create-country_internship-table
+      author: aliaksekaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: country_internship       
       changes:
         - createTable:
             tableName: country_internship           
@@ -374,8 +434,13 @@ databaseChangeLog:
                   type: bigint
                   
   - changeSet:
-      id: 13
-      author: fadin-sergey
+      id: 20210330.[BE-14]-create-internship_skill-table
+      author: aliaksekaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: internship_skill        
       changes:
         - createTable:
             tableName: internship_skill        
@@ -404,8 +469,13 @@ databaseChangeLog:
                   type: ENUM('HIGH', 'LOW')                  
                   
   - changeSet:
-      id: 14
+      id: 20210330.[BE-14-create-messenger-table]
       author: shpakovski-sergei
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: messenger        
       changes:
         - createTable:
             tableName: messenger
@@ -424,8 +494,13 @@ databaseChangeLog:
                     nullable: false      
 
   - changeSet:
-      id: 15
-      author: shpakovski-sergei
+      id: 20210330.[BE-14]-create-trainee_status-table
+      author: aliaksekaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: trainee_status        
       changes:
         - createTable:
             tableName: trainee_status
@@ -444,8 +519,13 @@ databaseChangeLog:
                     nullable: false                    
            
   - changeSet:
-      id: 16
-      author: shpakovski-sergei
+      id: 20210330.[BE-14]-create-trainee-table
+      author: aliaksekaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: trainee      
       changes:
         - createTable:
             tableName: trainee
@@ -502,13 +582,22 @@ databaseChangeLog:
                   name: administrator_id
                   type: bigint
                   constraints:
-                    nullable: true
                     foreignKeyName: administrator
-                    references: administrator(id)                                                
+                    references: administrator(id)  
+              - column:
+                   name: recipient
+                   type: boolean
+                   constraints:
+                     nullable: false 
                  
   -  changeSet:  
-      id:  17 
-      author:  aleksei  
+      id:  20210330.[BE-14]-create-interview-table
+      author:  aliaksekaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: interview        
       changes:  
         -  createTable:  
             tableName:  interview
@@ -546,28 +635,16 @@ databaseChangeLog:
                     deleteCascade: true                                          
               -  column:
                   name: additional_info
-                  type: varchar(250)
-                  
-  - changeSet:
-      id: 18
-      author: shpakovski-sergei
-      changes:
-        - createTable:
-            tableName: mailing_recipient
-            columns:
-              - column:
-                 name: id
-                 type: bigint
-                 constraints:
-                   primaryKey: true
-                   nullable: false
-                   foreignKeyName: recipient_trainee
-                   references: trainee(id)
-                   deleteCascade: true                   
+                  type: varchar(256)              
 
   - changeSet:
-      id: 19
-      author: shpakovski-sergei
+      id: 20210330.[BE-14]-create-messenger_trainee-table
+      author: aliaksekaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: messenger_trainee       
       changes:
         - createTable:
             tableName: messenger_trainee
@@ -592,8 +669,13 @@ databaseChangeLog:
                     deleteCascade: true                    
 
   - changeSet:
-      id: 20
-      author: naz-furdychka
+      id: 20210330.[BE-14]-create-mark-table
+      author: aliaksekaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: mark      
       changes:
         - createTable:
             tableName: mark        
@@ -636,8 +718,13 @@ databaseChangeLog:
                   type: int
 
   - changeSet:
-      id: 21
-      author: Dima
+      id: 20210330.[BE-14]-create-interview_period_trainee-table
+      author: aliaksekaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: interview_period_trainee      
       changes:
         - createTable:
             tableName: interview_period_trainee
@@ -662,8 +749,13 @@ databaseChangeLog:
                     deleteCascade: true                       
 
   - changeSet:
-      id: 22
-      author: fadin-sergey
+      id: 20210330.[BE-14]-create-trainee_skill-table
+      author: aliaksekaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: trainee_skill      
       changes:
         - createTable:
             tableName: trainee_skill 
@@ -686,8 +778,13 @@ databaseChangeLog:
                   type: bigint
                      
   - changeSet:
-      id: 23
-      author: fadin-sergey
+      id: 20210330.[BE-14]-create-additional_info-table
+      author: aliaksekaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: additional_info      
       changes:
         - createTable:
             tableName: additional_info          
@@ -718,12 +815,12 @@ databaseChangeLog:
                   type: BIGINT
               - column:
                   name: additional_info
-                  type: VARCHAR(250)
+                  type: VARCHAR(256)
               - column:
                   name: cv
-                  type: varchar(250)
+                  type: varchar(256)
               - column:
                   constraints:
                     nullable: false
                   name: github
-                  type: VARCHAR(250)
+                  type: VARCHAR(256)
