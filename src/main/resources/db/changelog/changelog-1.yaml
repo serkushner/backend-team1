@@ -259,7 +259,7 @@ databaseChangeLog:
                   type: varchar(250)
               - column:
                   name: image
-                  type: mediumblob
+                  type: varchar(250)
               - column:
                   name: format
                   type: enum('online','offline')  
@@ -721,7 +721,7 @@ databaseChangeLog:
                   type: VARCHAR(250)
               - column:
                   name: cv
-                  type: MEDIUMBLOB
+                  type: varchar(250)
               - column:
                   constraints:
                     nullable: false
