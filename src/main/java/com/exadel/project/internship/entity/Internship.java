@@ -1,6 +1,6 @@
 package com.exadel.project.internship.entity;
 
-import com.exadel.internship_type.entity.InternshipType;
+import com.exadel.project.internship_type.entity.InternshipType;
 import lombok.Getter;
 import lombok.Setter;
 

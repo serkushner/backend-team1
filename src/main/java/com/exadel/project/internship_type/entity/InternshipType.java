@@ -1,4 +1,4 @@
-package com.exadel.internship_type.entity;
+package com.exadel.project.internship_type.entity;
 
 import com.exadel.project.internship.entity.Internship;
 import lombok.Getter;
