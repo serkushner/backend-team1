@@ -1,0 +1,729 @@
+databaseChangeLog:  
+  -  changeSet:
+      id: 1
+      author: aleksei
+      changes:
+        -  createTable:
+            tableName: interviewer
+            columns:
+              -  column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey:  true
+                    nullable:  false
+              -  column:
+                  name: name
+                  type: varchar(30)
+                  constraints:
+                    nullable:  false
+              -  column:
+                  name: surname
+                  type: varchar(30)
+                  constraints:
+                    nullable:  false
+              -  column:
+                  name: email
+                  type: varchar(30)
+                  constraints:
+                    unique: true
+                    nullable:  false
+              -  column:
+                  name: phone
+                  type: varchar(30)
+                  constraints:
+                    nullable:  false
+              -  column:
+                  name: type
+                  type: enum('HR','tech')
+                  constraints:
+                    nullable:  false
+  -  changeSet:  
+      id:  2  
+      author:  aleksei  
+      changes:  
+        -  createTable:  
+            tableName: interview_time 
+            columns:  
+              -  column:  
+                  name:  id  
+                  type:  bigint
+                  autoIncrement:  true  
+                  constraints:  
+                    primaryKey:  true  
+                    nullable:  false  
+              -  column:  
+                  name:  start
+                  type:  datetime
+                  constraints:
+                    nullable: false
+              -  column:  
+                  name:  end
+                  type:  datetime
+                  constraints:  
+                    nullable:  false  
+
+  -  changeSet:  
+      id:  3  
+      author:  aleksei  
+      changes:  
+        -  createTable:  
+            tableName:  interviewer_time  
+            columns:  
+              -  column:  
+                  name:  interviewer_id
+                  type:  bigint   
+                  constraints:
+                    primaryKey:  true  
+                    foreignKeyName:  interviewer_time
+                    references: interviewer(id)
+                    deleteCascade: true
+                    nullable:  false  
+              -  column:  
+                  name:  time_id 
+                  type:  bigint
+                  constraints:
+                    primaryKey: true
+                    foreignKeyName:  time_interviewer
+                    references: interview_time(id)
+                    deleteCascade: true                    
+                    nullable: false
+                 
+  - changeSet:
+      id: 4
+      author: fadin-sergey
+      changes:
+        - createTable:
+            tableName: skill 
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                  name: id
+                  type: bigint
+              - column:
+                  constraints:
+                    nullable: false
+                  name: skill_name
+                  type: VARCHAR(30)
+                            
+  - changeSet:
+      id: 5
+      author: Dima
+      changes:
+        - createTable:
+            tableName: administrator
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: login
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: password
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+                    unique: true                    
+              - column:
+                  name: phone
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: skype
+                  type: VARCHAR(30)
+              - column:
+                  name: name
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: surname
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role
+                  type: ENUM('admin','superadmin')
+                  constraints:
+                    nullable: false                 
+                 
+  - changeSet:
+      id: 6
+      author: Dima
+      changes:
+        - createTable:
+            tableName: interview_period
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: start
+                  type: Time
+                  constraints:
+                    nullable: false
+              - column:
+                  name: end
+                  type: Time
+                  constraints:
+                    nullable: false                 
+                    
+  - changeSet:
+      id: 7
+      author: aleksei
+      changes:
+        - createTable:
+            tableName: internship_type        
+            columns:
+              -  column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey:  true
+                    nullable:  false
+              -  column:
+                  name: type
+                  type: varchar(30)
+                  constraints:
+                    unique: true
+                    nullable:  false                     
+                 
+  - changeSet:
+      id: 8
+      author: naz-furdychka
+      changes:
+        - createTable:
+            tableName: internship          
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                  name: id
+                  type: bigint
+              - column:
+                  constraints:
+                    nullable: false
+                  name: title
+                  type: varchar(30)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: subject_id
+                  type: bigint
+              - column:
+                  constraints:
+                    nullable: false
+                  name: start_internship
+                  type: date                  
+              - column:
+                  constraints:
+                    nullable: false
+                  name: end_internship
+                  type: date
+              - column:
+                  name: start_request
+                  type: date
+              - column:
+                  name: end_request
+                  type: date
+              - column:
+                  constraints:
+                    nullable: false
+                  name: description
+                  type: varchar(250)
+              - column:
+                  name: additional_info
+                  type: varchar(250)
+              - column:
+                  name: image
+                  type: mediumblob
+              - column:
+                  name: format
+                  type: enum('online','offline')  
+              -  column:  
+                  name:  type_id 
+                  type:  bigint
+                  constraints:
+                    foreignKeyName:  fk_internship_type
+                    references: internship_type(id)
+                    deleteCascade: true                    
+                    ForeignKeyConstraint:
+                    nullable: false                  
+                 
+  - changeSet:
+      id: 9
+      author: naz-furdychka
+      changes:
+        - createTable:
+            tableName: subject
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                  name: id
+                  type: bigint
+              - column:
+                  constraints:
+                    unique: true
+                    nullable: false
+                  name: title
+                  type: varchar(30)
+                
+  - changeSet:
+      id: 10
+      author: naz-furdychka
+      changes:
+        - createTable:
+            tableName: country          
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                  name: id
+                  type: bigint
+              - column:
+                  constraints:
+                    unique: true                    
+                    nullable: false
+                  name: country_code
+                  type: int
+              - column:
+                  constraints:
+                    unique: true                    
+                    nullable: false
+                  name: title
+                  type: varchar(30)
+
+  - changeSet:
+      id: 11
+      author: naz-furdychka
+      changes:
+        - createTable:
+            tableName: internship_subject            
+            columns:
+              - column:
+                  constraints:
+                    primaryKey: true
+                    foreignKeyName: fk_internship_subject
+                    references: skill(id)
+                    deleteCascade: true                    
+                    nullable: false
+                  name: skill_id
+                  type: bigint
+              - column:
+                  constraints:
+                    primaryKey: true
+                    foreignKeyName: fk_subject_internship
+                    references: internship(id)
+                    deleteCascade: true                    
+                    nullable: false
+                  name: internship_id
+                  type: bigint
+                 
+  - changeSet:
+      id: 12
+      author: naz-furdychka
+      changes:
+        - createTable:
+            tableName: country_internship           
+            columns:
+              - column:
+                  constraints:
+                    primaryKey: true
+                    foreignKeyName: fk_country_internship
+                    references: country(id)
+                    deleteCascade: true                    
+                    nullable: false
+                  name: country_id
+                  type: bigint
+              - column:
+                  constraints:
+                    primaryKey: true
+                    foreignKeyName: fk_internship_country
+                    references: internship(id)
+                    deleteCascade: true                    
+                    nullable: false
+                  name: internship_id
+                  type: bigint
+                  
+  - changeSet:
+      id: 13
+      author: fadin-sergey
+      changes:
+        - createTable:
+            tableName: internship_skill        
+            columns:
+              - column:
+                  constraints:
+                    primaryKey: true
+                    foreignKeyName: fk_internship_skill
+                    references: internship(id)
+                    deleteCascade: true                    
+                    ForeignKeyConstraint:
+                  name: internship_id
+                  type: bigint
+              - column:
+                  constraints:
+                    primaryKey: true
+                    foreignKeyName: fk_skill_internship
+                    references: skill(id)
+                    deleteCascade: true                    
+                  name: skill_id
+                  type: bigint
+              - column:
+                  constraints:
+                    nullable: false
+                  name: priority
+                  type: ENUM('HIGH', 'LOW')                  
+                  
+  - changeSet:
+      id: 14
+      author: shpakovski-sergei
+      changes:
+        - createTable:
+            tableName: messenger
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    autoIncrement: true
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: title
+                  type: varchar(30)
+                  constraints:
+                    nullable: false      
+
+  - changeSet:
+      id: 15
+      author: shpakovski-sergei
+      changes:
+        - createTable:
+            tableName: trainee_status
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: title
+                  type: varchar(30)
+                  constraints:
+                    nullable: false                    
+           
+  - changeSet:
+      id: 16
+      author: shpakovski-sergei
+      changes:
+        - createTable:
+            tableName: trainee
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: surname
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(30)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: phone
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: country_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: trainee_country
+                    references: country(id)                                     
+              - column:
+                  name: status_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: status
+                    references: trainee_status(id)                    
+              - column:
+                  name: linkedin
+                  type: varchar(30)
+              - column:
+                  name: skype
+                  type: varchar(30)
+              - column:
+                  name: administrator_id
+                  type: bigint
+                  constraints:
+                    nullable: true
+                    foreignKeyName: administrator
+                    references: administrator(id)                                                
+                 
+  -  changeSet:  
+      id:  17 
+      author:  aleksei  
+      changes:  
+        -  createTable:  
+            tableName:  interview
+            columns:  
+              -  column:  
+                  name:  id
+                  type:  bigint  
+                  autoIncrement:  true  
+                  constraints:  
+                    primaryKey:  true  
+                    nullable:  false  
+              -  column:  
+                  name:  interviewer_id
+                  type:  bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName:  interviewer_interview
+                    references: interviewer(id)
+                    deleteCascade: true                                      
+              -  column:  
+                  name:  trainee_id 
+                  type:  bigint  
+                  constraints:  
+                    nullable:  false  
+                    foreignKeyName:  trainee_interview
+                    references: trainee(id)
+                    deleteCascade: true                                           
+              -  column:  
+                  name:  time_id 
+                  type:  bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName:  time_interview
+                    references: interview_time(id)
+                    deleteCascade: true                                          
+              -  column:
+                  name: additional_info
+                  type: varchar(250)
+                  
+  - changeSet:
+      id: 18
+      author: shpakovski-sergei
+      changes:
+        - createTable:
+            tableName: mailing_recipient
+            columns:
+              - column:
+                 name: id
+                 type: bigint
+                 constraints:
+                   primaryKey: true
+                   nullable: false
+                   foreignKeyName: recipient_trainee
+                   references: trainee(id)
+                   deleteCascade: true                   
+
+  - changeSet:
+      id: 19
+      author: shpakovski-sergei
+      changes:
+        - createTable:
+            tableName: messenger_trainee
+            columns:
+              - column:
+                  name: messenger_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: messenger_trainee
+                    references: messenger(id)
+                    deleteCascade: true                                         
+              - column:
+                  name: trainee_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: trainee_messenger
+                    references: trainee(id)  
+                    deleteCascade: true                    
+
+  - changeSet:
+      id: 20
+      author: naz-furdychka
+      changes:
+        - createTable:
+            tableName: mark        
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                  name: id
+                  type: bigint
+              - column:
+                  constraints:
+                    nullable: false
+                    foreignKeyName: mark_skill
+                    references: skill(id)
+                    deleteCascade: true                                            
+                  name: skill-id
+                  type: bigint
+              - column:
+                  constraints:
+                    nullable: false
+                    foreignKeyName: mark_trainee
+                    references: trainee(id)
+                    deleteCascade: true                                      
+                  name: trainee_id
+                  type: bigint
+              - column:
+                  constraints:
+                    nullable: false
+                    foreignKeyName: mark_internship
+                    references: internship(id)
+                    deleteCascade: true                                         
+                  name: internship_id
+                  type: bigint
+              - column:
+                  constraints:
+                    nullable: false
+                  name: mark
+                  type: int
+
+  - changeSet:
+      id: 21
+      author: Dima
+      changes:
+        - createTable:
+            tableName: interview_period_trainee
+            columns:
+              - column:
+                  name: interview_period_id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: interview_period_trainee
+                    references: interview_period(id)
+                    deleteCascade: true                                       
+              - column:
+                  name: trainee_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    foreignKeyName: trainee_interview_period
+                    references: trainee(id)
+                    deleteCascade: true                       
+
+  - changeSet:
+      id: 22
+      author: fadin-sergey
+      changes:
+        - createTable:
+            tableName: trainee_skill 
+            columns:
+              - column:
+                  constraints:
+                    primaryKey: true
+                    foreignKeyName: fk_trainee_skill
+                    references: trainee(id)
+                    deleteCascade: true                                      
+                  name: trainee_id
+                  type: bigint
+              - column:
+                  constraints:
+                    primaryKey: true
+                    foreignKeyName: fk_skill_trainee
+                    references: skill(id)
+                    deleteCascade: true                                        
+                  name: skill_id
+                  type: bigint
+                     
+  - changeSet:
+      id: 23
+      author: fadin-sergey
+      changes:
+        - createTable:
+            tableName: additional_info          
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                  name: id
+                  type: bigint
+              - column:
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: additional_info_trainee
+                    references: trainee(id)
+                    deleteCascade: true                                    
+                  name: trainee_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: additional_info_internship
+                    references: internship(id)
+                    deleteCascade: true                                    
+                  name: internship_id
+                  type: BIGINT
+              - column:
+                  name: additional_info
+                  type: VARCHAR(250)
+              - column:
+                  name: cv
+                  type: MEDIUMBLOB
+              - column:
+                  constraints:
+                    nullable: false
+                  name: github
+                  type: VARCHAR(250)
