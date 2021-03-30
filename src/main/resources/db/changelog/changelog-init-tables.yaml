@@ -1,0 +1,826 @@
+databaseChangeLog:  
+  -  changeSet:
+      id: 20210330.[BE-14]-create-interviewer-table
+      author: alekseikaliada@gmail.com
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: interviewer      
+      changes:
+        -  createTable:
+            tableName: interviewer
+            columns:
+              -  column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey:  true
+                    nullable:  false
+              -  column:
+                  name: name
+                  type: varchar(30)
+                  constraints:
+                    nullable:  false
+              -  column:
+                  name: surname
+                  type: varchar(30)
+                  constraints:
+                    nullable:  false
+              -  column:
+                  name: email
+                  type: varchar(30)
+                  constraints:
+                    unique: true
+                    nullable:  false
+              -  column:
+                  name: phone
+                  type: varchar(30)
+                  constraints:
+                    nullable:  false
+              -  column:
+                  name: type
+                  type: enum('HR','TECH')
+                  constraints:
+                    nullable:  false
+  -  changeSet:  
+      id:  20210330.[BE-14]-create-interview_time-table
+      author:  alekseikaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: interview_time       
+      changes:     
+        -  createTable:  
+            tableName: interview_time 
+            columns:  
+              -  column:  
+                  name:  id  
+                  type:  bigint
+                  autoIncrement:  true  
+                  constraints:  
+                    primaryKey:  true  
+                    nullable:  false  
+              -  column:  
+                  name:  start_date
+                  type:  datetime
+                  constraints:
+                    nullable: false
+              -  column:  
+                  name:  end_date
+                  type:  datetime
+                  constraints:  
+                    nullable:  false  
+
+  -  changeSet:  
+      id:  20210330.[BE-14]-create-interviewer_time-table
+      author:  alekseikaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: interviewer_time       
+      changes:  
+        -  createTable:  
+            tableName:  interviewer_time  
+            columns:  
+              -  column:  
+                  name:  interviewer_id
+                  type:  bigint   
+                  constraints:
+                    primaryKey:  true  
+                    foreignKeyName:  interviewer_time
+                    references: interviewer(id)
+                    deleteCascade: true
+                    nullable:  false  
+              -  column:  
+                  name:  time_id 
+                  type:  bigint
+                  constraints:
+                    primaryKey: true
+                    foreignKeyName:  time_interviewer
+                    references: interview_time(id)
+                    deleteCascade: true                    
+                    nullable: false
+                 
+  - changeSet:
+      id: 20210330.[BE-14]-create-skill-table
+      author: alekseikaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: skill        
+      changes:
+        - createTable:
+            tableName: skill 
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                  name: id
+                  type: bigint
+              - column:
+                  constraints:
+                    nullable: false
+                  name: skill_name
+                  type: VARCHAR(30)
+                            
+  - changeSet:
+      id: 20210330.[BE-14]-create-administrator-table
+      author: aliaksekaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: administrator      
+      changes:
+        - createTable:
+            tableName: administrator
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: login
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: password
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+                    unique: true                    
+              - column:
+                  name: phone
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: skype
+                  type: VARCHAR(30)
+              - column:
+                  name: name
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: surname
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role
+                  type: ENUM('ADMIN','SUPERADMIN')
+                  constraints:
+                    nullable: false                 
+                 
+  - changeSet:
+      id: 20210330.[BE-14]-create-interview_period-table
+      author: aliaksekaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: interview_period      
+      changes:
+        - createTable:
+            tableName: interview_period
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: start_time
+                  type: Time
+                  constraints:
+                    nullable: false
+              - column:
+                  name: end_time
+                  type: Time
+                  constraints:
+                    nullable: false                 
+                    
+  - changeSet:
+      id: 20210330.[BE-14]-create-internship_type-table
+      author: aliaksekaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: internship_type       
+      changes:
+        - createTable:
+            tableName: internship_type        
+            columns:
+              -  column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey:  true
+                    nullable:  false
+              -  column:
+                  name: type
+                  type: varchar(30)
+                  constraints:
+                    unique: true
+                    nullable:  false                     
+                 
+  - changeSet:
+      id: 20210330.[BE-14]-create-internship-table
+      author: aliaksekaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: internship      
+      changes:
+        - createTable:
+            tableName: internship          
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                  name: id
+                  type: bigint
+              - column:
+                  constraints:
+                    nullable: false
+                  name: title
+                  type: varchar(30)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: subject_id
+                  type: bigint
+              - column:
+                  constraints:
+                    nullable: false
+                  name: start_date
+                  type: date                  
+              - column:
+                  constraints:
+                    nullable: false
+                  name: end_date
+                  type: date
+              - column:
+                  name: start_request_date
+                  type: date
+              - column:
+                  name: end_request_date
+                  type: date
+              - column:
+                  constraints:
+                    nullable: false
+                  name: description
+                  type: varchar(256)
+              - column:
+                  name: additional_info
+                  type: varchar(256)
+              - column:
+                  name: image
+                  type: varchar(256)
+              - column:
+                  name: format
+                  type: enum('ONLINE','OFFLINE')  
+              -  column:  
+                  name:  type_id 
+                  type:  bigint
+                  constraints:
+                    foreignKeyName:  fk_internship_type
+                    references: internship_type(id)
+                    deleteCascade: true                    
+                    ForeignKeyConstraint:
+                    nullable: false                  
+                 
+  - changeSet:
+      id: 20210330.[BE-14]-create-subject-table
+      author: aliaksekaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: subject      
+      changes:
+        - createTable:
+            tableName: subject
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                  name: id
+                  type: bigint
+              - column:
+                  constraints:
+                    unique: true
+                    nullable: false
+                  name: title
+                  type: varchar(30)
+                
+  - changeSet:
+      id: 20210330.[BE-14]-create-country-table
+      author: aliaksekaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: country      
+      changes:
+        - createTable:
+            tableName: country          
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                  name: id
+                  type: bigint
+              - column:
+                  constraints:
+                    unique: true                    
+                    nullable: false
+                  name: code
+                  type: int
+              - column:
+                  constraints:
+                    unique: true                    
+                    nullable: false
+                  name: name
+                  type: varchar(30)
+
+  - changeSet:
+      id: 20210330.[BE-14]-create-internship_subject-table
+      author: aliaksekaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: internship_subject        
+      changes:
+        - createTable:
+            tableName: internship_subject            
+            columns:
+              - column:
+                  constraints:
+                    primaryKey: true
+                    foreignKeyName: fk_internship_subject
+                    references: skill(id)
+                    deleteCascade: true                    
+                    nullable: false
+                  name: skill_id
+                  type: bigint
+              - column:
+                  constraints:
+                    primaryKey: true
+                    foreignKeyName: fk_subject_internship
+                    references: internship(id)
+                    deleteCascade: true                    
+                    nullable: false
+                  name: internship_id
+                  type: bigint
+                 
+  - changeSet:
+      id: 20210330.[BE-14]-create-country_internship-table
+      author: aliaksekaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: country_internship       
+      changes:
+        - createTable:
+            tableName: country_internship           
+            columns:
+              - column:
+                  constraints:
+                    primaryKey: true
+                    foreignKeyName: fk_country_internship
+                    references: country(id)
+                    deleteCascade: true                    
+                    nullable: false
+                  name: country_id
+                  type: bigint
+              - column:
+                  constraints:
+                    primaryKey: true
+                    foreignKeyName: fk_internship_country
+                    references: internship(id)
+                    deleteCascade: true                    
+                    nullable: false
+                  name: internship_id
+                  type: bigint
+                  
+  - changeSet:
+      id: 20210330.[BE-14]-create-internship_skill-table
+      author: aliaksekaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: internship_skill        
+      changes:
+        - createTable:
+            tableName: internship_skill        
+            columns:
+              - column:
+                  constraints:
+                    primaryKey: true
+                    foreignKeyName: fk_internship_skill
+                    references: internship(id)
+                    deleteCascade: true                    
+                    ForeignKeyConstraint:
+                  name: internship_id
+                  type: bigint
+              - column:
+                  constraints:
+                    primaryKey: true
+                    foreignKeyName: fk_skill_internship
+                    references: skill(id)
+                    deleteCascade: true                    
+                  name: skill_id
+                  type: bigint
+              - column:
+                  constraints:
+                    nullable: false
+                  name: priority
+                  type: ENUM('HIGH', 'LOW')                  
+                  
+  - changeSet:
+      id: 20210330.[BE-14-create-messenger-table]
+      author: shpakovski-sergei
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: messenger        
+      changes:
+        - createTable:
+            tableName: messenger
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    autoIncrement: true
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: title
+                  type: varchar(30)
+                  constraints:
+                    nullable: false      
+
+  - changeSet:
+      id: 20210330.[BE-14]-create-trainee_status-table
+      author: aliaksekaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: trainee_status        
+      changes:
+        - createTable:
+            tableName: trainee_status
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: title
+                  type: varchar(30)
+                  constraints:
+                    nullable: false                    
+           
+  - changeSet:
+      id: 20210330.[BE-14]-create-trainee-table
+      author: aliaksekaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: trainee      
+      changes:
+        - createTable:
+            tableName: trainee
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: surname
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(30)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: phone
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: country_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: trainee_country
+                    references: country(id)                                     
+              - column:
+                  name: status_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: status
+                    references: trainee_status(id)                    
+              - column:
+                  name: linkedin
+                  type: varchar(30)
+              - column:
+                  name: skype
+                  type: varchar(30)
+              - column:
+                  name: administrator_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: administrator
+                    references: administrator(id)  
+              - column:
+                   name: recipient
+                   type: boolean
+                   constraints:
+                     nullable: false 
+                 
+  -  changeSet:  
+      id:  20210330.[BE-14]-create-interview-table
+      author:  aliaksekaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: interview        
+      changes:  
+        -  createTable:  
+            tableName:  interview
+            columns:  
+              -  column:  
+                  name:  id
+                  type:  bigint  
+                  autoIncrement:  true  
+                  constraints:  
+                    primaryKey:  true  
+                    nullable:  false  
+              -  column:  
+                  name:  interviewer_id
+                  type:  bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName:  interviewer_interview
+                    references: interviewer(id)
+                    deleteCascade: true                                      
+              -  column:  
+                  name:  trainee_id 
+                  type:  bigint  
+                  constraints:  
+                    nullable:  false  
+                    foreignKeyName:  trainee_interview
+                    references: trainee(id)
+                    deleteCascade: true                                           
+              -  column:  
+                  name:  time_id 
+                  type:  bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName:  time_interview
+                    references: interview_time(id)
+                    deleteCascade: true                                          
+              -  column:
+                  name: additional_info
+                  type: varchar(256)              
+
+  - changeSet:
+      id: 20210330.[BE-14]-create-messenger_trainee-table
+      author: aliaksekaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: messenger_trainee       
+      changes:
+        - createTable:
+            tableName: messenger_trainee
+            columns:
+              - column:
+                  name: messenger_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: messenger_trainee
+                    references: messenger(id)
+                    deleteCascade: true                                         
+              - column:
+                  name: trainee_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: trainee_messenger
+                    references: trainee(id)  
+                    deleteCascade: true                    
+
+  - changeSet:
+      id: 20210330.[BE-14]-create-mark-table
+      author: aliaksekaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: mark      
+      changes:
+        - createTable:
+            tableName: mark        
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                  name: id
+                  type: bigint
+              - column:
+                  constraints:
+                    nullable: false
+                    foreignKeyName: mark_skill
+                    references: skill(id)
+                    deleteCascade: true                                            
+                  name: skill-id
+                  type: bigint
+              - column:
+                  constraints:
+                    nullable: false
+                    foreignKeyName: mark_trainee
+                    references: trainee(id)
+                    deleteCascade: true                                      
+                  name: trainee_id
+                  type: bigint
+              - column:
+                  constraints:
+                    nullable: false
+                    foreignKeyName: mark_internship
+                    references: internship(id)
+                    deleteCascade: true                                         
+                  name: internship_id
+                  type: bigint
+              - column:
+                  constraints:
+                    nullable: false
+                  name: mark
+                  type: int
+
+  - changeSet:
+      id: 20210330.[BE-14]-create-interview_period_trainee-table
+      author: aliaksekaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: interview_period_trainee      
+      changes:
+        - createTable:
+            tableName: interview_period_trainee
+            columns:
+              - column:
+                  name: interview_period_id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: interview_period_trainee
+                    references: interview_period(id)
+                    deleteCascade: true                                       
+              - column:
+                  name: trainee_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    foreignKeyName: trainee_interview_period
+                    references: trainee(id)
+                    deleteCascade: true                       
+
+  - changeSet:
+      id: 20210330.[BE-14]-create-trainee_skill-table
+      author: aliaksekaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: trainee_skill      
+      changes:
+        - createTable:
+            tableName: trainee_skill 
+            columns:
+              - column:
+                  constraints:
+                    primaryKey: true
+                    foreignKeyName: fk_trainee_skill
+                    references: trainee(id)
+                    deleteCascade: true                                      
+                  name: trainee_id
+                  type: bigint
+              - column:
+                  constraints:
+                    primaryKey: true
+                    foreignKeyName: fk_skill_trainee
+                    references: skill(id)
+                    deleteCascade: true                                        
+                  name: skill_id
+                  type: bigint
+                     
+  - changeSet:
+      id: 20210330.[BE-14]-create-additional_info-table
+      author: aliaksekaliada@gmail
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: additional_info      
+      changes:
+        - createTable:
+            tableName: additional_info          
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                  name: id
+                  type: bigint
+              - column:
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: additional_info_trainee
+                    references: trainee(id)
+                    deleteCascade: true                                    
+                  name: trainee_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: additional_info_internship
+                    references: internship(id)
+                    deleteCascade: true                                    
+                  name: internship_id
+                  type: BIGINT
+              - column:
+                  name: additional_info
+                  type: VARCHAR(256)
+              - column:
+                  name: cv
+                  type: varchar(256)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: github
+                  type: VARCHAR(256)
