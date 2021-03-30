@@ -25,5 +25,5 @@ public class InternshipType {
     private String type;
 
     @OneToMany(mappedBy="internship_type")
-    private List<Internship> comments = new ArrayList<>();
+    private List<Internship> internships = new ArrayList<>();
 }
