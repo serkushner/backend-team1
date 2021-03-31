@@ -393,7 +393,7 @@ databaseChangeLog:
                     references: subject(id)
                     deleteCascade: true                    
                     nullable: false
-                  name: skill_id
+                  name: subject_id
                   type: bigint
               - column:
                   constraints:
