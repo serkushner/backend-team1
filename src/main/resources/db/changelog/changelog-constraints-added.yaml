@@ -3,21 +3,43 @@ databaseChangeLog:
       id: 20210331.[BE-15]-simplify_primary_key
       author: shpaser3@yandex
       preConditions:
-        - onFail: HALT
+        - onFail: MARK_RAN
         - tableExists:
             tableName: additional_info
       changes:
-      - dropPrimaryKey:
-          tableName: additional_info
-      - addPrimaryKey:
-          tableName: additional_info
-          columnNames: id
+        - renameColumn:
+            columnDataType: bigint
+            oldColumnName: id
+            newColumnName: oldId
+            tableName: additional_info
+        - addColumn:
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+            tableName: additional_info
+        - sql:
+            sql: |
+              update additional_info set id = oldId;
+        - dropPrimaryKey:
+            tableName: additional_info
+        - addNotNullConstraint:
+            columnDataType: bigint
+            columnName: id
+            tableName: additional_info
+        - addPrimaryKey:
+            columnNames: id
+            constraintName: additional_info_PK
+            tableName: additional_info
+        - dropColumn:
+            columnName: oldId
+            tableName: additional_info
 
   - changeSet:
       id: 20210331.[BE-15]-additional_info-unique
       author: shpaser3@yandex
       preConditions:
-        - onFail: HALT
+        - onFail: MARK_RAN
         - tableExists:
             tableName: additional_info
       changes:
@@ -30,12 +52,15 @@ databaseChangeLog:
       id: 20210331.[BE-15]-resolve_mistake_in_internship_subject
       author: shpaser3@yandex
       preConditions:
-        - onFail: HALT
+        - onFail: MARK_RAN
         - tableExists:
             tableName: internship_subject
+        - columnExists:
+            columnName: skill_id
       changes:
         - renameColumn:
             tableName:  internship_subject
+            columnDataType: bigint
             oldColumnName:  skill_id
             newColumnName:  subject_id
 
@@ -43,12 +68,13 @@ databaseChangeLog:
       id: 20210331.[BE-15]-renaming_in_internship
       author: shpaser3@yandex
       preConditions:
-        - onFail: HALT
+        - onFail: MARK_RAN
         - tableExists:
-            tableName: internship_subject
+            tableName: internship
       changes:
         - renameColumn:
-            tableName: internship_subject
+            tableName: internship
+            columnDataType: bigint
             oldColumnName: title
             newColumnName: name
 
@@ -56,12 +82,13 @@ databaseChangeLog:
       id: 20210331.[BE-15]-renaming_in_subject
       author: shpaser3@yandex
       preConditions:
-        - onFail: HALT
+        - onFail: MARK_RAN
         - tableExists:
             tableName: subject
       changes:
         - renameColumn:
             tableName: subject
+            columnDataType: bigint
             oldColumnName: title
             newColumnName: name
 
@@ -69,12 +96,13 @@ databaseChangeLog:
       id: 20210331.[BE-15]-renaming_in_messenger
       author: shpaser3@yandex
       preConditions:
-        - onFail: HALT
+        - onFail: MARK_RAN
         - tableExists:
             tableName: messenger
       changes:
         - renameColumn:
             tableName: messenger
+            columnDataType: bigint
             oldColumnName: title
             newColumnName: name
 
@@ -82,12 +110,13 @@ databaseChangeLog:
       id: 20210331.[BE-15]-renaming_in_trainee_status
       author: shpaser3@yandex
       preConditions:
-        - onFail: HALT
+        - onFail: MARK_RAN
         - tableExists:
             tableName: trainee_status
       changes:
         - renameColumn:
             tableName: trainee_status
+            columnDataType: bigint
             oldColumnName: title
             newColumnName: name
 
@@ -95,7 +124,7 @@ databaseChangeLog:
       id: 20210331.[BE-15]-trainee_fk_admin_set_null_on-delete
       author: shpaser3@yandex
       preConditions:
-        - onFail: HALT
+        - onFail: MARK_RAN
         - tableExists:
             tableName: trainee
       changes:
@@ -111,11 +140,12 @@ databaseChangeLog:
       id: 20210331.[BE-15]-trainee_fk_country_drop_not_null
       author: shpaser3@yandex
       preConditions:
-        - onFail: HALT
+        - onFail: MARK_RAN
         - tableExists:
             tableName: trainee
       changes:
         - dropNotNullConstraint:
+            columnDataType: bigint
             tableName: trainee
             columnName: country_id
 
@@ -123,17 +153,24 @@ databaseChangeLog:
       id: 20210331.[BE-15]-trainee_fk_status_drop_not_null
       author: shpaser3@yandex
       preConditions:
-        - onFail: HALT
+        - onFail: MARK_RAN
         - tableExists:
             tableName: trainee
       changes:
         - dropNotNullConstraint:
+            columnDataType: bigint
             tableName: trainee
             columnName: status_id
 
   - changeSet:
       id: 20210331.[BE-15]-trainee_fk_country_set_null_on-delete
       author: shpaser3@yandex
+      preConditions:
+        - onFail: MARK_RAN
+        - tableExists:
+            tableName: trainee
+        - tableExists:
+            tableName: country
       changes:
         - addForeignKeyConstraint:
             constraintName: fk_deletion_set_null_trainee_country
@@ -146,6 +183,12 @@ databaseChangeLog:
   - changeSet:
       id: 20210331.[BE-15]-trainee_fk_status_set_null_on-delete
       author: shpaser3@yandex
+      preConditions:
+        - onFail: MARK_RAN
+        - tableExists:
+            tableName: trainee
+        - tableExists:
+            tableName: trainee_status
       changes:
         - addForeignKeyConstraint:
             constraintName: fk_deletion_set_null_status
