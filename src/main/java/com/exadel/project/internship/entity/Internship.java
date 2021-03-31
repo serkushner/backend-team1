@@ -1,12 +1,10 @@
 package com.exadel.project.internship.entity;
 
-
 import lombok.Data;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -30,26 +28,26 @@ public class Internship {
     private List<Subject> subjects = new ArrayList<>();
 
     @Column(name = "start_date", nullable = false)
-    private Date start_date;
+    private LocalDate startDate;
 
 
     @Column(name = "end_date", nullable = false)
-    private Date end_date;
+    private LocalDate endDate;
 
 
     @Column(name = "start_request_date")
-    private Date start_request_date;
+    private LocalDate startRequestDate;
 
 
     @Column(name = "end_request_date")
-    private Date end_request_date;
+    private LocalDate endRequestDate;
 
     @NotBlank(message = "Description of internship should not be empty")
     @Column(name = "description")
     private String description;
 
     @Column(name = "additional_info")
-    private String additional_info;
+    private String additionalInfo;
 
     @Column(name = "image")
     private String image;
@@ -60,7 +58,7 @@ public class Internship {
 
     @ManyToOne
     @JoinColumn(name = "type_id")
-    private InternshipType internship_type;
+    private InternshipType internshipType;
 
 
 }

@@ -1,8 +1,6 @@
 package com.exadel.project.internship.entity;
 
-
 import lombok.Data;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
@@ -13,7 +11,7 @@ import java.util.List;
 @Table(name = "internship_type")
 public class InternshipType {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
