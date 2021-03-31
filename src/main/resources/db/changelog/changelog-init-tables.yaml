@@ -44,6 +44,9 @@ databaseChangeLog:
                   type: enum('HR','TECH')
                   constraints:
                     nullable:  false
+              - column:
+                  name: skype
+                  type: VARCHAR(30)
   -  changeSet:  
       id:  20210330.[BE-14]-create-interview_time-table
       author:  alekseikaliada@gmail
@@ -387,7 +390,7 @@ databaseChangeLog:
                   constraints:
                     primaryKey: true
                     foreignKeyName: fk_internship_subject
-                    references: skill(id)
+                    references: subject(id)
                     deleteCascade: true                    
                     nullable: false
                   name: skill_id
@@ -483,8 +486,8 @@ databaseChangeLog:
               - column:
                   name: id
                   type: bigint
+                  autoIncrement: true
                   constraints:
-                    autoIncrement: true
                     primaryKey: true
                     nullable: false
               - column:
@@ -657,7 +660,7 @@ databaseChangeLog:
                     nullable: false
                     foreignKeyName: messenger_trainee
                     references: messenger(id)
-                    deleteCascade: true                                         
+                    deleteCascade: true
               - column:
                   name: trainee_id
                   type: bigint
@@ -665,8 +668,8 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
                     foreignKeyName: trainee_messenger
-                    references: trainee(id)  
-                    deleteCascade: true                    
+                    references: trainee(id)
+                    deleteCascade: true
 
   - changeSet:
       id: 20210330.[BE-14]-create-mark-table
@@ -821,6 +824,5 @@ databaseChangeLog:
                   type: varchar(256)
               - column:
                   constraints:
-                    nullable: false
                   name: github
                   type: VARCHAR(256)
