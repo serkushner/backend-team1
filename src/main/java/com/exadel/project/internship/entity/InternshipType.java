@@ -19,6 +19,6 @@ public class InternshipType {
     @Column(name = "type",nullable = false)
     private String type;
 
-    @OneToMany(mappedBy="internship_type")
+    @OneToMany(mappedBy="internshipType")
     private List<Internship> internships = new ArrayList<>();
 }
