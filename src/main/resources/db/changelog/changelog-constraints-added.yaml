@@ -1,0 +1,156 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20210331.[BE-15]-simplify_primary_key
+      author: shpaser3@yandex
+      preConditions:
+        - onFail: HALT
+        - tableExists:
+            tableName: additional_info
+      changes:
+      - dropPrimaryKey:
+          tableName: additional_info
+      - addPrimaryKey:
+          tableName: additional_info
+          columnNames: id
+
+  - changeSet:
+      id: 20210331.[BE-15]-additional_info-unique
+      author: shpaser3@yandex
+      preConditions:
+        - onFail: HALT
+        - tableExists:
+            tableName: additional_info
+      changes:
+        - addUniqueConstraint:
+            tableName: additional_info
+            columnNames: trainee_id, internship_id
+            constraintName: one_email_per_internship
+
+  - changeSet:
+      id: 20210331.[BE-15]-resolve_mistake_in_internship_subject
+      author: shpaser3@yandex
+      preConditions:
+        - onFail: HALT
+        - tableExists:
+            tableName: internship_subject
+      changes:
+        - renameColumn:
+            tableName:  internship_subject
+            oldColumnName:  skill_id
+            newColumnName:  subject_id
+
+  - changeSet:
+      id: 20210331.[BE-15]-renaming_in_internship
+      author: shpaser3@yandex
+      preConditions:
+        - onFail: HALT
+        - tableExists:
+            tableName: internship_subject
+      changes:
+        - renameColumn:
+            tableName: internship_subject
+            oldColumnName: title
+            newColumnName: name
+
+  - changeSet:
+      id: 20210331.[BE-15]-renaming_in_subject
+      author: shpaser3@yandex
+      preConditions:
+        - onFail: HALT
+        - tableExists:
+            tableName: subject
+      changes:
+        - renameColumn:
+            tableName: subject
+            oldColumnName: title
+            newColumnName: name
+
+  - changeSet:
+      id: 20210331.[BE-15]-renaming_in_messenger
+      author: shpaser3@yandex
+      preConditions:
+        - onFail: HALT
+        - tableExists:
+            tableName: messenger
+      changes:
+        - renameColumn:
+            tableName: messenger
+            oldColumnName: title
+            newColumnName: name
+
+  - changeSet:
+      id: 20210331.[BE-15]-renaming_in_trainee_status
+      author: shpaser3@yandex
+      preConditions:
+        - onFail: HALT
+        - tableExists:
+            tableName: trainee_status
+      changes:
+        - renameColumn:
+            tableName: trainee_status
+            oldColumnName: title
+            newColumnName: name
+
+  - changeSet:
+      id: 20210331.[BE-15]-trainee_fk_admin_set_null_on-delete
+      author: shpaser3@yandex
+      preConditions:
+        - onFail: HALT
+        - tableExists:
+            tableName: trainee
+      changes:
+        - addForeignKeyConstraint:
+            constraintName: fk_deletion_set_null_administrator
+            baseTableName: trainee
+            baseColumnNames: administrator_id
+            onDelete: 'SET NULL'
+            referencedTableName: administrator
+            referencedColumnNames: id
+
+  - changeSet:
+      id: 20210331.[BE-15]-trainee_fk_country_drop_not_null
+      author: shpaser3@yandex
+      preConditions:
+        - onFail: HALT
+        - tableExists:
+            tableName: trainee
+      changes:
+        - dropNotNullConstraint:
+            tableName: trainee
+            columnName: country_id
+
+  - changeSet:
+      id: 20210331.[BE-15]-trainee_fk_status_drop_not_null
+      author: shpaser3@yandex
+      preConditions:
+        - onFail: HALT
+        - tableExists:
+            tableName: trainee
+      changes:
+        - dropNotNullConstraint:
+            tableName: trainee
+            columnName: status_id
+
+  - changeSet:
+      id: 20210331.[BE-15]-trainee_fk_country_set_null_on-delete
+      author: shpaser3@yandex
+      changes:
+        - addForeignKeyConstraint:
+            constraintName: fk_deletion_set_null_trainee_country
+            baseTableName: trainee
+            baseColumnNames: country_id
+            onDelete: 'SET NULL'
+            referencedTableName: country
+            referencedColumnNames: id
+
+  - changeSet:
+      id: 20210331.[BE-15]-trainee_fk_status_set_null_on-delete
+      author: shpaser3@yandex
+      changes:
+        - addForeignKeyConstraint:
+            constraintName: fk_deletion_set_null_status
+            baseTableName: trainee
+            baseColumnNames: status_id
+            onDelete: 'SET NULL'
+            referencedTableName: trainee_status
+            referencedColumnNames: id
