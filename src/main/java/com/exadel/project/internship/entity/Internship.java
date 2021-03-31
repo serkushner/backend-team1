@@ -5,8 +5,8 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -22,27 +22,27 @@ public class Internship {
     @Column(name = "title")
     private String title;
 
-    @ManyToMany() //add cascade types
+    @ManyToMany
     @JoinTable(name = "internship_subject",
             joinColumns = @JoinColumn(name = "internship_id"),
-            inverseJoinColumns = @JoinColumn(name = "skill_id")
+            inverseJoinColumns = @JoinColumn(name = "subject_id")
     )
     private List<Subject> subjects = new ArrayList<>();
 
     @Column(name = "start_date", nullable = false)
-    private java.sql.Date start_date;
+    private Date start_date;
 
 
     @Column(name = "end_date", nullable = false)
-    private java.sql.Date end_date;
+    private Date end_date;
 
 
     @Column(name = "start_request_date")
-    private java.sql.Date start_request_date;
+    private Date start_request_date;
 
 
     @Column(name = "end_request_date")
-    private java.sql.Date end_request_date;
+    private Date end_request_date;
 
     @NotBlank(message = "Description of internship should not be empty")
     @Column(name = "description")
