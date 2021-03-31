@@ -53,7 +53,7 @@ public class Internship {
     private String image;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "format")
+    @Column(name = "format", columnDefinition="ENUM('ONLINE','OFFLINE')")
     private Format format;
 
     @ManyToOne
