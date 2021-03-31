@@ -1,52 +1,56 @@
 package com.exadel.project.internship.entity;
 
-import com.exadel.project.internship_type.entity.InternshipType;
-import lombok.Getter;
-import lombok.Setter;
+
+import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
+@Data
 @Entity
 @Table(name = "internship")
-@Setter
-@Getter
 public class Internship {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @NotBlank(message = "Title should not be empty")
+    @NotBlank(message = "Title of internship should not be empty")
     @Column(name = "title")
     private String title;
 
-    @NotNull
-    @Column(name = "start_internship")
-    private java.sql.Date start_internship;
+    @ManyToMany() //add cascade types
+    @JoinTable(name = "internship_subject",
+            joinColumns = @JoinColumn(name = "internship_id"),
+            inverseJoinColumns = @JoinColumn(name = "skill_id")
+    )
+    private List<Subject> subjects = new ArrayList<>();
 
-    @NotNull
-    @Column(name = "end_internship")
-    private java.sql.Date end_internship;
+    @Column(name = "start_date", nullable = false)
+    private java.sql.Date start_date;
 
-    @NotNull
-    @Column(name = "start_request")
-    private java.sql.Date start_request;
 
-    @NotNull
-    @Column(name = "end_request")
-    private java.sql.Date end_request;
+    @Column(name = "end_date", nullable = false)
+    private java.sql.Date end_date;
 
-    @NotBlank(message = "Description should not be empty")
+
+    @Column(name = "start_request_date")
+    private java.sql.Date start_request_date;
+
+
+    @Column(name = "end_request_date")
+    private java.sql.Date end_request_date;
+
+    @NotBlank(message = "Description of internship should not be empty")
     @Column(name = "description")
     private String description;
 
-    @NotBlank(message = "Additional info should not be empty")
     @Column(name = "additional_info")
     private String additional_info;
 
-    @NotNull
     @Column(name = "image")
     private String image;
 
