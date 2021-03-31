@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-
 @Repository
 public interface SkillRepository extends JpaRepository<Skill, Long> {
     List<Skill> findByIdIn(List<Long> ids);

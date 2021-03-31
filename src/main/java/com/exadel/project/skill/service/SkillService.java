@@ -22,11 +22,6 @@ public class SkillService {
     }
 
     public Skill getSkillById(Long id) throws EntityNotFoundException {
-        Optional<Skill> optionalSkill = skillRepository.findById(id);
-        if (optionalSkill.isPresent()){
-            return optionalSkill.get();
-        }else {
-            throw new EntityNotFoundException();
-        }
+        return skillRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 }
