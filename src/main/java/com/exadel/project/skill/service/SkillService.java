@@ -1,27 +1,17 @@
 package com.exadel.project.skill.service;
 
-import com.exadel.project.common.exception.EntityNotFoundException;
+import com.exadel.project.common.service.CommonService;
 import com.exadel.project.skill.entity.Skill;
 import com.exadel.project.skill.repository.SkillRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.*;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class SkillService {
-    private SkillRepository skillRepository;
-
-    public List<Skill> getAllSkills(){
-        return skillRepository.findAll();
-    }
+public class SkillService extends CommonService<Skill, SkillRepository> {
 
     public List<Skill> getSkillsByIds(List<Long> ids){
-        return skillRepository.findByIdIn(ids);
-    }
-
-    public Skill getSkillById(Long id) throws EntityNotFoundException {
-        return skillRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        return getRepository().findByIdIn(ids);
     }
 }
