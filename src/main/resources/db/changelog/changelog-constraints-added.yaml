@@ -70,7 +70,7 @@ databaseChangeLog:
             - columnExists:
                 tableName: internship
                 columnName: name
-        changes:
+      changes:
         - renameColumn:
             tableName: internship
             columnDataType: bigint
