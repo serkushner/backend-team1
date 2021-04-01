@@ -1,4 +1,4 @@
-package com.exadel.project.service;
+package com.exadel.project.generic_service;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;

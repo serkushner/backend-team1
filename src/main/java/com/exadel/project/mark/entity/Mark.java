@@ -1,13 +1,12 @@
-package com.exadel.project.entity;
+package com.exadel.project.mark.entity;
 
+import com.exadel.project.trainee.entity.Trainee;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,29 +15,26 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "messenger")
-public class Messenger {
+@Table(name = "mark")
+public class Mark {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "messenger_id")
+    @Column(name = "mark_id")
     private Long id;
 
-    @NotBlank
-    @Size(min = 2, max = 30, message = "title should be from 2 to 30 symbols")
-    @Column(name = "title")
-    private String title;
+    @Column(name = "mark")
+    private Integer mark;
 
-    @OneToMany(mappedBy = "messenger", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "mark", cascade = CascadeType.ALL)
     private List<Trainee> trainees = new ArrayList<>();
 
     public void setTrainee(List<Trainee> trainees) {
         if (trainees != null) {
             trainees.forEach(a -> {
-                a.setMessenger(this);
+                a.setMark(this);
             });
         }
         this.trainees = trainees;
     }
-
 }

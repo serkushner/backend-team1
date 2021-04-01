@@ -1,7 +1,8 @@
-package com.exadel.project.entity;
+package com.exadel.project.administrator.entity;
 
 
 
+import com.exadel.project.trainee.entity.Trainee;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

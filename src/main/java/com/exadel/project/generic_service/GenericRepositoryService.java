@@ -1,4 +1,4 @@
-package com.exadel.project.service;
+package com.exadel.project.generic_service;
 
 import java.util.List;
 

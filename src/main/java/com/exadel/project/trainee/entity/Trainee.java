@@ -1,7 +1,11 @@
-package com.exadel.project.entity;
+package com.exadel.project.trainee.entity;
 
+import com.exadel.project.administrator.entity.Administrator;
+import com.exadel.project.interview.etity.Interview;
+import com.exadel.project.messenger.entity.Messenger;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.exadel.project.mark.entity.Mark;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;

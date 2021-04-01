@@ -1,6 +1,8 @@
-package com.exadel.project.entity;
+package com.exadel.project.interviewer.entity;
 
 
+import com.exadel.project.interview_time.entity.InterviewTime;
+import com.exadel.project.interview.etity.Interview;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

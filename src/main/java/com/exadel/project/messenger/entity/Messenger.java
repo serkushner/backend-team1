@@ -1,5 +1,6 @@
-package com.exadel.project.entity;
+package com.exadel.project.messenger.entity;
 
+import com.exadel.project.trainee.entity.Trainee;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,28 +17,29 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "trainee_status")
-public class TraineeStatus {
+@Table(name = "messenger")
+public class Messenger {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "trainee_status_id")
+    @Column(name = "messenger_id")
     private Long id;
 
     @NotBlank
-    @Size(min = 2, max = 30, message = "trainee_status should be from 2 to 30 symbols")
-    @Column(name = "trainee_status")
-    private String traineeStatus;
+    @Size(min = 2, max = 30, message = "title should be from 2 to 30 symbols")
+    @Column(name = "title")
+    private String title;
 
-    @OneToMany(mappedBy = "status", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "messenger", cascade = CascadeType.ALL)
     private List<Trainee> trainees = new ArrayList<>();
 
-    public void setTrainee(List<Trainee> trainees ) {
+    public void setTrainee(List<Trainee> trainees) {
         if (trainees != null) {
             trainees.forEach(a -> {
-                a.setStatus(this);
+                a.setMessenger(this);
             });
         }
         this.trainees = trainees;
     }
+
 }
