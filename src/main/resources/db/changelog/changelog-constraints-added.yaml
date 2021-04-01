@@ -51,9 +51,9 @@ databaseChangeLog:
       preConditions:
         - onFail: MARK_RAN
         - not:
-          - columnExists:
-              tableName: internship_subject
-              columnName: subject_id
+            - columnExists:
+                tableName: internship_subject
+                columnName: subject_id
       changes:
         - renameColumn:
             tableName:  internship_subject
@@ -67,10 +67,10 @@ databaseChangeLog:
       preConditions:
         - onFail: MARK_RAN
         - not:
-          - columnExists:
-              tableName: internship
-              columnName: name
-      changes:
+            - columnExists:
+                tableName: internship
+                columnName: name
+        changes:
         - renameColumn:
             tableName: internship
             columnDataType: bigint
@@ -83,9 +83,9 @@ databaseChangeLog:
       preConditions:
         - onFail: MARK_RAN
         - not:
-          - columnExists:
-              tableName: subject
-              columnName: name
+            - columnExists:
+                tableName: subject
+                columnName: name
       changes:
         - renameColumn:
             tableName: subject
@@ -99,9 +99,9 @@ databaseChangeLog:
       preConditions:
         - onFail: MARK_RAN
         - not:
-          - columnExists:
-              tableName: messenger
-              columnName: name
+            - columnExists:
+                tableName: messenger
+                columnName: name
       changes:
         - renameColumn:
             tableName: messenger
@@ -197,3 +197,59 @@ databaseChangeLog:
             onDelete: 'SET NULL'
             referencedTableName: trainee_status
             referencedColumnNames: id
+
+  - changeSet:
+      id: 20210331.[BE-15]-change_type_in_internship
+      author: shpaser3@yandex
+      preConditions:
+        - onFail: MARK_RAN
+      changes:
+        - modifyDataType:
+            newDataType: varchar(256)
+            columnName: name
+            tableName: internship
+
+  - changeSet:
+      id: 20210331.[BE-15]-change_type_in_subject
+      author: shpaser3@yandex
+      preConditions:
+        - onFail: MARK_RAN
+      changes:
+        - modifyDataType:
+            newDataType: varchar(256)
+            columnName: name
+            tableName: subject
+
+  - changeSet:
+      id: 20210331.[BE-15]-change_type_in_messenger
+      author: shpaser3@yandex
+      preConditions:
+        - onFail: MARK_RAN
+      changes:
+        - modifyDataType:
+            newDataType: varchar(256)
+            columnName: name
+            tableName: messenger
+
+
+  - changeSet:
+      id: 20210331.[BE-15]-change_type_in_trainee_status
+      author: shpaser3@yandex
+      preConditions:
+        - onFail: MARK_RAN
+      changes:
+        - modifyDataType:
+            newDataType: varchar(256)
+            columnName: name
+            tableName: trainee_status
+
+  - changeSet:
+      id: 20210331.[BE-15]-change_type_in_country
+      author: shpaser3@yandex
+      preConditions:
+        - onFail: MARK_RAN
+      changes:
+        - modifyDataType:
+            newDataType: varchar(256)
+            columnName: name
+            tableName: country
