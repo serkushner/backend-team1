@@ -17,7 +17,7 @@ public class Internship {
     private Long id;
 
     @NotBlank(message = "Title of internship should not be empty")
-    @Column(name = "title")
+    @Column(name = "name")
     private String title;
 
     @ManyToMany
@@ -54,6 +54,7 @@ public class Internship {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "format", columnDefinition="ENUM('ONLINE','OFFLINE')")
+//    @Column(name = "format")
     private Format format;
 
     @ManyToOne

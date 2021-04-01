@@ -15,7 +15,7 @@ public class Subject {
     private Long id;
 
     @NotBlank(message = "Title of subject should not be empty")
-    @Column(name = "title")
+    @Column(name = "name")
     private String type;
 
     @ManyToMany(mappedBy = "subjects")
