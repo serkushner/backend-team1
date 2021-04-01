@@ -2,10 +2,9 @@ databaseChangeLog:
   - changeSet:
       id: 20210331.[BE-15]-simplify_primary_key
       author: shpaser3@yandex
+      comment: "PK changed from 3 columns based to one column based"
       preConditions:
         - onFail: MARK_RAN
-        - tableExists:
-            tableName: additional_info
       changes:
         - renameColumn:
             columnDataType: bigint
@@ -40,8 +39,6 @@ databaseChangeLog:
       author: shpaser3@yandex
       preConditions:
         - onFail: MARK_RAN
-        - tableExists:
-            tableName: additional_info
       changes:
         - addUniqueConstraint:
             tableName: additional_info
@@ -53,10 +50,10 @@ databaseChangeLog:
       author: shpaser3@yandex
       preConditions:
         - onFail: MARK_RAN
-        - tableExists:
-            tableName: internship_subject
-        - columnExists:
-            columnName: skill_id
+        - not:
+          - columnExists:
+              tableName: internship_subject
+              columnName: subject_id
       changes:
         - renameColumn:
             tableName:  internship_subject
@@ -69,8 +66,10 @@ databaseChangeLog:
       author: shpaser3@yandex
       preConditions:
         - onFail: MARK_RAN
-        - tableExists:
-            tableName: internship
+        - not:
+          - columnExists:
+              tableName: internship
+              columnName: name
       changes:
         - renameColumn:
             tableName: internship
@@ -83,8 +82,10 @@ databaseChangeLog:
       author: shpaser3@yandex
       preConditions:
         - onFail: MARK_RAN
-        - tableExists:
-            tableName: subject
+        - not:
+          - columnExists:
+              tableName: subject
+              columnName: name
       changes:
         - renameColumn:
             tableName: subject
@@ -97,8 +98,10 @@ databaseChangeLog:
       author: shpaser3@yandex
       preConditions:
         - onFail: MARK_RAN
-        - tableExists:
-            tableName: messenger
+        - not:
+          - columnExists:
+              tableName: messenger
+              columnName: name
       changes:
         - renameColumn:
             tableName: messenger
@@ -111,8 +114,10 @@ databaseChangeLog:
       author: shpaser3@yandex
       preConditions:
         - onFail: MARK_RAN
-        - tableExists:
-            tableName: trainee_status
+        - not:
+            - columnExists:
+                tableName: trainee_status
+                columnName: name
       changes:
         - renameColumn:
             tableName: trainee_status
@@ -125,8 +130,9 @@ databaseChangeLog:
       author: shpaser3@yandex
       preConditions:
         - onFail: MARK_RAN
-        - tableExists:
-            tableName: trainee
+        - not:
+            - foreignKeyConstraintExists:
+                foreignKeyName: fk_deletion_set_null_administrator
       changes:
         - addForeignKeyConstraint:
             constraintName: fk_deletion_set_null_administrator
@@ -141,8 +147,6 @@ databaseChangeLog:
       author: shpaser3@yandex
       preConditions:
         - onFail: MARK_RAN
-        - tableExists:
-            tableName: trainee
       changes:
         - dropNotNullConstraint:
             columnDataType: bigint
@@ -154,8 +158,6 @@ databaseChangeLog:
       author: shpaser3@yandex
       preConditions:
         - onFail: MARK_RAN
-        - tableExists:
-            tableName: trainee
       changes:
         - dropNotNullConstraint:
             columnDataType: bigint
@@ -167,10 +169,9 @@ databaseChangeLog:
       author: shpaser3@yandex
       preConditions:
         - onFail: MARK_RAN
-        - tableExists:
-            tableName: trainee
-        - tableExists:
-            tableName: country
+        - not:
+            - foreignKeyConstraintExists:
+                foreignKeyName: fk_deletion_set_null_trainee_country
       changes:
         - addForeignKeyConstraint:
             constraintName: fk_deletion_set_null_trainee_country
@@ -185,10 +186,9 @@ databaseChangeLog:
       author: shpaser3@yandex
       preConditions:
         - onFail: MARK_RAN
-        - tableExists:
-            tableName: trainee
-        - tableExists:
-            tableName: trainee_status
+        - not:
+            - foreignKeyConstraintExists:
+                foreignKeyName: fk_deletion_set_null_status
       changes:
         - addForeignKeyConstraint:
             constraintName: fk_deletion_set_null_status
