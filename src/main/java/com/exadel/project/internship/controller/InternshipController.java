@@ -2,6 +2,8 @@ package com.exadel.project.internship.controller;
 
 
 import com.exadel.project.common.exception.EntityNotFoundException;
+import com.exadel.project.internship.dto.InternshipDTO;
+import com.exadel.project.internship.dto.InternshipInfoDTO;
 import com.exadel.project.internship.entity.Internship;
 import com.exadel.project.internship.service.InternshipService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +21,12 @@ public class InternshipController {
     private InternshipService internshipService;
 
     @GetMapping("internship")
-    public List<Internship> findAllInternships(@RequestParam(value = "search", required = false) String search){
-        return internshipService.getAllEntities(search);
+    public List<InternshipDTO> findAllInternships(@RequestParam(value = "search", required = false) String search){
+        return internshipService.getAllDTOs(search);
     }
     //TODO write Exception handler [BE-39]
     @GetMapping("internship/{id}")
-    public Internship findInternshipById(@PathVariable ("id") Long id) throws EntityNotFoundException {
-        return internshipService.getEntityById(id);
+    public InternshipInfoDTO findInternshipById(@PathVariable ("id") Long id) throws EntityNotFoundException {
+        return internshipService.getDTOById(id);
     }
 }
