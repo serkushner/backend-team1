@@ -5,40 +5,64 @@ databaseChangeLog:
       comment: "PK changed from 3 columns based to one column based"
       preConditions:
         - onFail: MARK_RAN
+        - primaryKeyExists:
+            tableName: additional_info
+            columnName: id, trainee_id, internship_id
       changes:
-        - renameColumn:
-            columnDataType: bigint
-            oldColumnName: id
-            newColumnName: oldId
-            tableName: additional_info
-        - addColumn:
-            columns:
-              - column:
-                  name: id
-                  type: bigint
-            tableName: additional_info
-        - sql:
-            sql: |
-              update additional_info set id = oldId;
-        - dropPrimaryKey:
-            tableName: additional_info
-        - addNotNullConstraint:
-            columnDataType: bigint
-            columnName: id
-            tableName: additional_info
-        - addPrimaryKey:
-            columnNames: id
-            constraintName: additional_info_PK
+        - dropForeignKeyConstraint:
+            baseTableName: additional_info
+            baseTableSchemaName: exadel_internships
+            constraintName: additional_info_trainee
+        - dropForeignKeyConstraint:
+            baseTableName: additional_info
+            baseTableSchemaName: exadel_internships
+            constraintName: additional_info_internship
+        - dropColumn:
+            columnName: trainee_id
             tableName: additional_info
         - dropColumn:
-            columnName: oldId
+            columnName: internship_id
             tableName: additional_info
+        - addAutoIncrement:
+            schemaName: exadel_internships
+            tableName: additional_info
+            columnName: id
+            columnDataType: bigint
+            defaultOnNull: false
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+        - addColumn:
+            tableName: additional_info
+            columns:
+              - column:
+                  name: trainee_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: additional_info_trainee
+                    references: trainee(id)
+                    deleteCascade: true
+              - column:
+                  name: internship_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: additional_info_internship
+                    references: internship(id)
+                    deleteCascade: true
 
   - changeSet:
       id: 20210331.[BE-15]-additional_info-unique
       author: shpaser3@yandex
       preConditions:
         - onFail: MARK_RAN
+        - not:
+            - indexExists:
+                schemaName:   exadel_internships
+                indexName:  one_email_per_internship
+                tableName:  additional_info
+                columnName: trainee_id, internship_id
       changes:
         - addUniqueConstraint:
             tableName: additional_info
@@ -147,6 +171,10 @@ databaseChangeLog:
       author: shpaser3@yandex
       preConditions:
         - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: "NO"
+            sql: SELECT is_Nullable FROM INFORMATION_SCHEMA.COLUMNS WHERE
+                table_schema = 'exadel_internships' AND table_name='trainee' AND column_name='country_id'
       changes:
         - dropNotNullConstraint:
             columnDataType: bigint
@@ -158,6 +186,10 @@ databaseChangeLog:
       author: shpaser3@yandex
       preConditions:
         - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: "NO"
+            sql: SELECT is_Nullable FROM INFORMATION_SCHEMA.COLUMNS WHERE
+              table_schema = 'exadel_internships' AND table_name='trainee' AND column_name='status_id'
       changes:
         - dropNotNullConstraint:
             columnDataType: bigint
@@ -203,6 +235,12 @@ databaseChangeLog:
       author: shpaser3@yandex
       preConditions:
         - onFail: MARK_RAN
+        - not:
+            - sqlCheck:
+                expectedResult: "varchar"
+                sql: SELECT DATA_TYPE  FROM INFORMATION_SCHEMA.COLUMNS WHERE
+                  table_schema = 'exadel_internships' AND table_name='internship' AND
+                  column_name='name'
       changes:
         - modifyDataType:
             newDataType: varchar(256)
@@ -214,6 +252,12 @@ databaseChangeLog:
       author: shpaser3@yandex
       preConditions:
         - onFail: MARK_RAN
+        - not:
+            - sqlCheck:
+                expectedResult: "varchar"
+                sql: SELECT DATA_TYPE  FROM INFORMATION_SCHEMA.COLUMNS WHERE
+                  table_schema = 'exadel_internships' AND table_name='subject' AND
+                  column_name='name'
       changes:
         - modifyDataType:
             newDataType: varchar(256)
@@ -225,6 +269,12 @@ databaseChangeLog:
       author: shpaser3@yandex
       preConditions:
         - onFail: MARK_RAN
+        - not:
+            - sqlCheck:
+                expectedResult: "varchar"
+                sql: SELECT DATA_TYPE  FROM INFORMATION_SCHEMA.COLUMNS WHERE
+                  table_schema = 'exadel_internships' AND table_name='messenger' AND
+                  column_name='name'
       changes:
         - modifyDataType:
             newDataType: varchar(256)
@@ -237,6 +287,12 @@ databaseChangeLog:
       author: shpaser3@yandex
       preConditions:
         - onFail: MARK_RAN
+        - not:
+            - sqlCheck:
+                expectedResult: "varchar"
+                sql: SELECT DATA_TYPE  FROM INFORMATION_SCHEMA.COLUMNS WHERE
+                  table_schema = 'exadel_internships' AND table_name='trainee_status' AND
+                  column_name='name'
       changes:
         - modifyDataType:
             newDataType: varchar(256)
@@ -248,6 +304,12 @@ databaseChangeLog:
       author: shpaser3@yandex
       preConditions:
         - onFail: MARK_RAN
+        - not:
+            - sqlCheck:
+                expectedResult: "varchar"
+                sql: SELECT DATA_TYPE  FROM INFORMATION_SCHEMA.COLUMNS WHERE
+                  table_schema = 'exadel_internships' AND table_name='country' AND
+                  column_name='name'
       changes:
         - modifyDataType:
             newDataType: varchar(256)
