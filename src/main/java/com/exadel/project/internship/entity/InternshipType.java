@@ -18,7 +18,4 @@ public class InternshipType {
     @NotBlank(message = "Type should not be empty")
     @Column(name = "type",nullable = false)
     private String type;
-
-    @OneToMany(mappedBy="internshipType")
-    private List<Internship> internships = new ArrayList<>();
 }
