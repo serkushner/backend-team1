@@ -1,14 +1,14 @@
 package com.exadel.project.common.repository.rsql;
 
+import com.exadel.project.internship.entity.Country;
+import com.exadel.project.internship.entity.InternshipType;
+import com.exadel.project.internship.entity.Subject;
 import cz.jirutka.rsql.parser.ast.*;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.List;
 import static cz.jirutka.rsql.parser.ast.RSQLOperators.*;
 
-public class JpaRsqlConverter implements RSQLVisitor<Predicate, Root> {
+public class JpaRsqlConverter<T> implements RSQLVisitor<Predicate, Root> {
 
     private final CriteriaBuilder builder;
 
@@ -25,19 +25,23 @@ public class JpaRsqlConverter implements RSQLVisitor<Predicate, Root> {
     }
 
     public Predicate visit(ComparisonNode node, Root root) {
-        ComparisonOperator operator = node.getOperator();
-        Path attrPath = root.get(node.getSelector());
-        Object argument = node.getArguments().get(0);
-        if (operator.equals(EQUAL)) {
-            return builder.equal(attrPath, argument);
-        }
-        if (operator.equals(IN)){
+        try{
+            String selector = node.getSelector();
+            Path attrPath = selector.contains(".") ? visitToJoin(node, root) : root.get(node.getSelector());
             List<String> arguments = node.getArguments();
-            Predicate[] predicates = new Predicate[arguments.size()];
-            for (int i = 0; i < arguments.size(); i++) {
-                predicates[i] = builder.equal(attrPath, arguments.get(i));
+            ComparisonOperator operator = node.getOperator();
+            if (operator.equals(EQUAL)) {
+                return builder.equal(attrPath, arguments.get(0));
             }
-            return builder.or(predicates);
+            if (operator.equals(IN)){
+                Predicate[] predicates = new Predicate[arguments.size()];
+                for (int i = 0; i < arguments.size(); i++) {
+                    predicates[i] = builder.equal(attrPath, arguments.get(i));
+                }
+                return builder.or(predicates);
+            }
+        }catch (IllegalArgumentException e){
+            return null;
         }
         return null;
     }
@@ -48,5 +52,22 @@ public class JpaRsqlConverter implements RSQLVisitor<Predicate, Root> {
             predicates[i] = nodes.get(i).accept(this, root);
         }
         return predicates;
+    }
+
+    private Path visitToJoin(ComparisonNode node, Root root) {
+        String selector = node.getSelector();
+        String[] selectors = selector.split("\\.");
+        switch (selectors[0]){
+            case "subjects":
+                Join<T, Subject> subjectJoin = root.join(selectors[0]);
+                return subjectJoin.get(selectors[1]);
+            case "countries":
+                Join<T, Country> countryJoin = root.join(selectors[0]);
+                return countryJoin.get(selectors[1]);
+            case "internshipType":
+                Join<T, InternshipType> internshipTypeJoin = root.join(selectors[0]);
+                return internshipTypeJoin.get(selectors[1]);
+        }
+        return null;
     }
 }

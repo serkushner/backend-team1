@@ -22,7 +22,7 @@ public class InternshipController {
     public List<Internship> findAllInternships(@RequestParam(value = "search", required = false) String search){
         return internshipService.getAllEntities(search);
     }
-
+    //TODO write Exception handler [BE-39]
     @GetMapping("internship/{id}")
     public Internship findInternshipById(@PathVariable ("id") Long id) throws EntityNotFoundException {
         return internshipService.getEntityById(id);
