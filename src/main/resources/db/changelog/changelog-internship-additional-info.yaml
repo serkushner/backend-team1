@@ -1,0 +1,70 @@
+databaseChangeLog:
+
+  - changeSet:
+        id: 20210402.[BE-40]-addition_to_country_internship
+        author: v.khorunzhyn@gmail.com
+        comment: "Insertion of initial data to country_internship table"
+        preConditions:
+          - onFail: MARK_RAN
+          - onError: MARK_RAN
+          - sqlCheck:
+              expectedResult: "0"
+              sql: SELECT COUNT(*) FROM country_internship
+        changes:
+          - insert:
+              tableName: country_internship
+              columns:
+                - column:
+                    name: country_id
+                    value: "7"
+                - column:
+                    name: internship_id
+                    value: "3"
+          - insert:
+              tableName: country_internship
+              columns:
+                - column:
+                    name: country_id
+                    value: "4"
+                - column:
+                    name: internship_id
+                    value: "2"
+          - insert:
+              tableName: country_internship
+              columns:
+                - column:
+                    name: country_id
+                    value: "2"
+                - column:
+                    name: internship_id
+                    value: "1"
+
+  - changeSet:
+        id: 20210402.[BE-40]-addition_to_internship_subject
+        author: v.khorunzhyn@gmail.com
+        comment: "Insertion of initial data to internship_subject table"
+        preConditions:
+          - onFail: MARK_RAN
+          - onError: MARK_RAN
+          - sqlCheck:
+              expectedResult: "3"
+              sql: SELECT COUNT(*) FROM internship_subject
+        changes:
+          - insert:
+              tableName: internship_subject
+              columns:
+                - column:
+                    name: subject_id
+                    value: "1"
+                - column:
+                    name: internship_id
+                    value: "1"
+          - insert:
+              tableName: internship_subject
+              columns:
+                - column:
+                    name: subject_id
+                    value: "1"
+                - column:
+                    name: internship_id
+                    value: "2"
