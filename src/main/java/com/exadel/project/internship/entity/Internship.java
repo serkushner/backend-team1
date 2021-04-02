@@ -1,5 +1,6 @@
 package com.exadel.project.internship.entity;
 
+import com.exadel.project.skill.entity.Skill;
 import lombok.Data;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -32,7 +33,7 @@ public class Internship {
             joinColumns = @JoinColumn(name = "internship_id"),
             inverseJoinColumns = @JoinColumn(name = "skill_id")
     )
-    private List<Subject> skills = new ArrayList<>();
+    private List<Skill> skills = new ArrayList<>();
 
     @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
