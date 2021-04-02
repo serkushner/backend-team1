@@ -27,6 +27,13 @@ public class Internship {
     )
     private List<Subject> subjects = new ArrayList<>();
 
+    @ManyToMany
+    @JoinTable(name = "internship_skill",
+            joinColumns = @JoinColumn(name = "internship_id"),
+            inverseJoinColumns = @JoinColumn(name = "skill_id")
+    )
+    private List<Subject> skills = new ArrayList<>();
+
     @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
 
