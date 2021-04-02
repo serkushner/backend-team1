@@ -13,8 +13,8 @@ import java.util.List;
 public class InternshipInfoDTO {
 
     private String title;
-    private List<Subject> subjects = new ArrayList<>();
-    private List<Skill> skills = new ArrayList<>();
+    private List<SubjectDTO> subjects = new ArrayList<>();
+    private List<SkillDTO> skills = new ArrayList<>();
     private LocalDate startDate;
     private LocalDate endDate;
     private LocalDate startRequestDate;
@@ -23,7 +23,8 @@ public class InternshipInfoDTO {
     private String additionalInfo;
     private String image;
     private Format format;
-    private InternshipType internshipType;
+    private InternshipTypeDTO internshipType;
+    private List<CountryDTO> countries = new ArrayList<>();
 
 
 }

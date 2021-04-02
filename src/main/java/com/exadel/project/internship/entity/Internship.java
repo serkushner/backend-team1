@@ -1,7 +1,10 @@
 package com.exadel.project.internship.entity;
 
 import com.exadel.project.skill.entity.Skill;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.ToString;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
@@ -9,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@ToString(exclude = {"subjects","skills","internshipType","coutries"})
 @Entity
 @Table(name = "internship")
 public class Internship {
@@ -21,6 +25,7 @@ public class Internship {
     @Column(name = "name")
     private String title;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "internship_subject",
             joinColumns = @JoinColumn(name = "internship_id"),

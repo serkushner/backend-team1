@@ -3,13 +3,14 @@ package com.exadel.project.internship.mapper;
 import com.exadel.project.internship.dto.InternshipDTO;
 import com.exadel.project.internship.entity.Internship;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {SubjectMapper.class, CountryMapper.class})
 public interface InternshipMapper {
 
-    InternshipDTO internshipToInternshipDTO(Internship entity);
+    InternshipDTO entityToDto(Internship entity);
 
-    Internship internshipDTOtoInternship(InternshipDTO dto);
+    Internship dtoToEntity(InternshipDTO dto);
 
 
 }
