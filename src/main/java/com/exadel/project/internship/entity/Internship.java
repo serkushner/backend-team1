@@ -17,7 +17,7 @@ public class Internship {
     private Long id;
 
     @NotBlank(message = "Title of internship should not be empty")
-    @Column(name = "title")
+    @Column(name = "name")
     private String title;
 
     @ManyToMany
