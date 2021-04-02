@@ -1,15 +1,29 @@
 databaseChangeLog:
 
-  - preConditions:
-      - onFail: CONTINUE
-      - onError: CONTINUE
-      - sqlCheck:
-          expectedResult: "0"
-          sql: SELECT COUNT(*) FROM country
+  - changeSet:
+      id: 20210331.[BE-15]-drop_redundant_column_in_internship
+      author: shpaser3@yandex
+      preConditions:
+        - onFail: MARK_RAN
+        - columnExists:
+            tableName: internship
+            columnName: subject_id
+      changes:
+        - dropColumn:
+            tableName: internship
+            columnName: subject_id
+
+
   - changeSet:
       id: 20210401.[BE-16]-countries_table_fulfilling
       author: shpaser3@yandex
       comment: "Insertion of initial data to country table with ISO-3166-1 codes"
+      preConditions:
+        - onFail: MARK_RAN
+        - onError: MARK_RAN
+        - sqlCheck:
+            expectedResult: "0"
+            sql: SELECT COUNT(*) FROM country
       changes:
         - insert:
             tableName: country
@@ -84,16 +98,17 @@ databaseChangeLog:
                   name: name
                   value: "Uzbekistan"
 
-  - preConditions:
-      - onFail: CONTINUE
-      - onError: CONTINUE
-      - sqlCheck:
-          expectedResult: "0"
-          sql: SELECT COUNT(*) FROM subject
+
   - changeSet:
       id: 20210401.[BE-16]-subject_table_fulfilling
       author: shpaser3@yandex
       comment: "Insertion of initial data to subject table"
+      preConditions:
+        - onFail: CONTINUE
+        - onError: CONTINUE
+        - sqlCheck:
+            expectedResult: "0"
+            sql: SELECT COUNT(*) FROM subject
       changes:
         - insert:
             tableName: subject
@@ -120,16 +135,16 @@ databaseChangeLog:
                   name: name
                   value: "QA"
 
-  - preConditions:
-      - onFail: CONTINUE
-      - onError: CONTINUE
-      - sqlCheck:
-          expectedResult: "0"
-          sql: SELECT COUNT(*) FROM skill
   - changeSet:
       id: 20210401.[BE-16]-skill_table_fulfilling
       author: shpaser3@yandex
       comment: "Insertion of initial data to skill table"
+      preConditions:
+        - onFail: CONTINUE
+        - onError: CONTINUE
+        - sqlCheck:
+            expectedResult: "0"
+            sql: SELECT COUNT(*) FROM skill
       changes:
         - insert:
             tableName: skill
@@ -204,16 +219,209 @@ databaseChangeLog:
                   name: skill_name
                   value: "TestRail"
 
-  - preConditions:
-      - onFail: CONTINUE
-      - onError: CONTINUE
-      - sqlCheck:
-          expectedResult: "0"
-          sql: SELECT COUNT(*) FROM internship_skill
+  - changeSet:
+      id: 20210401.[BE-16]-internship_type_table_fulfilling
+      author: shpaser3@yandex
+      comment: "Insertion of initial data to internship_type table"
+      preConditions:
+        - onFail: CONTINUE
+        - onError: CONTINUE
+        - sqlCheck:
+            expectedResult: "0"
+            sql: SELECT COUNT(*) FROM internship_type
+      changes:
+        - insert:
+            tableName: internship_type
+            columns:
+              - column:
+                  name: type
+                  value: "internship"
+        - insert:
+            tableName: internship_type
+            columns:
+              - column:
+                  name: type
+                  value: "CSS"
+        - insert:
+            tableName: internship_type
+            columns:
+              - column:
+                  name: type
+                  value: "training"
+        - insert:
+            tableName: internship_type
+            columns:
+              - column:
+                  name: type
+                  value: "webinar"
+        - insert:
+            tableName: internship_type
+            columns:
+              - column:
+                  name: type
+                  value: "lecture"
+
+
+  - changeSet:
+      id: 20210401.[BE-16]-internship_table_fulfilling
+      author: nidaff.s@gmail.com
+      comment: "Insertion of initial data to internship table"
+      preConditions:
+        - onFail: CONTINUE
+        - onError: CONTINUE
+        - sqlCheck:
+            expectedResult: "0"
+            sql: SELECT COUNT(*) FROM internship
+      changes:
+        - insert:
+            tableName: internship
+            columns:
+              - column:
+                  name: name
+                  value: "Java"
+              - column:
+                  name: start_date
+                  value: "2021-04-23"
+              - column:
+                  name: end_date
+                  value: "2021-04-29"
+              - column:
+                  name: start_request_date
+                  value: "2021-04-12"
+              - column:
+                  name: end_request_date
+                  value: "2021-04-20"
+              - column:
+                  name: description
+                  value: "Java internship"
+              - column:
+                  name: additional_info
+                  value: "for beginner developers"
+              - column:
+                  name: image
+                  value: "http..."
+              - column:
+                  name: format
+                  value: 'OFFLINE'
+              - column:
+                  name: type_id
+                  value: "1"
+        - insert:
+            tableName: internship
+            columns:
+              - column:
+                  name: name
+                  value: "JS"
+              - column:
+                  name: start_date
+                  value: "2021-05-23"
+              - column:
+                  name: end_date
+                  value: "2021-05-29"
+              - column:
+                  name: start_request_date
+                  value: "2021-05-12"
+              - column:
+                  name: end_request_date
+                  value: "2021-05-20"
+              - column:
+                  name: description
+                  value: "JS internship"
+              - column:
+                  name: additional_info
+                  value: "for beginner developers"
+              - column:
+                  name: image
+                  value: "http..."
+              - column:
+                  name: format
+                  value: 'OFFLINE'
+              - column:
+                  name: type_id
+                  value: "1"
+        - insert:
+            tableName: internship
+            columns:
+              - column:
+                  name: name
+                  value: "QA"
+              - column:
+                  name: start_date
+                  value: "2021-06-23"
+              - column:
+                  name: end_date
+                  value: "2021-06-29"
+              - column:
+                  name: start_request_date
+                  value: "2021-06-12"
+              - column:
+                  name: end_request_date
+                  value: "2021-06-20"
+              - column:
+                  name: description
+                  value: ".NET internship"
+              - column:
+                  name: additional_info
+                  value: "for beginner developers"
+              - column:
+                  name: image
+                  value: "http..."
+              - column:
+                  name: format
+                  value: 'OFFLINE'
+              - column:
+                  name: type_id
+                  value: "1"
+
+  - changeSet:
+      id: 20210401.[BE-16]-internship_subject_table_fulfilling
+      author: nidaff.s@gmail.com
+      comment: "Insertion of initial data to internship_subject table"
+      preConditions:
+        - onFail: CONTINUE
+        - onError: CONTINUE
+        - sqlCheck:
+            expectedResult: "0"
+            sql: SELECT COUNT(*) FROM internship_subject
+      changes:
+        - insert:
+            tableName: internship_subject
+            columns:
+              - column:
+                  name: subject_id
+                  value: "2"
+              - column:
+                  name: internship_id
+                  value: "2"
+        - insert:
+            tableName: internship_subject
+            columns:
+              - column:
+                  name: subject_id
+                  value: "4"
+              - column:
+                  name: internship_id
+                  value: "3"
+        - insert:
+            tableName: internship_subject
+            columns:
+              - column:
+                  name: subject_id
+                  value: "3"
+              - column:
+                  name: internship_id
+                  value: "1"
+
   - changeSet:
       id: 20210401.[BE-16]-internship_skill_table_fulfilling
       author: shpaser3@yandex
       comment: "Insertion of initial data to internship_skill table"
+      preConditions:
+        - onFail: CONTINUE
+        - onError: CONTINUE
+        - sqlCheck:
+            expectedResult: "0"
+            sql: SELECT COUNT(*) FROM internship_skill
       changes:
         - insert:
             tableName: internship_skill
@@ -350,196 +558,3 @@ databaseChangeLog:
               - column:
                   name: internship_id
                   value: "3"
-
-  - preConditions:
-      - onFail: CONTINUE
-      - onError: CONTINUE
-      - sqlCheck:
-          expectedResult: "0"
-          sql: SELECT COUNT(*) FROM internship_type
-  - changeSet:
-      id: 20210401.[BE-16]-internship_type_table_fulfilling
-      author: shpaser3@yandex
-      comment: "Insertion of initial data to internship_type table"
-      changes:
-        - insert:
-            tableName: internship_type
-            columns:
-              - column:
-                  name: type
-                  value: "internship"
-        - insert:
-            tableName: internship_type
-            columns:
-              - column:
-                  name: type
-                  value: "CSS"
-        - insert:
-            tableName: internship_type
-            columns:
-              - column:
-                  name: skill_name
-                  value: "training"
-        - insert:
-            tableName: internship_type
-            columns:
-              - column:
-                  name: type
-                  value: "webinar"
-        - insert:
-            tableName: internship_type
-            columns:
-              - column:
-                  name: type
-                  value: "lecture"
-
-
-  - preConditions:
-      - onFail: CONTINUE
-      - onError: CONTINUE
-      - sqlCheck:
-          expectedResult: "0"
-          sql: SELECT COUNT(*) FROM internship
-  - changeSet:
-      id: 20210401.[BE-16]-internship_table_fulfilling
-      author: nidaff.s@gmail.com
-      comment: "Insertion of initial data to internship table"
-      changes:
-        - insert:
-            tableName: internship
-            columns:
-              - column:
-                  name: title
-                  value: "Java"
-              - column:
-                  name: start_date
-                  value: "2021-04-23"
-              - column:
-                  name: end_date
-                  value: "2021-04-29"
-              - column:
-                  name: start_request_date
-                  value: "2021-04-12"
-              - column:
-                  name: end_request_date
-                  value: "2021-04-20"
-              - column:
-                  name: description
-                  value: "Java internship"
-              - column:
-                  name: additional_info
-                  value: "for beginner developers"
-              - column:
-                  name: image
-                  value: "http..."
-              - column:
-                  name: format
-                  value: 'OFFLINE'
-              - column:
-                  name: type_id
-                  value: "1"
-        - insert:
-            tableName: internship
-            columns:
-              - column:
-                  name: title
-                  value: "JS"
-              - column:
-                  name: start_date
-                  value: "2021-05-23"
-              - column:
-                  name: end_date
-                  value: "2021-05-29"
-              - column:
-                  name: start_request_date
-                  value: "2021-05-12"
-              - column:
-                  name: end_request_date
-                  value: "2021-05-20"
-              - column:
-                  name: description
-                  value: "JS internship"
-              - column:
-                  name: additional_info
-                  value: "for beginner developers"
-              - column:
-                  name: image
-                  value: "http..."
-              - column:
-                  name: format
-                  value: 'OFFLINE'
-              - column:
-                  name: type_id
-                  value: "1"
-        - insert:
-            tableName: internship
-            columns:
-              - column:
-                  name: title
-                  value: "QA"
-              - column:
-                  name: start_date
-                  value: "2021-06-23"
-              - column:
-                  name: end_date
-                  value: "2021-06-29"
-              - column:
-                  name: start_request_date
-                  value: "2021-06-12"
-              - column:
-                  name: end_request_date
-                  value: "2021-06-20"
-              - column:
-                  name: description
-                  value: ".NET internship"
-              - column:
-                  name: additional_info
-                  value: "for beginner developers"
-              - column:
-                  name: image
-                  value: "http..."
-              - column:
-                  name: format
-                  value: 'OFFLINE'
-              - column:
-                  name: type_id
-                  value: "1"
-
-  - preConditions:
-      - onFail: CONTINUE
-      - onError: CONTINUE
-      - sqlCheck:
-          expectedResult: "0"
-          sql: SELECT COUNT(*) FROM internship_subject
-  - changeSet:
-      id: 20210401.[BE-16]-internship_subject_table_fulfilling
-      author: nidaff.s@gmail.com
-      comment: "Insertion of initial data to internship_subject table"
-      changes:
-        - insert:
-            tableName: internship_subject
-            columns:
-              - column:
-                  name: subject_id
-                  value: "2"
-              - column:
-                  name: internship_id
-                  value: "2"
-        - insert:
-            tableName: internship_subject
-            columns:
-              - column:
-                  name: subject_id
-                  value: "4"
-              - column:
-                  name: internship_id
-                  value: "3"
-        - insert:
-            tableName: internship_subject
-            columns:
-              - column:
-                  name: subject_id
-                  value: "3"
-              - column:
-                  name: internship_id
-                  value: "1"
