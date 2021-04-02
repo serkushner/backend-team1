@@ -3,3 +3,5 @@ databaseChangeLog:
       file: db/changelog/changelog-init-tables.yaml
   - include:
       file: db/changelog/changelog-constraints-added.yaml
+  - include:
+      file: db/changelog/changelog-countries-data-added.yaml
