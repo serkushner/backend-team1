@@ -54,7 +54,6 @@ public class Internship {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "format", columnDefinition="ENUM('ONLINE','OFFLINE')")
-//    @Column(name = "format")
     private Format format;
 
     @ManyToOne
