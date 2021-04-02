@@ -10,7 +10,6 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class SkillService extends BaseService<Skill, SkillRepository> {
-
     public List<Skill> getSkillsByIds(List<Long> ids){
         return getRepository().findByIdIn(ids);
     }

@@ -20,11 +20,11 @@ public class InternshipController {
 
     @GetMapping("internship")
     public List<Internship> findAllInternships(@RequestParam(value = "search", required = false) String search){
-        return internshipService.getAllInternshipsStartAfterToday(search);
+        return internshipService.getAllEntities(search);
     }
 
     @GetMapping("internship/{id}")
     public Internship findInternshipById(@PathVariable ("id") Long id) throws EntityNotFoundException {
-        return internshipService.getInternshipStartAfterTodayById(id);
+        return internshipService.getEntityById(id);
     }
 }
