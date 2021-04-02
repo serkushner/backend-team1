@@ -16,8 +16,5 @@ public class Subject {
 
     @NotBlank(message = "Title of subject should not be empty")
     @Column(name = "name")
-    private String type;
-
-    @ManyToMany(mappedBy = "subjects")
-    private List<Internship> internships = new ArrayList<>();
+    private String name;
 }
