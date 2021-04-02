@@ -1,0 +1,317 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20210331.[BE-15]-simplify_primary_key
+      author: shpaser3@yandex
+      comment: "PK changed from 3 columns based to one column based"
+      preConditions:
+        - onFail: MARK_RAN
+        - primaryKeyExists:
+            tableName: additional_info
+            columnName: id, trainee_id, internship_id
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: additional_info
+            baseTableSchemaName: exadel_internships
+            constraintName: additional_info_trainee
+        - dropForeignKeyConstraint:
+            baseTableName: additional_info
+            baseTableSchemaName: exadel_internships
+            constraintName: additional_info_internship
+        - dropColumn:
+            columnName: trainee_id
+            tableName: additional_info
+        - dropColumn:
+            columnName: internship_id
+            tableName: additional_info
+        - addAutoIncrement:
+            schemaName: exadel_internships
+            tableName: additional_info
+            columnName: id
+            columnDataType: bigint
+            defaultOnNull: false
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+        - addColumn:
+            tableName: additional_info
+            columns:
+              - column:
+                  name: trainee_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: additional_info_trainee
+                    references: trainee(id)
+                    deleteCascade: true
+              - column:
+                  name: internship_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: additional_info_internship
+                    references: internship(id)
+                    deleteCascade: true
+
+  - changeSet:
+      id: 20210331.[BE-15]-additional_info-unique
+      author: shpaser3@yandex
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - indexExists:
+                schemaName:   exadel_internships
+                indexName:  one_email_per_internship
+                tableName:  additional_info
+                columnName: trainee_id, internship_id
+      changes:
+        - addUniqueConstraint:
+            tableName: additional_info
+            columnNames: trainee_id, internship_id
+            constraintName: one_email_per_internship
+
+  - changeSet:
+      id: 20210331.[BE-15]-resolve_mistake_in_internship_subject
+      author: shpaser3@yandex
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - columnExists:
+                tableName: internship_subject
+                columnName: subject_id
+      changes:
+        - renameColumn:
+            tableName:  internship_subject
+            columnDataType: bigint
+            oldColumnName:  skill_id
+            newColumnName:  subject_id
+
+  - changeSet:
+      id: 20210331.[BE-15]-renaming_in_internship
+      author: shpaser3@yandex
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - columnExists:
+                tableName: internship
+                columnName: name
+      changes:
+        - renameColumn:
+            tableName: internship
+            columnDataType: bigint
+            oldColumnName: title
+            newColumnName: name
+
+  - changeSet:
+      id: 20210331.[BE-15]-renaming_in_subject
+      author: shpaser3@yandex
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - columnExists:
+                tableName: subject
+                columnName: name
+      changes:
+        - renameColumn:
+            tableName: subject
+            columnDataType: bigint
+            oldColumnName: title
+            newColumnName: name
+
+  - changeSet:
+      id: 20210331.[BE-15]-renaming_in_messenger
+      author: shpaser3@yandex
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - columnExists:
+                tableName: messenger
+                columnName: name
+      changes:
+        - renameColumn:
+            tableName: messenger
+            columnDataType: bigint
+            oldColumnName: title
+            newColumnName: name
+
+  - changeSet:
+      id: 20210331.[BE-15]-renaming_in_trainee_status
+      author: shpaser3@yandex
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - columnExists:
+                tableName: trainee_status
+                columnName: name
+      changes:
+        - renameColumn:
+            tableName: trainee_status
+            columnDataType: bigint
+            oldColumnName: title
+            newColumnName: name
+
+  - changeSet:
+      id: 20210331.[BE-15]-trainee_fk_admin_set_null_on-delete
+      author: shpaser3@yandex
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - foreignKeyConstraintExists:
+                foreignKeyName: fk_deletion_set_null_administrator
+      changes:
+        - addForeignKeyConstraint:
+            constraintName: fk_deletion_set_null_administrator
+            baseTableName: trainee
+            baseColumnNames: administrator_id
+            onDelete: 'SET NULL'
+            referencedTableName: administrator
+            referencedColumnNames: id
+
+  - changeSet:
+      id: 20210331.[BE-15]-trainee_fk_country_drop_not_null
+      author: shpaser3@yandex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: "NO"
+            sql: SELECT is_Nullable FROM INFORMATION_SCHEMA.COLUMNS WHERE
+                table_schema = 'exadel_internships' AND table_name='trainee' AND column_name='country_id'
+      changes:
+        - dropNotNullConstraint:
+            columnDataType: bigint
+            tableName: trainee
+            columnName: country_id
+
+  - changeSet:
+      id: 20210331.[BE-15]-trainee_fk_status_drop_not_null
+      author: shpaser3@yandex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: "NO"
+            sql: SELECT is_Nullable FROM INFORMATION_SCHEMA.COLUMNS WHERE
+              table_schema = 'exadel_internships' AND table_name='trainee' AND column_name='status_id'
+      changes:
+        - dropNotNullConstraint:
+            columnDataType: bigint
+            tableName: trainee
+            columnName: status_id
+
+  - changeSet:
+      id: 20210331.[BE-15]-trainee_fk_country_set_null_on-delete
+      author: shpaser3@yandex
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - foreignKeyConstraintExists:
+                foreignKeyName: fk_deletion_set_null_trainee_country
+      changes:
+        - addForeignKeyConstraint:
+            constraintName: fk_deletion_set_null_trainee_country
+            baseTableName: trainee
+            baseColumnNames: country_id
+            onDelete: 'SET NULL'
+            referencedTableName: country
+            referencedColumnNames: id
+
+  - changeSet:
+      id: 20210331.[BE-15]-trainee_fk_status_set_null_on-delete
+      author: shpaser3@yandex
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - foreignKeyConstraintExists:
+                foreignKeyName: fk_deletion_set_null_status
+      changes:
+        - addForeignKeyConstraint:
+            constraintName: fk_deletion_set_null_status
+            baseTableName: trainee
+            baseColumnNames: status_id
+            onDelete: 'SET NULL'
+            referencedTableName: trainee_status
+            referencedColumnNames: id
+
+  - changeSet:
+      id: 20210331.[BE-15]-change_type_in_internship
+      author: shpaser3@yandex
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - sqlCheck:
+                expectedResult: "varchar"
+                sql: SELECT DATA_TYPE  FROM INFORMATION_SCHEMA.COLUMNS WHERE
+                  table_schema = 'exadel_internships' AND table_name='internship' AND
+                  column_name='name'
+      changes:
+        - modifyDataType:
+            newDataType: varchar(256)
+            columnName: name
+            tableName: internship
+
+  - changeSet:
+      id: 20210331.[BE-15]-change_type_in_subject
+      author: shpaser3@yandex
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - sqlCheck:
+                expectedResult: "varchar"
+                sql: SELECT DATA_TYPE  FROM INFORMATION_SCHEMA.COLUMNS WHERE
+                  table_schema = 'exadel_internships' AND table_name='subject' AND
+                  column_name='name'
+      changes:
+        - modifyDataType:
+            newDataType: varchar(256)
+            columnName: name
+            tableName: subject
+
+  - changeSet:
+      id: 20210331.[BE-15]-change_type_in_messenger
+      author: shpaser3@yandex
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - sqlCheck:
+                expectedResult: "varchar"
+                sql: SELECT DATA_TYPE  FROM INFORMATION_SCHEMA.COLUMNS WHERE
+                  table_schema = 'exadel_internships' AND table_name='messenger' AND
+                  column_name='name'
+      changes:
+        - modifyDataType:
+            newDataType: varchar(256)
+            columnName: name
+            tableName: messenger
+
+
+  - changeSet:
+      id: 20210331.[BE-15]-change_type_in_trainee_status
+      author: shpaser3@yandex
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - sqlCheck:
+                expectedResult: "varchar"
+                sql: SELECT DATA_TYPE  FROM INFORMATION_SCHEMA.COLUMNS WHERE
+                  table_schema = 'exadel_internships' AND table_name='trainee_status' AND
+                  column_name='name'
+      changes:
+        - modifyDataType:
+            newDataType: varchar(256)
+            columnName: name
+            tableName: trainee_status
+
+  - changeSet:
+      id: 20210331.[BE-15]-change_type_in_country
+      author: shpaser3@yandex
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - sqlCheck:
+                expectedResult: "varchar"
+                sql: SELECT DATA_TYPE  FROM INFORMATION_SCHEMA.COLUMNS WHERE
+                  table_schema = 'exadel_internships' AND table_name='country' AND
+                  column_name='name'
+      changes:
+        - modifyDataType:
+            newDataType: varchar(256)
+            columnName: name
+            tableName: country
