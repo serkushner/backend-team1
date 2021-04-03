@@ -1,9 +1,7 @@
 package com.exadel.project.internship.dto;
 
-import com.exadel.project.internship.entity.Country;
-import com.exadel.project.internship.entity.Subject;
-import lombok.Data;
 
+import lombok.Data;
 import java.time.LocalDate;
 import java.util.List;
 
