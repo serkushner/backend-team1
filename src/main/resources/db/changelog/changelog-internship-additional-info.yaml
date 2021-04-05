@@ -11,33 +11,12 @@ databaseChangeLog:
               expectedResult: "0"
               sql: SELECT COUNT(*) FROM country_internship
         changes:
-          - insert:
-              tableName: country_internship
-              columns:
-                - column:
-                    name: country_id
-                    value: "7"
-                - column:
-                    name: internship_id
-                    value: "3"
-          - insert:
-              tableName: country_internship
-              columns:
-                - column:
-                    name: country_id
-                    value: "4"
-                - column:
-                    name: internship_id
-                    value: "2"
-          - insert:
-              tableName: country_internship
-              columns:
-                - column:
-                    name: country_id
-                    value: "2"
-                - column:
-                    name: internship_id
-                    value: "1"
+          - sqlFile:
+              dbms: 'mysql'
+              endDelimiter: "@@"
+              splitStatements: false
+              path: db/sql/init_country_internship.sql
+              stripComments: false
 
   - changeSet:
         id: 20210402.[BE-40]-addition_to_internship_subject
@@ -50,21 +29,9 @@ databaseChangeLog:
               expectedResult: "3"
               sql: SELECT COUNT(*) FROM internship_subject
         changes:
-          - insert:
-              tableName: internship_subject
-              columns:
-                - column:
-                    name: subject_id
-                    value: "1"
-                - column:
-                    name: internship_id
-                    value: "1"
-          - insert:
-              tableName: internship_subject
-              columns:
-                - column:
-                    name: subject_id
-                    value: "1"
-                - column:
-                    name: internship_id
-                    value: "2"
+          - sqlFile:
+              dbms: 'mysql'
+              endDelimiter: "@@"
+              splitStatements: false
+              path: db/sql/add_data_internship_subject.sql
+              stripComments: false
