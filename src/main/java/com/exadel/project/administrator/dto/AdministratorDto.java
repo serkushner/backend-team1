@@ -1,0 +1,19 @@
+package com.exadel.project.administrator.dto;
+
+import com.exadel.project.administrator.entity.Role;
+import lombok.Data;
+
+@Data
+public class AdministratorDto {
+
+    private Long id;
+    private String login;
+    private String email;
+    private String password;
+    private String name;
+    private String surname;
+    private String phone;
+    private String skype;
+    private Role role;
+
+}
