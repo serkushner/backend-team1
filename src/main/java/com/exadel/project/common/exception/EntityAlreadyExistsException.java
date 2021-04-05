@@ -1,8 +1,5 @@
 package com.exadel.project.common.exception;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
-
-public class EntityAlreadyExistsException extends Exception{
+public class EntityAlreadyExistsException extends RuntimeException{
 
 }

@@ -5,3 +5,5 @@ databaseChangeLog:
       file: db/changelog/changelog-constraints-added.yaml
   - include:
       file: db/changelog/changelog-countries-data-added.yaml
+  - include:
+      file: db/changelog/changelog-password-column-size-changed.yaml

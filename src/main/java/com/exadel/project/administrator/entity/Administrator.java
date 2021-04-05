@@ -22,7 +22,7 @@ public class Administrator {
     private String login;
 
     @NotBlank(message = "Administrator email should not be empty")
-    @Column(name = "email")
+    @Column(unique=true, name = "email")
     private String email;
 
     @NotBlank(message = "Administrator password should not be empty")
@@ -41,7 +41,6 @@ public class Administrator {
     @Column(name = "phone")
     private String phone;
 
-    @NotBlank(message = "Administrator skype should not be empty")
     @Column(name = "skype")
     private String skype;
 
