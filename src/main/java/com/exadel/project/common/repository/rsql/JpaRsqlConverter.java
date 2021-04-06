@@ -1,14 +1,11 @@
 package com.exadel.project.common.repository.rsql;
 
-import com.exadel.project.internship.entity.Country;
-import com.exadel.project.internship.entity.InternshipType;
-import com.exadel.project.internship.entity.Subject;
 import cz.jirutka.rsql.parser.ast.*;
 import lombok.Getter;
-
 import javax.persistence.criteria.*;
 import java.util.List;
 import static cz.jirutka.rsql.parser.ast.RSQLOperators.*;
+
 @Getter
 public abstract class JpaRsqlConverter implements RSQLVisitor<Predicate, Root> {
 
@@ -26,7 +23,25 @@ public abstract class JpaRsqlConverter implements RSQLVisitor<Predicate, Root> {
         return builder.or(processNodes(node.getChildren(), root));
     }
 
-    public abstract Predicate visit(ComparisonNode node, Root root);
+    public Predicate visit(ComparisonNode node, Root root){
+        String selector = node.getSelector();
+        Path attrPath = selector.contains(".") ? visitToJoin(node, root) : root.get(node.getSelector());
+        List<String> arguments = node.getArguments();
+        ComparisonOperator operator = node.getOperator();
+        if (operator.equals(EQUAL)) {
+            return getBuilder().equal(attrPath, checkAndConvertToEnum(selector, arguments.get(0)));
+        }
+        if (operator.equals(IN)){
+            Predicate[] predicates = new Predicate[arguments.size()];
+            for (int i = 0; i < arguments.size(); i++) {
+                predicates[i] = getBuilder().equal(attrPath, checkAndConvertToEnum(selector, arguments.get(i)));
+            }
+            return getBuilder().or(predicates);
+        }
+        return null;
+    }
+
+    public abstract Object checkAndConvertToEnum(String selector, String argument);
 
     private Predicate[] processNodes(List<Node> nodes, Root root) {
         Predicate[] predicates = new Predicate[nodes.size()];
