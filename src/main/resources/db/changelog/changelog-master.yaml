@@ -7,3 +7,5 @@ databaseChangeLog:
       file: db/changelog/changelog-countries-data-added.yaml
   - include:
       file: db/changelog/changelog-internship-additional-info.yaml
+  - include:
+      file: db/changelog/changelog-password-column-size-changed
