@@ -1,5 +1,6 @@
-package com.exadel.project.common.repository.rsql;
+package com.exadel.project.common.service.rsql;
 
+import com.exadel.project.common.service.rsql.JpaRsqlConverter;
 import cz.jirutka.rsql.parser.RSQLParser;
 import cz.jirutka.rsql.parser.RSQLParserException;
 import cz.jirutka.rsql.parser.ast.Node;

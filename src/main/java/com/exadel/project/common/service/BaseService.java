@@ -1,7 +1,7 @@
 package com.exadel.project.common.service;
 
 import com.exadel.project.common.exception.EntityNotFoundException;
-import com.exadel.project.common.repository.rsql.RsqlSpecification;
+import com.exadel.project.common.service.rsql.RsqlSpecification;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;

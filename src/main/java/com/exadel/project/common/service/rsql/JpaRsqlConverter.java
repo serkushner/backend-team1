@@ -1,4 +1,4 @@
-package com.exadel.project.common.repository.rsql;
+package com.exadel.project.common.service.rsql;
 
 import com.exadel.project.internship.entity.Country;
 import com.exadel.project.internship.entity.InternshipType;
