@@ -18,10 +18,12 @@ public abstract class BaseService<T, R extends JpaRepository<T, Long> & JpaSpeci
         if (search == null){
             return repository.findAll();
         }
-        return repository.findAll(RsqlSpecification.<T>rsql(search));
+        return repository.findAll(getRsqlSpecification().rsql(search));
     }
 
     public T getEntityById(Long id) throws EntityNotFoundException {
         return repository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
+
+    public abstract RsqlSpecification getRsqlSpecification();
 }
