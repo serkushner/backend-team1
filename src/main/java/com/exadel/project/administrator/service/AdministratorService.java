@@ -1,6 +1,7 @@
 package com.exadel.project.administrator.service;
 
 import com.exadel.project.administrator.dto.AdministratorDto;
+import com.exadel.project.administrator.dto.RoleDto;
 import com.exadel.project.administrator.entity.Administrator;
 import com.exadel.project.administrator.entity.Role;
 import com.exadel.project.administrator.mapper.AdministratorMapper;
@@ -50,9 +51,9 @@ public class AdministratorService extends BaseService<Administrator, Administrat
         return administratorMapper.entityToDto(administrator);
     }
 
-    public AdministratorDto changeAdministratorRole(Long id, String roleName) throws EntityNotFoundException {
+    public AdministratorDto changeAdministratorRole(Long id, RoleDto role) throws EntityNotFoundException {
         Administrator existingAdministrator = findAdministratorById(id);
-        existingAdministrator.setRole(Role.valueOf(roleName.toUpperCase()));
+        existingAdministrator.setRole(Role.valueOf(role.getRole().toUpperCase()));
         administratorRepository.save(existingAdministrator);
         return administratorMapper.entityToDto(existingAdministrator);
     }

@@ -19,6 +19,7 @@ public interface AdministratorMapper {
 
     @Mapping(target = "role", ignore = true)
     @Mapping(target = "id", ignore = true)
+    @Mapping(source = "password", target = "password", qualifiedBy = EncodedMapping.class)
     void updateAdministrator(AdministratorDto dto, @MappingTarget Administrator administrator);
 
 }

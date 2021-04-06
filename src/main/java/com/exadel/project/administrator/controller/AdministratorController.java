@@ -1,6 +1,7 @@
 package com.exadel.project.administrator.controller;
 
 import com.exadel.project.administrator.dto.AdministratorDto;
+import com.exadel.project.administrator.dto.RoleDto;
 import com.exadel.project.administrator.entity.Administrator;
 import com.exadel.project.administrator.service.AdministratorService;
 import com.exadel.project.common.exception.EntityAlreadyExistsException;
@@ -40,9 +41,9 @@ public class AdministratorController {
         return ResponseEntity.ok(administratorService.updateAdministrator(id, dto));
     }
 
-    @PutMapping(value = ID +"/role")
-    public ResponseEntity<AdministratorDto> changeAdministratorRole(@PathVariable Long id, @RequestBody String roleName) {
-        return ResponseEntity.ok(administratorService.changeAdministratorRole(id, roleName));
+    @PutMapping(value = ID +"/role", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<AdministratorDto> changeAdministratorRole(@PathVariable Long id, @RequestBody RoleDto role) {
+        return ResponseEntity.ok(administratorService.changeAdministratorRole(id, role));
     }
 
 }
