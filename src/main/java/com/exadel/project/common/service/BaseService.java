@@ -5,6 +5,7 @@ import com.exadel.project.common.service.rsql.RsqlSpecification;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import static org.springframework.data.domain.Sort.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import java.util.List;
@@ -18,7 +19,7 @@ public abstract class BaseService<T, R extends JpaRepository<T, Long> & JpaSpeci
     @Autowired
     private R repository;
 
-    public List<T> getAllEntities(String search, Sort sort){
+    public List<T> findBySpecifications(String search, Sort sort){
         if (search == null){
             return repository.findAll(sort);
         }
@@ -36,15 +37,15 @@ public abstract class BaseService<T, R extends JpaRepository<T, Long> & JpaSpeci
                 : Sort.by(getOrders(sortFields));
     }
 
-    public Sort.Direction getDirection(String direction){
-        return Sort.Direction.valueOf(direction.toUpperCase());
+    public Direction getDirection(String direction){
+        return Direction.valueOf(direction.toUpperCase());
     }
 
-    public List<Sort.Order> getOrders(String sortFields){
+    public List<Order> getOrders(String sortFields){
         return Stream.of(sortFields)
                 .flatMap(o->Stream.of(o.split(","))
                         .map(a->a.split(":"))
-                        .map(b->new Sort.Order(b.length > 1 ? getDirection(b[1]) : Sort.DEFAULT_DIRECTION, b[0])))
+                        .map(b->new Order(b.length > 1 ? getDirection(b[1]) : DEFAULT_DIRECTION, b[0])))
                 .collect(Collectors.toList());
     }
 }

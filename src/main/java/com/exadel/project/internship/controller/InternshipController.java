@@ -17,8 +17,8 @@ public class InternshipController {
     private final InternshipService internshipService;
 
     @GetMapping
-    public List<InternshipDTO> findAllInternships(@RequestParam(value = "search", required = false) String search,
-                                                  @RequestParam(value = "sort", required = false) String sort){
+    public List<InternshipDTO> findInternships(@RequestParam(value = "search", required = false) String search,
+                                               @RequestParam(value = "sort", required = false) String sort){
         return internshipService.getAll(search, sort);
     }
     //TODO write Exception handler [BE-39]

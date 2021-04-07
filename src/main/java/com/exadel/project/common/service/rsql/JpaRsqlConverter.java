@@ -40,7 +40,7 @@ public abstract class JpaRsqlConverter implements RSQLVisitor<Predicate, Root> {
         }
         return null;
     }
-
+//TODO refactor by reflection
     public abstract Object checkAndConvertToEnum(String selector, String argument);
 
     private Predicate[] processNodes(List<Node> nodes, Root root) {
@@ -50,6 +50,6 @@ public abstract class JpaRsqlConverter implements RSQLVisitor<Predicate, Root> {
         }
         return predicates;
     }
-
+//TODO refactor by reflection
     public abstract Path visitToJoin(ComparisonNode node, Root root);
 }

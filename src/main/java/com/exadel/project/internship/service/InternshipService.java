@@ -33,10 +33,10 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
     public RsqlSpecification getRsqlSpecification() {
         return internshipRsqlSpecification;
     }
-
+//TODO refactor by DTO abstraction
     public List<InternshipDTO> getAll(String search, String sortFields) {
         Sort sort = getSort(sortFields);
-        return super.getAllEntities(search, sort).stream()
+        return super.findBySpecifications(search, sort).stream()
                 .map(internship -> internshipMapper.entityToDto(internship))
                 .collect(Collectors.toList());
     }
