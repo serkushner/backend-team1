@@ -8,6 +8,7 @@ import com.exadel.project.administrator.mapper.AdministratorMapper;
 import com.exadel.project.administrator.repository.AdministratorRepository;
 import com.exadel.project.common.exception.EntityAlreadyExistsException;
 import com.exadel.project.common.exception.EntityNotFoundException;
+import com.exadel.project.common.repository.rsql.RsqlSpecification;
 import com.exadel.project.common.service.BaseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +25,11 @@ public class AdministratorService extends BaseService<Administrator, Administrat
     private final PasswordEncoder passwordEncoder;
 
     private final AdministratorRepository administratorRepository;
+
+    @Override
+    public RsqlSpecification getRsqlSpecification() {
+        throw new UnsupportedOperationException();
+    }
 
     public AdministratorDto getAdministratorByEmail(String email) throws EntityNotFoundException {
         return administratorMapper.entityToDto(Optional.ofNullable(administratorRepository.findAdministratorByEmail(email))
