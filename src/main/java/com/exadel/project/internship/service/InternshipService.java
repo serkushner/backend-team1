@@ -10,22 +10,24 @@ import com.exadel.project.internship.mapper.InternshipDetailsMapper;
 import com.exadel.project.internship.mapper.InternshipMapper;
 import com.exadel.project.internship.repository.InternshipRepository;
 import com.exadel.project.internship.service.rsql.InternshipRsqlSpecification;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class InternshipService extends BaseService<Internship, InternshipRepository> {
-    private static final String DEFAULT_SORTING_FIELD = "startDate";
+
     private final InternshipMapper internshipMapper;
     private final InternshipDetailsMapper internshipDetailsMapper;
     private final InternshipRsqlSpecification internshipRsqlSpecification;
+    {
+        defaultSortingField = "startDate";
+        defaultSortingDirection = "desc";
+    }
 
     @Override
     public RsqlSpecification getRsqlSpecification() {
@@ -41,9 +43,5 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
 
     public InternshipDetailsDTO getById(Long id) throws EntityNotFoundException {
         return internshipDetailsMapper.entityToDto(super.getEntityById(id));
-    }
-
-    private Sort getSort(String sortFields){
-        return sortFields == null ? Sort.by(DEFAULT_SORTING_FIELD) : Sort.by(sortFields.split(","));
     }
 }

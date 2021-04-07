@@ -14,7 +14,7 @@ public class SkillService extends BaseService<Skill, SkillRepository> {
 
     @Override
     public RsqlSpecification getRsqlSpecification() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public List<Skill> getSkillsByIds(List<Long> ids){

@@ -28,7 +28,7 @@ public class AdministratorService extends BaseService<Administrator, Administrat
 
     @Override
     public RsqlSpecification getRsqlSpecification() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public AdministratorDto getAdministratorByEmail(String email) throws EntityNotFoundException {
