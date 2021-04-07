@@ -1,6 +1,6 @@
 package com.exadel.project.internship.service.rsql;
 
-import com.exadel.project.common.repository.rsql.JpaRsqlConverter;
+import com.exadel.project.common.service.rsql.JpaRsqlConverter;
 import com.exadel.project.internship.entity.*;
 import cz.jirutka.rsql.parser.ast.ComparisonNode;
 import javax.persistence.criteria.*;

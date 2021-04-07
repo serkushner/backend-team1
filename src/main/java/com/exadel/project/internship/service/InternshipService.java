@@ -1,7 +1,7 @@
 package com.exadel.project.internship.service;
 
 import com.exadel.project.common.exception.EntityNotFoundException;
-import com.exadel.project.common.repository.rsql.RsqlSpecification;
+import com.exadel.project.common.service.rsql.RsqlSpecification;
 import com.exadel.project.common.service.BaseService;
 import com.exadel.project.internship.dto.InternshipDTO;
 import com.exadel.project.internship.dto.InternshipDetailsDTO;

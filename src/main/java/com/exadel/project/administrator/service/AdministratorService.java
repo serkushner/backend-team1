@@ -8,7 +8,7 @@ import com.exadel.project.administrator.mapper.AdministratorMapper;
 import com.exadel.project.administrator.repository.AdministratorRepository;
 import com.exadel.project.common.exception.EntityAlreadyExistsException;
 import com.exadel.project.common.exception.EntityNotFoundException;
-import com.exadel.project.common.repository.rsql.RsqlSpecification;
+import com.exadel.project.common.service.rsql.RsqlSpecification;
 import com.exadel.project.common.service.BaseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
