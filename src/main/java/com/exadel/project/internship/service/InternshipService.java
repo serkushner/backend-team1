@@ -44,7 +44,6 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
     }
 
     private Sort getSort(String sortFields){
-        Sort sort = sortFields == null ? Sort.by(DEFAULT_SORTING_FIELD) : Sort.by(sortFields.split(","));
-        return sort;
+        return sortFields == null ? Sort.by(DEFAULT_SORTING_FIELD) : Sort.by(sortFields.split(","));
     }
 }
