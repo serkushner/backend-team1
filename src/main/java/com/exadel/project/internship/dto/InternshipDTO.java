@@ -14,4 +14,5 @@ public class InternshipDTO {
     private String title;
     private String description;
     private String internshipType;
+    private String image;
 }
