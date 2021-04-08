@@ -13,3 +13,5 @@ databaseChangeLog:
       file: db/changelog/changelog-fill-internships.yaml
   - include:
       file: db/changelog/changelog-password-column-size-changed.yaml
+  - include:
+      file: db/changelog/changelog-interviewer-additional-info.yaml

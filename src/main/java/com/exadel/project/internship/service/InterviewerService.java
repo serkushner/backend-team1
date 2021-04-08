@@ -2,14 +2,15 @@ package com.exadel.project.internship.service;
 
 import com.exadel.project.common.exception.EntityNotFoundException;
 import com.exadel.project.common.service.BaseService;
+import com.exadel.project.common.service.rsql.RsqlSpecification;
 import com.exadel.project.internship.dto.InterviewerDto;
 import com.exadel.project.internship.entity.Interviewer;
 import com.exadel.project.internship.mapper.InterviewerMapper;
 import com.exadel.project.internship.repository.InterviewerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,13 +19,17 @@ import java.util.stream.Collectors;
 public class InterviewerService extends BaseService<Interviewer, InterviewerRepository> {
 
     private final InterviewerMapper interviewerMapper;
-
     private final InterviewerRepository interviewerRepository;
 
-    public List<InterviewerDto> getAll(String search) {
-        return super.getAllEntities(search)
+    {
+        defaultSortingField = "type";
+        defaultSortingDirection = "desc";
+    }
+
+    public List<InterviewerDto> getAll(String search, String sortFields) {
+        Sort sort = getSort(sortFields);
+        return super.findBySpecifications(search, sort)
                 .stream()
-                .sorted(Comparator.comparing(Interviewer::getType))
                 .map(interviewerMapper::entityToDto)
                 .collect(Collectors.toList());
     }
@@ -46,7 +51,7 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
         return interviewerMapper.entityToDto(savedInterviewer);
     }
 
-    public void deleteInterviewer(Long id) throws EntityNotFoundException{
+    public void deleteInterviewer(Long id) throws EntityNotFoundException {
         interviewerRepository.delete(getEntityById(id));
     }
 
@@ -59,5 +64,8 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
         interviewer.setSkype(interviewerDto.getSkype());
     }
 
-
+    @Override
+    public RsqlSpecification getRsqlSpecification() {
+        throw new UnsupportedOperationException();
+    }
 }

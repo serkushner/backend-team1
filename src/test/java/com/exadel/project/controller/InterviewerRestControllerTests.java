@@ -13,6 +13,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Arrays;
+
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
@@ -54,6 +56,36 @@ public class InterviewerRestControllerTests {
                 .andExpect(jsonPath("$.phone", is("80556958574")))
                 .andExpect(jsonPath("$.type", is("TECH")))
                 .andExpect(jsonPath("$.skype", is("testSkype")));
+    }
+
+    @Test
+    void getAllInterviewers() throws Exception {
+        InterviewerDto firstDto = new InterviewerDto();
+        firstDto.setId(1L);
+        firstDto.setName("Alex");
+        firstDto.setEmail("alex@yandex.by");
+        firstDto.setType(InterviewerType.TECH);
+        InterviewerDto secondDto = new InterviewerDto();
+        secondDto.setId(2L);
+        secondDto.setName("Angelina");
+        secondDto.setEmail("angel@gmail.com");
+        secondDto.setType(InterviewerType.HR);
+
+        doReturn(Arrays.asList(firstDto, secondDto)).when(interviewerService).getAll(null, null);
+
+        mockMvc.perform(get("/interviewer"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+
+                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[0].name", is("Alex")))
+                .andExpect(jsonPath("$[0].email", is("alex@yandex.by")))
+                .andExpect(jsonPath("$[0].type", is("TECH")))
+                .andExpect(jsonPath("$[1].id", is(2)))
+                .andExpect(jsonPath("$[1].name", is("Angelina")))
+                .andExpect(jsonPath("$[1].email", is("angel@gmail.com")))
+                .andExpect(jsonPath("$[1].type", is("HR")));
+
     }
 
     @Test

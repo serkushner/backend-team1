@@ -25,8 +25,9 @@ public class InterviewerController {
     }
 
     @GetMapping
-    public ResponseEntity<List<InterviewerDto>> findAllInterviewers(@RequestParam(value = "search", required = false) String search) {
-        List<InterviewerDto> dtoList = interviewerService.getAll(search);
+    public ResponseEntity<List<InterviewerDto>> findAllInterviewers(@RequestParam(value = "search", required = false) String search,
+                                                                    @RequestParam(value = "sort", required = false) String sort) {
+        List<InterviewerDto> dtoList = interviewerService.getAll(search, sort);
         return ResponseEntity.ok(dtoList);
     }
 
