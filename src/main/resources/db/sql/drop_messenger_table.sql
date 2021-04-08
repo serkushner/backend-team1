@@ -1,0 +1,5 @@
+-- liquibase formatted sql
+
+-- changeset 20210406.[BE-19]-drop-messenger-table
+
+DROP TABLE messenger;

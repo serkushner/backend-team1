@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@ToString(exclude = {"subjects","skills","internshipType","coutries"})
+@ToString(exclude = {"subjects","skills","internshipType","countries"})
 @Entity
 @Table(name = "internship")
 public class Internship {
