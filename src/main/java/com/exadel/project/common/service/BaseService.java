@@ -11,6 +11,7 @@ import java.util.List;
 
 @Getter
 public abstract class BaseService<T, R extends JpaRepository<T, Long> & JpaSpecificationExecutor<T>>{
+
     @Autowired
     private R repository;
 
