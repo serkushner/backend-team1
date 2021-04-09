@@ -6,6 +6,8 @@ import lombok.Data;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -53,4 +55,11 @@ public class Trainee {
     @NotNull
     @Column(name = "recipient")
     private Boolean recipient;
+
+    @ManyToMany
+    @JoinTable(name = "interview_period_trainee",
+            joinColumns = @JoinColumn(name = "trainee_id"),
+            inverseJoinColumns = @JoinColumn(name = "interview_period_id")
+    )
+    private List<InterviewPeriod> interviewPeriods = new ArrayList<>();
 }

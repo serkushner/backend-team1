@@ -2,6 +2,7 @@ package com.exadel.project.trainee.entity;
 
 import com.exadel.project.internship.entity.Internship;
 import lombok.Data;
+
 import javax.persistence.*;
 
 @Data
