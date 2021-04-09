@@ -46,8 +46,8 @@ public class Trainee {
     @Column(name = "skype")
     private String skype;
 
-    @OneToOne
-    @JoinColumn()
+    @ManyToOne
+    @JoinColumn(name = "administrator_id")
     private Administrator administrator;
 
     @NotNull
