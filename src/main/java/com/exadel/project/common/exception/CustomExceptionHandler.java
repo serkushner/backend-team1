@@ -1,5 +1,7 @@
 package com.exadel.project.common.exception;
 
+import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -23,6 +25,14 @@ public class CustomExceptionHandler {
         String message = String.format("%s %s", LocalDateTime.now(), exMessage);
         ExceptionResponse exceptionResponse = new ExceptionResponse(message);
         return new ResponseEntity<>(exceptionResponse, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(InvalidDataAccessApiUsageException.class)
+    public ResponseEntity<ExceptionResponse> handlePropertyReferenceExceptionAndInvalidDataAccessApiUsageException(Exception e){
+        String exMessage = exceptionLoadMessage(e, "Bad request");
+        String message = String.format("%s %s", LocalDateTime.now(), exMessage);
+        ExceptionResponse exceptionResponse = new ExceptionResponse(message);
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
     private String exceptionLoadMessage(Exception e, String defaultMessage) {
