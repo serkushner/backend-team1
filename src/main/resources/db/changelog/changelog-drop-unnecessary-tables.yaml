@@ -1,0 +1,69 @@
+databaseChangeLog:
+
+  - changeSet:
+        id: 20210406.[BE-19]-drop-mark-table
+        author: aliaksei.kaliada@gmail.com
+        preConditions:
+          - onFail: MARK_RAN
+          - onError: MARK_RAN
+          - tableNotExists:
+            schemaName: exadel_internships
+            tableName: mark
+        changes:
+          - sqlFile:
+              dbms: 'mysql'
+              endDelimiter: "@@"
+              splitStatements: false
+              path: db/sql/drop_mark_table.sql
+              stripComments: false
+
+  - changeSet:
+        id: 20210406.[BE-19]-drop-messenger_trainee-table
+        author: aliaksei.kaliada@gmail.com
+        preConditions:
+          - onFail: MARK_RAN
+          - onError: MARK_RAN
+          - tableNotExists:
+            schemaName: exadel_internships
+            tableName: messenger_trainee
+        changes:
+          - sqlFile:
+              dbms: 'mysql'
+              endDelimiter: "@@"
+              splitStatements: false
+              path: db/sql/drop_messenger_trainee_table.sql
+              stripComments: false 
+
+  - changeSet:
+        id: 20210406.[BE-19]-drop-messenger-table
+        author: aliaksei.kaliada@gmail.com
+        preConditions:
+          - onFail: MARK_RAN
+          - onError: MARK_RAN
+          - tableNotExists:
+            schemaName: exadel_internships
+            tableName: messenger
+        changes:
+          - sqlFile:
+              dbms: 'mysql'
+              endDelimiter: "@@"
+              splitStatements: false
+              path: db/sql/drop_messenger_table.sql
+              stripComments: false
+
+  - changeSet:
+        id: 20210406.[BE-19]-drop-trainee_skill-table
+        author: aliaksei.kaliada@gmail.com
+        preConditions:
+          - onFail: MARK_RAN
+          - onError: MARK_RAN
+          - tableNotExists:
+            schemaName: exadel_internships
+            tableName: trainee_skill
+        changes:
+          - sqlFile:
+              dbms: 'mysql'
+              endDelimiter: "@@"
+              splitStatements: false
+              path: db/sql/drop_trainee_skill_table.sql
+              stripComments: false                
