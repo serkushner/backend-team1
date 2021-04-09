@@ -24,8 +24,12 @@ public class Interview {
     private InterviewTime interviewTime;
 
     @ManyToOne
-    @JoinColumn(name="trainee_id", nullable=false)
+    @JoinColumn(name = "trainee_id", nullable = false)
     private Trainee trainee;
+
+    @ManyToOne
+    @JoinColumn(name = "interviewer_id", nullable = false)
+    private Interviewer interviewer;
 }
 
 
