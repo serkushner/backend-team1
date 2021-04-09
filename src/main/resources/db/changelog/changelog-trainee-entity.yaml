@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20210409.[BE-23]-add-column-day-of-week
+      author: nidaff.s@gmail.com
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: "0"
+            sql: SELECT count(COLUMN_NAME) FROM INFORMATION_SCHEMA.COLUMNS WHERE
+              table_schema = 'exadel_internships' AND table_name='interview_period' AND column_name='day_of_week'
+      changes:
+        - addColumn:
+            tableName: interview_period
+            columns:
+              name: day_of_week
+              type: ENUM('MON','TUE','WED','THU','FRI','SAT','SUN')
+              constraints:
+                nullable: false
