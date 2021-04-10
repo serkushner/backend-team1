@@ -1,0 +1,18 @@
+databaseChangeLog:
+
+  - changeSet:  
+        id:  20210409.[BE-53]-update-images
+        author:  aliaksei.kaliada@gmail.com  
+        preConditions:
+          - onFail: MARK_RAN
+          - onError: MARK_RAN
+          - tableNotExists:
+            schemaName: exadel_internships
+            tableName: internship        
+        changes:
+          - sqlFile:
+              dbms: 'mysql'
+              endDelimiter: "@@"
+              splitStatements: true
+              path: db/sql/internships-update-images.sql
+              stripComments: false 
