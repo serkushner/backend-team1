@@ -5,6 +5,7 @@ import com.exadel.project.common.service.rsql.RsqlSpecification;
 import com.exadel.project.common.service.BaseService;
 import com.exadel.project.internship.dto.InternshipDTO;
 import com.exadel.project.internship.dto.InternshipDetailsDTO;
+import com.exadel.project.internship.entity.Country;
 import com.exadel.project.internship.entity.Internship;
 import com.exadel.project.internship.mapper.InternshipDetailsMapper;
 import com.exadel.project.internship.mapper.InternshipMapper;

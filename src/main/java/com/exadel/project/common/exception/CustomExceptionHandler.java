@@ -4,6 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 @ControllerAdvice
@@ -23,6 +25,14 @@ public class CustomExceptionHandler {
         String message = String.format("%s %s", LocalDateTime.now(), exMessage);
         ExceptionResponse exceptionResponse = new ExceptionResponse(message);
         return new ResponseEntity<>(exceptionResponse, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(IOException.class)
+    public ResponseEntity<ExceptionResponse> handlerIOException(Exception e){
+        String exMessage = exceptionLoadMessage(e, "can't upload cv");
+        String message = String.format("%s %s", LocalDateTime.now(), exMessage);
+        ExceptionResponse exceptionResponse = new ExceptionResponse(message);
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.OK);
     }
 
     private String exceptionLoadMessage(Exception e, String defaultMessage) {

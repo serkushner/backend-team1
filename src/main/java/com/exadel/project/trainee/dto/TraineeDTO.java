@@ -1,9 +1,12 @@
 package com.exadel.project.trainee.dto;
 
 
+import lombok.Data;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
 public class TraineeDTO {
     private Long id;
     private String name;
@@ -14,7 +17,7 @@ public class TraineeDTO {
     private String traineeStatus;
     private String skype;
     private Boolean recipient;
-    private String English;
+    private String english;
     private String cv;
     private String github;
     private String day1;

@@ -29,7 +29,7 @@ public class AdditionalInfo {
     @JoinColumn(name = "trainee_id")
     private Trainee trainee;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "internship_id")
     private Internship internship;
 }
