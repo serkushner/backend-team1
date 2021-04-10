@@ -1,10 +1,9 @@
 package com.exadel.project.trainee.entity;
 
-import com.exadel.project.administrator.entity.Role;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.sql.Time;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,10 +17,10 @@ public class InterviewPeriod {
     private Long id;
 
     @Column(name = "start_time")
-    private Time startTime;
+    private LocalTime startTime;
 
     @Column(name = "end_time")
-    private Time endTime;
+    private LocalTime endTime;
 
     @ManyToMany(mappedBy = "interviewPeriods")
     private List<Trainee> trainees = new ArrayList<>();

@@ -3,6 +3,7 @@ package com.exadel.project.trainee.entity;
 import com.exadel.project.administrator.entity.Administrator;
 import com.exadel.project.internship.entity.Country;
 import lombok.Data;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
