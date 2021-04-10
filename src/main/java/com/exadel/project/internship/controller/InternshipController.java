@@ -19,9 +19,9 @@ public class InternshipController {
     @GetMapping
     public List<InternshipDTO> findInternships(@RequestParam(value = "search", required = false) String search,
                                                @RequestParam(value = "sort", required = false) String sort){
-        return internshipService.getAll(search, sort);
+            return internshipService.getAll(search, sort);
     }
-    //TODO write Exception handler [BE-39]
+
     @GetMapping("/{id}")
     public InternshipDetailsDTO findInternshipById(@PathVariable ("id") Long id) throws EntityNotFoundException {
         return internshipService.getById(id);

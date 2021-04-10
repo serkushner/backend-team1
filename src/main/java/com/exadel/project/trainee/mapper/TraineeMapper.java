@@ -8,17 +8,7 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface TraineeMapper {
+    @Mapping()
+    Trainee dtoToEntity(TraineeDTO dto, Long internship);
 
-
-    //TODO: possibly error here with country
-    @Mapping(target = "name", expression =
-            "java(getCountryName(entity.getCountryName()))")
-    TraineeDTO traineetoTraineeDTO(Trainee entity);
-
-
-    default String getCountryName(Country country) {
-        return country.getName();
-    }
-
-    //TODO add for traineeStatus and List<InterviewPeriodDTO> interviewPeriods
 }

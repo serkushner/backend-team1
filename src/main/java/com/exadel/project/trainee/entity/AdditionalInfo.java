@@ -23,7 +23,7 @@ public class AdditionalInfo {
     private String cv;
 
     @Column(name = "github")
-    private String githubLink;
+    private String github;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trainee_id")

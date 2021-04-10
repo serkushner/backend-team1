@@ -5,6 +5,7 @@ import com.exadel.project.internship.entity.Country;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class Trainee {
     private String surname;
 
     @NotBlank(message = "Email of trainee should not be empty")
+    @Email
     @Column(name = "email", unique = true)
     private String email;
 
@@ -42,9 +44,6 @@ public class Trainee {
     @ManyToOne
     @JoinColumn(name = "status_id")
     private TraineeStatus status;
-
-    @Column(name = "linkedin")
-    private String linkedInLink;
 
     @Column(name = "skype")
     private String skype;
