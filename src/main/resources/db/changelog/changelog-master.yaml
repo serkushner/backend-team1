@@ -15,3 +15,5 @@ databaseChangeLog:
       file: db/changelog/changelog-password-column-size-changed.yaml
   - include:
       file: db/changelog/changelog-trainee-entity.yaml
+  - include:
+      file: db/changelog/changelog-fill-trainee-status.yaml
