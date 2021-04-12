@@ -1,8 +1,8 @@
-package com.exadel.project.internship.controller;
+package com.exadel.project.interviewer.controller;
 
 import com.exadel.project.common.exception.EntityNotFoundException;
-import com.exadel.project.internship.dto.InterviewerDto;
-import com.exadel.project.internship.service.InterviewerService;
+import com.exadel.project.interviewer.dto.InterviewerDto;
+import com.exadel.project.interviewer.service.InterviewerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +25,7 @@ public class InterviewerController {
     }
 
     @GetMapping
-    public ResponseEntity<List<InterviewerDto>> findAllInterviewers(@RequestParam(value = "search", required = false) String search,
+    public ResponseEntity<List<InterviewerDto>> findBySpecification(@RequestParam(value = "search", required = false) String search,
                                                                     @RequestParam(value = "sort", required = false) String sort) {
         List<InterviewerDto> dtoList = interviewerService.getAll(search, sort);
         return ResponseEntity.ok(dtoList);

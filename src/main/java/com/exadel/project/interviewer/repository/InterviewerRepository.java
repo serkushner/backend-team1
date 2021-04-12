@@ -1,6 +1,6 @@
-package com.exadel.project.internship.repository;
+package com.exadel.project.interviewer.repository;
 
-import com.exadel.project.internship.entity.Interviewer;
+import com.exadel.project.interviewer.entity.Interviewer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 

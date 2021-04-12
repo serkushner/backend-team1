@@ -1,6 +1,6 @@
-package com.exadel.project.internship.entity;
+package com.exadel.project.interviewer.entity;
 
-
+import com.exadel.project.interviewer.entity.InterviewerType;
 import lombok.Data;
 
 import javax.persistence.*;

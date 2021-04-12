@@ -1,6 +1,6 @@
-package com.exadel.project.internship.dto;
+package com.exadel.project.interviewer.dto;
 
-import com.exadel.project.internship.entity.InterviewerType;
+import com.exadel.project.interviewer.entity.InterviewerType;
 import lombok.Data;
 
 @Data

@@ -1,12 +1,12 @@
-package com.exadel.project.internship.service;
+package com.exadel.project.interviewer.service;
 
 import com.exadel.project.common.exception.EntityNotFoundException;
 import com.exadel.project.common.service.BaseService;
 import com.exadel.project.common.service.rsql.RsqlSpecification;
-import com.exadel.project.internship.dto.InterviewerDto;
-import com.exadel.project.internship.entity.Interviewer;
-import com.exadel.project.internship.mapper.InterviewerMapper;
-import com.exadel.project.internship.repository.InterviewerRepository;
+import com.exadel.project.interviewer.dto.InterviewerDto;
+import com.exadel.project.interviewer.entity.Interviewer;
+import com.exadel.project.interviewer.mapper.InterviewerMapper;
+import com.exadel.project.interviewer.repository.InterviewerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -45,23 +45,14 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
     }
 
     public InterviewerDto updateInterviewer(Long id, InterviewerDto interviewerDto) {
-        Interviewer interviewer = getEntityById(id);
-        fillInterviewer(interviewerDto, interviewer);
+        Interviewer interviewer = interviewerMapper.dtoToEntity(interviewerDto);
+        interviewer.setId(getEntityById(id).getId());
         Interviewer savedInterviewer = interviewerRepository.save(interviewer);
         return interviewerMapper.entityToDto(savedInterviewer);
     }
 
     public void deleteInterviewer(Long id) throws EntityNotFoundException {
         interviewerRepository.delete(getEntityById(id));
-    }
-
-    private void fillInterviewer(InterviewerDto interviewerDto, Interviewer interviewer) {
-        interviewer.setName(interviewerDto.getName());
-        interviewer.setSurname(interviewerDto.getSurname());
-        interviewer.setEmail(interviewerDto.getEmail());
-        interviewer.setPhone(interviewerDto.getPhone());
-        interviewer.setType(interviewerDto.getType());
-        interviewer.setSkype(interviewerDto.getSkype());
     }
 
     @Override

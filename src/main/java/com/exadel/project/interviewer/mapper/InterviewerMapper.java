@@ -1,8 +1,8 @@
-package com.exadel.project.internship.mapper;
+package com.exadel.project.interviewer.mapper;
 
 
-import com.exadel.project.internship.dto.InterviewerDto;
-import com.exadel.project.internship.entity.Interviewer;
+import com.exadel.project.interviewer.dto.InterviewerDto;
+import com.exadel.project.interviewer.entity.Interviewer;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
