@@ -25,23 +25,23 @@ public class AdministratorController {
             return ResponseEntity.ok(administratorService.getAdministratorById(id));
     }
 
-    @DeleteMapping(value = ID +"/delete")
+    @DeleteMapping(value = ID)
     public ResponseEntity<Void> deleteAdmin(@PathVariable Long id) {
         administratorService.deleteAdministratorById(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping( consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping()
     public ResponseEntity<AdministratorDto> addAdministrator(@RequestBody AdministratorDto dto) {
             return ResponseEntity.ok(administratorService.addAdministrator(dto));
     }
 
-    @PutMapping(value = ID, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = ID)
     public ResponseEntity<AdministratorDto> updateAdministrator(@PathVariable Long id, @RequestBody AdministratorDto dto) {
         return ResponseEntity.ok(administratorService.updateAdministrator(id, dto));
     }
 
-    @PutMapping(value = ID +"/role", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value ="/role" + ID)
     public ResponseEntity<AdministratorDto> changeAdministratorRole(@PathVariable Long id, @RequestBody RoleDto role) {
         return ResponseEntity.ok(administratorService.changeAdministratorRole(id, role));
     }
