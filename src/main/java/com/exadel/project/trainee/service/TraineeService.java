@@ -15,7 +15,7 @@ import com.exadel.project.trainee.mapper.TraineeMapper;
 import com.exadel.project.trainee.repository.TraineeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -49,11 +49,12 @@ public class TraineeService extends BaseService<Trainee, TraineeRepository> {
             addCountryToTrainee(traineeDTO.getLocation(), trainee);
         }
         trainee = traineeRepository.save(trainee);
+        List<InterviewPeriod> interviewPeriods = new ArrayList<>();
         if (traineeDTO.getDates() != null){
-            addInterviewPeriodsToTrainee(traineeDTO.getDates().values(), trainee);
+            interviewPeriods = addInterviewPeriodsToTrainee(traineeDTO.getDates().values(), trainee);
         }
-        additionalInfoService.saveAdditionalInfo(traineeDTO, trainee, internship);
-        return traineeMapper.entityToDto(trainee);
+        AdditionalInfo additionalInfo = additionalInfoService.saveAdditionalInfo(traineeDTO, trainee, internship);
+        return traineeMapper.entityToDto(trainee, additionalInfo, interviewPeriods);
     }
 
     private void addCountryToTrainee(String location, Trainee trainee){
@@ -61,9 +62,10 @@ public class TraineeService extends BaseService<Trainee, TraineeRepository> {
         trainee.setCountry(country);
     }
 
-    private void addInterviewPeriodsToTrainee(Collection<Map<String, String>> dates, Trainee trainee){
+    private List<InterviewPeriod> addInterviewPeriodsToTrainee(Collection<Map<String, String>> dates, Trainee trainee){
         List<InterviewPeriod> interviewPeriods = interviewPeriodService.addInterviewPeriod(dates, trainee);
         trainee.getInterviewPeriods().addAll(interviewPeriods);
+        return interviewPeriods;
     }
 
     private void checkDoubleRegistration(Trainee trainee, Internship internship){

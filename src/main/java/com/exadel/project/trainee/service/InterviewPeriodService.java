@@ -9,7 +9,6 @@ import com.exadel.project.trainee.entity.Trainee;
 import com.exadel.project.trainee.repository.InterviewPeriodRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -42,6 +41,10 @@ public class InterviewPeriodService extends BaseService<InterviewPeriod, Intervi
         return interviewPeriods;
     }
 
+    public List<InterviewPeriod> getInterviewPeriodsByTraineeInternship(Trainee trainee){
+        return interviewPeriodRepository.findAllByTrainees(trainee);
+    }
+
     private DayOfWeek getDayOfWeek(String day){
         switch (day){
             case "Monday": return DayOfWeek.MON;
@@ -61,8 +64,6 @@ public class InterviewPeriodService extends BaseService<InterviewPeriod, Intervi
         matcher.find();
         int hours = Integer.parseInt(matcher.group(startGroup));
         int minutes = Integer.parseInt(matcher.group(startGroup + 1));
-        LocalTime localTime = LocalTime.of(hours, minutes);
-        System.out.println(localTime);
-        return localTime;
+        return LocalTime.of(hours, minutes);
     }
 }
