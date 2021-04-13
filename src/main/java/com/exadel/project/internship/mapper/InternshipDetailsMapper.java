@@ -9,6 +9,8 @@ import com.exadel.project.internship.entity.Subject;
 import com.exadel.project.skill.entity.Skill;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+
 import java.util.List;
 
 
@@ -21,6 +23,7 @@ public interface InternshipDetailsMapper {
     @Mapping(target = "skills", expression = "java(getSkillsNames(entity.getSkills()))")
     InternshipDetailsDTO entityToDto(Internship entity);
 
+    Internship dtoToEntity(InternshipDetailsDTO dto);
 
     default List<String> getSubjectsNames(List<Subject> subjects) {
         return MapperUtil.getStrings(subjects, Subject::getName);
@@ -37,4 +40,7 @@ public interface InternshipDetailsMapper {
     default List<String> getSkillsNames(List<Skill> skills) {
         return MapperUtil.getStrings(skills, Skill::getName);
     }
+
+    @Mapping(target = "id", ignore = true)
+    void updateInternship(InternshipDetailsDTO internshipDetailsDTO, @MappingTarget Internship internship);
 }
