@@ -33,7 +33,9 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
     public RsqlSpecification getRsqlSpecification() {
         return internshipRsqlSpecification;
     }
+
 //TODO refactor by DTO abstraction
+
     public List<InternshipDTO> getAll(String search, String sortFields) {
         Sort sort = getSort(sortFields);
         return super.findBySpecifications(search, sort).stream()
