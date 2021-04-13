@@ -10,8 +10,10 @@ databaseChangeLog:
   - include:
       file: db/changelog/changelog-drop-unnecessary-tables.yaml
   - include:
-      file: db/changelog/changelog-fill-internships.yaml      
+      file: db/changelog/changelog-fill-internships.yaml
   - include:
       file: db/changelog/changelog-password-column-size-changed.yaml
+  - include:
+      file: db/changelog/changelog-interviewer-additional-info.yaml
   - include:
       file: db/changelog/changelog-change-images-interships.yaml
