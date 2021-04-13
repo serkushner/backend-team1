@@ -1,7 +1,5 @@
 package com.exadel.project.interviewer.entity;
 
-import com.exadel.project.interviewer.entity.Interviewer;
-import com.exadel.project.interviewer.entity.InterviewerType;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -30,6 +28,5 @@ public class InterviewerTestData {
         interviewer.setSkype("Yulia_hr");
         return interviewer;
     }
-
 
 }

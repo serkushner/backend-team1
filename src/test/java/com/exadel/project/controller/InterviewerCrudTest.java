@@ -4,7 +4,11 @@ import com.exadel.project.interviewer.entity.Interviewer;
 import com.exadel.project.interviewer.entity.InterviewerTestData;
 import com.exadel.project.interviewer.repository.InterviewerRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -13,18 +17,23 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
-import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@DisplayName("CRUD tests with Interviewer's Entity")
 public class InterviewerCrudTest {
 
     @MockBean
@@ -34,83 +43,152 @@ public class InterviewerCrudTest {
     private InterviewerTestData interviewerTestData;
 
     @Autowired
+    private ObjectMapper objectMapper;
+
+    @Autowired
     private MockMvc mockMvc;
 
-    @Test
-    void getInterviewerById() throws Exception {
 
-        Interviewer interviewer = interviewerTestData.getTechInterviewer();
+    @Nested
+    @DisplayName("Check Interviewer's getById method")
+    class testGetByIdMethod {
 
-        doReturn(Optional.of(interviewer)).when(interviewerRepository).findById(1L);
+        @Test
+        @DisplayName("When Interviewer is exist Then return him from database")
+        void getInterviewerById() throws Exception {
 
-        mockMvc.perform(get("/interviewer/{id}", 1))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            Interviewer interviewer = interviewerTestData.getTechInterviewer();
 
-                .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.name", is("Vladimir")))
-                .andExpect(jsonPath("$.surname", is("Mashkov")))
-                .andExpect(jsonPath("$.email", is("vlad.mashkov@gmail.com")))
-                .andExpect(jsonPath("$.phone", is("80554445588")))
-                .andExpect(jsonPath("$.type", is("TECH")))
-                .andExpect(jsonPath("$.skype", is("Vlad_tech")));
-    }
+            doReturn(Optional.of(interviewer)).when(interviewerRepository).findById(1L);
 
-    @Test
-    void getAllInterviewers() throws Exception {
+            MvcResult result = mockMvc.perform(get("/interviewer/{id}", 1))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andReturn();
 
-        Interviewer firstInterviewer = interviewerTestData.getTechInterviewer();
-        Interviewer secondInterviewer = interviewerTestData.getHrInterviewer();
+            String content = result.getResponse().getContentAsString();
+            Interviewer returnedInterviewer = objectMapper.readValue(content, Interviewer.class);
 
-        doReturn(Arrays.asList(firstInterviewer,secondInterviewer)).when(interviewerRepository).findAll(Sort.by(Sort.Direction.DESC,"type"));
+            Assertions.assertEquals(returnedInterviewer, interviewer);
+        }
 
-        mockMvc.perform(get("/interviewer"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
 
-                .andExpect(jsonPath("$[0].id", is(1)))
-                .andExpect(jsonPath("$[0].name", is("Vladimir")))
-                .andExpect(jsonPath("$[0].surname", is("Mashkov")))
-                .andExpect(jsonPath("$[0].email", is("vlad.mashkov@gmail.com")))
-                .andExpect(jsonPath("$[0].phone", is("80554445588")))
-                .andExpect(jsonPath("$[0].type", is("TECH")))
-                .andExpect(jsonPath("$[0].skype", is("Vlad_tech")))
-                .andExpect(jsonPath("$[1].id", is(2)))
-                .andExpect(jsonPath("$[1].name", is("Yulia")))
-                .andExpect(jsonPath("$[1].surname", is("Serebrennikova")))
-                .andExpect(jsonPath("$[1].email", is("yulia_serebro@gmail.com")))
-                .andExpect(jsonPath("$[1].phone", is("80559995522")))
-                .andExpect(jsonPath("$[1].type", is("HR")))
-                .andExpect(jsonPath("$[1].skype", is("Yulia_hr")));
+        @Test
+        @DisplayName("When Interviewer does't exist Then response status - Entity not found")
+        void testInterviewerByIdNotFound() throws Exception {
 
-    }
+            doReturn(Optional.empty()).when(interviewerRepository).findById(1358L);
 
-    @Test
-    void testCreateInterviewer() throws Exception {
-
-        Interviewer interviewer = interviewerTestData.getTechInterviewer();
-
-        doReturn(interviewer).when(interviewerRepository).save(interviewer);
-
-        mockMvc.perform(post("/interviewer")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(interviewer)))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-
-                .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.name", is("Vladimir")))
-                .andExpect(jsonPath("$.surname", is("Mashkov")))
-                .andExpect(jsonPath("$.email", is("vlad.mashkov@gmail.com")))
-                .andExpect(jsonPath("$.phone", is("80554445588")))
-                .andExpect(jsonPath("$.type", is("TECH")))
-                .andExpect(jsonPath("$.skype", is("Vlad_tech")));
+            mockMvc.perform(get("/interviewer/{id}", 1358))
+                    .andExpect(status().isNotFound());
+        }
 
     }
 
 
-    private static String asJsonString(final Object obj) throws JsonProcessingException {
-        return new ObjectMapper().writeValueAsString(obj);
+    @Nested
+    @DisplayName("Check Interviewer's getAll method")
+    class testGetAllMethod {
+
+        @Test
+        @DisplayName("When Interviewers exist Then return array of them ")
+        void getAllInterviewers() throws Exception {
+
+            Interviewer firstInterviewer = interviewerTestData.getTechInterviewer();
+            Interviewer secondInterviewer = interviewerTestData.getHrInterviewer();
+
+            doReturn(Arrays.asList(firstInterviewer, secondInterviewer)).when(interviewerRepository).findAll(Sort.by(Sort.Direction.DESC, "type"));
+
+            MvcResult result = mockMvc.perform(get("/interviewer"))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andReturn();
+
+            String content = result.getResponse().getContentAsString();
+
+            List<Interviewer> interviewerList = objectMapper.readValue(content, new TypeReference<List<Interviewer>>() {
+            });
+
+            Assertions.assertEquals(interviewerList.get(0), firstInterviewer);
+            Assertions.assertEquals(interviewerList.get(1), secondInterviewer);
+        }
+
+    }
+
+
+    @Nested
+    @DisplayName("Check Interviewer's create method")
+    class testCreateInterviewerMethod {
+
+        @Test
+        @DisplayName("When Interviewer doesn't exist in database Then save and return him ")
+        void testCreateInterviewer() throws Exception {
+
+            Interviewer interviewer = interviewerTestData.getTechInterviewer();
+            Interviewer savedInterviewer = interviewerTestData.getTechInterviewer();
+            savedInterviewer.setId(null);
+
+            doReturn(interviewer).when(interviewerRepository).save(savedInterviewer);
+
+            MvcResult result = mockMvc.perform(post("/interviewer")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(savedInterviewer)))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andReturn();
+
+            String content = result.getResponse().getContentAsString();
+            Interviewer returnedInterviewer = objectMapper.readValue(content, Interviewer.class);
+
+            Assertions.assertEquals(returnedInterviewer, interviewer);
+
+        }
+
+    }
+
+    @Nested
+    @DisplayName("Check Interviewer's update method")
+    class testUpdateInterviewerMethod {
+
+        @Test
+        @DisplayName("When Interviewer exist Then save Interviewer with updates and return him")
+        void testUpdateInterviewer() throws Exception {
+            Interviewer interviewer = interviewerTestData.getTechInterviewer();
+            Interviewer updateInterviewer = interviewerTestData.getHrInterviewer();
+            updateInterviewer.setId(1L);
+
+            doReturn(Optional.of(interviewer)).when(interviewerRepository).findById(1L);
+            doReturn(updateInterviewer).when(interviewerRepository).save(updateInterviewer);
+
+            MvcResult result = mockMvc.perform(put("/interviewer/{id}", 1)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(updateInterviewer)))
+                    .andExpect(status().isOk())
+                    .andReturn();
+
+            String content = result.getResponse().getContentAsString();
+            Interviewer returnedInterviewer = objectMapper.readValue(content, Interviewer.class);
+
+            Assertions.assertEquals(returnedInterviewer,updateInterviewer);
+            Assertions.assertNotEquals(returnedInterviewer,interviewer);
+
+        }
+
+        @Test
+        @DisplayName("When updated Interviewer doesn't exist Then response back status is Not Found")
+        void testUpdateInterviewerNotFound() throws Exception {
+
+            Interviewer interviewerToPut = interviewerTestData.getHrInterviewer();
+
+            doReturn(Optional.of(interviewerToPut)).when(interviewerRepository).findById(2L);
+
+            mockMvc.perform(put("/interviewer/{id}", 135)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(interviewerToPut)))
+                    .andExpect(status().isNotFound());
+
+        }
+
     }
 
 }
