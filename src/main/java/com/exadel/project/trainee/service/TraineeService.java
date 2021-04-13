@@ -1,5 +1,6 @@
 package com.exadel.project.trainee.service;
 
+import com.exadel.project.common.exception.DoubleRegistrationException;
 import com.exadel.project.common.service.BaseService;
 import com.exadel.project.common.service.rsql.RsqlSpecification;
 import com.exadel.project.internship.entity.Country;
@@ -10,25 +11,24 @@ import com.exadel.project.trainee.dto.TraineeDTO;
 import com.exadel.project.trainee.entity.AdditionalInfo;
 import com.exadel.project.trainee.entity.InterviewPeriod;
 import com.exadel.project.trainee.entity.Trainee;
-import com.exadel.project.trainee.mapper.AdditionalInfoMapper;
 import com.exadel.project.trainee.mapper.TraineeMapper;
-import com.exadel.project.trainee.repository.AdditionalInfoRepository;
 import com.exadel.project.trainee.repository.TraineeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 public class TraineeService extends BaseService<Trainee, TraineeRepository> {
-    private static final Long TRAINEE_STATUS_FIRST_ID = 1L;
 
     private final TraineeMapper traineeMapper;
     private final CountryService countryService;
-    private final TraineeStatusService traineeStatusService;
     private final TraineeRepository traineeRepository;
-    private final AdditionalInfoMapper additionalInfoMapper;
     private final InternshipService internshipService;
-    private final AdditionalInfoRepository additionalInfoRepository;
+    private final AdditionalInfoService additionalInfoService;
     private final InterviewPeriodService interviewPeriodService;
 
     @Override
@@ -37,30 +37,39 @@ public class TraineeService extends BaseService<Trainee, TraineeRepository> {
     }
 
     public TraineeDTO addTrainee(TraineeDTO traineeDTO, Long internshipId){
-        Trainee trainee = traineeMapper.dtoToEntity(traineeDTO);
-        Country country = countryService.getByName(traineeDTO.getLocation());
-        trainee.setCountry(country);
-//        trainee.setStatus(traineeStatusService.getEntityById(TRAINEE_STATUS_FIRST_ID));
-        trainee = traineeRepository.save(trainee);
+        Trainee trainee = traineeRepository.findTraineeByEmail(traineeDTO.getEmail());
         Internship internship = internshipService.getEntityById(internshipId);
-        AdditionalInfo additionalInfo = additionalInfoMapper.dtoToEntity(traineeDTO, trainee, internship);
-        additionalInfoRepository.save(additionalInfo);
-        InterviewPeriod interviewPeriod = null;
-        if (traineeDTO.getDay1() != null && traineeDTO.getHours1() != null){
-            interviewPeriod = interviewPeriodService.addInterviewPeriod(traineeDTO.getHours1(), traineeDTO.getDay1());
-            trainee.getInterviewPeriods().add(interviewPeriod);
-            interviewPeriod.getTrainees().add(trainee);
+        checkDoubleRegistration(trainee, internship);
+        if (trainee != null){
+            traineeMapper.updateTrainee(traineeDTO, trainee);
+        }else {
+            trainee = traineeMapper.dtoToEntity(traineeDTO);
         }
-        if (traineeDTO.getDay2() != null && traineeDTO.getHours2() != null){
-            interviewPeriod = interviewPeriodService.addInterviewPeriod(traineeDTO.getHours2(), traineeDTO.getDay2());
-            trainee.getInterviewPeriods().add(interviewPeriod);
-            interviewPeriod.getTrainees().add(trainee);
+        if (traineeDTO.getLocation() != null){
+            addCountryToTrainee(traineeDTO.getLocation(), trainee);
         }
-        if (traineeDTO.getDay3() != null && traineeDTO.getHours3() != null){
-            interviewPeriod = interviewPeriodService.addInterviewPeriod(traineeDTO.getHours3(), traineeDTO.getDay3());
-            trainee.getInterviewPeriods().add(interviewPeriod);
-            interviewPeriod.getTrainees().add(trainee);
+        trainee = traineeRepository.save(trainee);
+        if (traineeDTO.getDates() != null){
+            addInterviewPeriodsToTrainee(traineeDTO.getDates().values(), trainee);
         }
-        return traineeDTO;
+        additionalInfoService.saveAdditionalInfo(traineeDTO, trainee, internship);
+        return traineeMapper.entityToDto(trainee);
+    }
+
+    private void addCountryToTrainee(String location, Trainee trainee){
+        Country country = countryService.getByName(location);
+        trainee.setCountry(country);
+    }
+
+    private void addInterviewPeriodsToTrainee(Collection<Map<String, String>> dates, Trainee trainee){
+        List<InterviewPeriod> interviewPeriods = interviewPeriodService.addInterviewPeriod(dates, trainee);
+        trainee.getInterviewPeriods().addAll(interviewPeriods);
+    }
+
+    private void checkDoubleRegistration(Trainee trainee, Internship internship){
+        AdditionalInfo additionalInfo = additionalInfoService.getAdditionalInfoByInternshipAndTrainee(internship, trainee);
+        if (additionalInfo != null){
+            throw new DoubleRegistrationException();
+        }
     }
 }

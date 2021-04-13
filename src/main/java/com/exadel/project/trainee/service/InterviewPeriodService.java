@@ -7,13 +7,14 @@ import com.exadel.project.trainee.entity.DayOfWeek;
 import com.exadel.project.trainee.entity.InterviewPeriod;
 import com.exadel.project.trainee.entity.Trainee;
 import com.exadel.project.trainee.repository.InterviewPeriodRepository;
-import com.exadel.project.trainee.repository.TraineeRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,13 +28,18 @@ public class InterviewPeriodService extends BaseService<InterviewPeriod, Intervi
         throw new UnsupportedOperationException();
     }
 
-    public InterviewPeriod addInterviewPeriod(String time, String day){
-        InterviewPeriod interviewPeriod = new InterviewPeriod();
-        interviewPeriod.setDayOfWeek(getDayOfWeek(day));
-        List<LocalTime> localTimes = getTimeFromStrings(time);
-        interviewPeriod.setStartTime(localTimes.get(0));
-        interviewPeriod.setEndTime(localTimes.get(1));
-        return interviewPeriodRepository.save(interviewPeriod);
+    public List<InterviewPeriod> addInterviewPeriod(Collection<Map<String, String>> dates, Trainee trainee){
+        List<InterviewPeriod> interviewPeriods = new ArrayList<>();
+        dates.forEach(map->{
+            InterviewPeriod interviewPeriod = new InterviewPeriod();
+            interviewPeriod.setDayOfWeek(getDayOfWeek(map.get("day")));
+            interviewPeriod.setStartTime(getTimeFromPeriod(map.get("time"), 1));
+            interviewPeriod.setEndTime(getTimeFromPeriod(map.get("time"), 3));
+            interviewPeriod = interviewPeriodRepository.save(interviewPeriod);
+            interviewPeriod.getTrainees().add(trainee);
+            interviewPeriods.add(interviewPeriod);
+        });
+        return interviewPeriods;
     }
 
     private DayOfWeek getDayOfWeek(String day){
@@ -49,37 +55,14 @@ public class InterviewPeriodService extends BaseService<InterviewPeriod, Intervi
         }
     }
 
-    private List<String> getAllMatches(String times) {
-        String regex = "(\\d?\\d.\\d\\d)";
-        List<String> matches = new ArrayList<String>();
-        Matcher m = Pattern.compile(regex).matcher(times);
-        while(m.find()) {
-            matches.add(m.group(1));
-        }
-        return matches;
-    }
-
-    private List<LocalTime> getTimeFromStrings(String times) {
-        List<String> stringWithTime = getAllMatches(times);
-
-        String regExHours = "(\\d?\\d).";
-        Pattern hoursPattern = Pattern.compile(regExHours);
-        String regExMinutes = ".(\\d\\d)";
-        Pattern minutesPattern = Pattern.compile(regExMinutes);
-        List<LocalTime> localTimes = new ArrayList<>();
-        String hours;
-        String minutes;
-        LocalTime time;
-        for (String s : stringWithTime) {
-            Matcher matcher = hoursPattern.matcher(s);
-            matcher.find();
-            hours = matcher.group(1);
-            matcher = minutesPattern.matcher(s);
-            matcher.find();
-            minutes = matcher.group(1);
-            time = LocalTime.of(Integer.parseInt(hours), Integer.parseInt(minutes));
-            localTimes.add(time);
-        }
-        return localTimes;
+    private LocalTime getTimeFromPeriod(String period, int startGroup){
+        Pattern pattern = Pattern.compile("(\\d{2})\\.(\\d{2}) - (\\d{2})\\.(\\d{2})");
+        Matcher matcher = pattern.matcher(period);
+        matcher.find();
+        int hours = Integer.parseInt(matcher.group(startGroup));
+        int minutes = Integer.parseInt(matcher.group(startGroup + 1));
+        LocalTime localTime = LocalTime.of(hours, minutes);
+        System.out.println(localTime);
+        return localTime;
     }
 }

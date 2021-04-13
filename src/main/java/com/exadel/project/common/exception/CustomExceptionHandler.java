@@ -38,11 +38,19 @@ public class CustomExceptionHandler {
     }
 
     @ExceptionHandler(InvalidDataAccessApiUsageException.class)
-    public ResponseEntity<ExceptionResponse> handlePropertyReferenceExceptionAndInvalidDataAccessApiUsageException(Exception e){
+    public ResponseEntity<ExceptionResponse> handlerPropertyReferenceExceptionAndInvalidDataAccessApiUsageException(Exception e){
         String exMessage = exceptionLoadMessage(e, "Bad request");
         String message = String.format("%s %s", LocalDateTime.now(), exMessage);
         ExceptionResponse exceptionResponse = new ExceptionResponse(message);
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DoubleRegistrationException.class)
+    public ResponseEntity<ExceptionResponse> handlerDoubleRegistrationException(Exception e){
+        String exMessage = exceptionLoadMessage(e, "trainee already registered on the internship");
+        String message = String.format("%s %s", LocalDateTime.now(), exMessage);
+        ExceptionResponse exceptionResponse = new ExceptionResponse(message);
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.FORBIDDEN);
     }
 
     private String exceptionLoadMessage(Exception e, String defaultMessage) {

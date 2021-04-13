@@ -3,7 +3,6 @@ package com.exadel.project.trainee.entity;
 import com.exadel.project.administrator.entity.Administrator;
 import com.exadel.project.internship.entity.Country;
 import lombok.Data;
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -40,10 +39,6 @@ public class Trainee {
     @ManyToOne
     @JoinColumn(name = "country_id")
     private Country country;
-
-    @ManyToOne
-    @JoinColumn(name = "status_id")
-    private TraineeStatus status;
 
     @Column(name = "skype")
     private String skype;

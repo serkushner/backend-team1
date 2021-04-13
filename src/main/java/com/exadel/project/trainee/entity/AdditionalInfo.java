@@ -2,7 +2,6 @@ package com.exadel.project.trainee.entity;
 
 import com.exadel.project.internship.entity.Internship;
 import lombok.Data;
-
 import javax.persistence.*;
 
 @Data
@@ -17,7 +16,7 @@ public class AdditionalInfo {
     private Long id;
 
     @Column(name = "additional_info")
-    private String additionalInfo;
+    private String english;
 
     @Column(name = "cv")
     private String cv;
@@ -32,4 +31,8 @@ public class AdditionalInfo {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "internship_id")
     private Internship internship;
+
+    @ManyToOne
+    @JoinColumn(name = "status_id")
+    private TraineeStatus status;
 }

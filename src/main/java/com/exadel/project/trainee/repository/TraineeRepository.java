@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface TraineeRepository extends JpaRepository<Trainee, Long>,
         JpaSpecificationExecutor<Trainee> {
+    Trainee findTraineeByEmail(String email);
 }

@@ -1,7 +1,6 @@
 package com.exadel.project.trainee.entity;
 
 import lombok.Data;
-
 import javax.persistence.*;
 import java.time.LocalTime;
 import java.util.ArrayList;

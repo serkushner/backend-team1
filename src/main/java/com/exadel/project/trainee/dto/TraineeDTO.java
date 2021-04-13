@@ -1,10 +1,8 @@
 package com.exadel.project.trainee.dto;
 
-
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 @Data
 public class TraineeDTO {
@@ -20,10 +18,5 @@ public class TraineeDTO {
     private String english;
     private String cv;
     private String github;
-    private String day1;
-    private String day2;
-    private String day3;
-    private String hours1;
-    private String hours2;
-    private String hours3;
+    private Map<String, Map<String, String>> dates;
 }

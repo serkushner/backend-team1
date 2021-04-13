@@ -26,11 +26,6 @@ public class CountryService extends BaseService<Country, CountryRepository> {
     }
 
     public Country getByName(String name){
-        return getRepository().findOne(new Specification<Country>() {
-            @Override
-            public Predicate toPredicate(Root<Country> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                return criteriaBuilder.equal(root.get("name"), name);
-            }
-        }).orElseThrow(EntityNotFoundException::new);
+        return countryRepository.findCountryByName(name);
     }
 }

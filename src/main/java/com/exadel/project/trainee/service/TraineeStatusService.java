@@ -16,4 +16,8 @@ public class TraineeStatusService extends BaseService<TraineeStatus, TraineeStat
     public RsqlSpecification getRsqlSpecification() {
         throw new UnsupportedOperationException();
     }
+
+    public TraineeStatus findTraineeStatusByName(String name){
+        return name != null ? traineeStatusRepository.findTraineeStatusByName(name) : traineeStatusRepository.findById(1L).get();
+    }
 }
