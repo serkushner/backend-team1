@@ -1,0 +1,19 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: 20210414.[BE-24]-addition_to_administrator
+      author: nidaff.s@gmail.com
+      comment: "Insertion of initial data to administrator table"
+      preConditions:
+        - onFail: MARK_RAN
+        - onError: MARK_RAN
+        - sqlCheck:
+            expectedResult: "0"
+            sql: SELECT COUNT(*) FROM administrator
+      changes:
+        - sqlFile:
+            dbms: 'mysql'
+            endDelimiter: "@@"
+            splitStatements: false
+            path: db/sql/add-administrators.sql
+            stripComments: false
