@@ -1,0 +1,18 @@
+databaseChangeLog:
+
+  - changeSet:  
+        id:  20210413.[BE-23]-replace-trainee-status-id-to-additional-info
+        author:  aliaksei.kaliada@gmail.com  
+        preConditions:
+          - onFail: MARK_RAN
+          - onError: MARK_RAN
+          - tableNotExists:
+            schemaName: exadel_internships
+            tableName: additional_info        
+        changes:
+          - sqlFile:
+              dbms: 'mysql'
+              endDelimiter: "@@"
+              splitStatements: true
+              path: db/sql/replace-status-id.sql
+              stripComments: false 
