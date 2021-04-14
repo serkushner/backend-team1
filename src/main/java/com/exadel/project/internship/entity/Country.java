@@ -21,7 +21,4 @@ public class Country {
     @NotBlank(message = "Name of country should not be empty")
     @Column(name = "name")
     private String name;
-
-    @ManyToMany(mappedBy = "countries")
-    private List<Internship> internships = new ArrayList<>();
 }

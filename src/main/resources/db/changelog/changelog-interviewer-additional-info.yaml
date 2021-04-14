@@ -1,0 +1,19 @@
+databaseChangeLog:
+
+  - changeSet:
+        id: 20210406.[BE-20]-addition_to_interviewer
+        author: v.khorunzhyn@gmail.com
+        comment: "Insertion of initial data to interviewer table"
+        preConditions:
+          - onFail: MARK_RAN
+          - onError: MARK_RAN
+          - sqlCheck:
+              expectedResult: "0"
+              sql: SELECT COUNT(*) FROM interviewer
+        changes:
+          - sqlFile:
+              dbms: 'mysql'
+              endDelimiter: "@@"
+              splitStatements: false
+              path: db/sql/init_interviewer.sql
+              stripComments: false

@@ -19,7 +19,7 @@ public abstract class RsqlSpecification {
                 try{
                     rsql = new RSQLParser().parse(rsqlQuery);
                 }catch (RSQLParserException e){
-                    return null;
+                    throw new IllegalArgumentException(e);
                 }
                 JpaRsqlConverter jpaRsqlConverter = getJpaRsqlConverter(cb);
                 return rsql.accept(jpaRsqlConverter, root);

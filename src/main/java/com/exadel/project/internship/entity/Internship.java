@@ -67,7 +67,7 @@ public class Internship {
     private String description;
 
     @Column(name = "additional_info")
-    private String additionalInfo;
+    private String additionalInfoInternship;
 
     @Column(name = "image")
     private String image;

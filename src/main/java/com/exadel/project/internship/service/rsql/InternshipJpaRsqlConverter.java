@@ -26,7 +26,7 @@ public class InternshipJpaRsqlConverter extends JpaRsqlConverter {
                 Join<Internship, InternshipType> internshipTypeJoin = root.join(selectors[0]);
                 return internshipTypeJoin.get(selectors[1]);
         }
-        return null;
+        throw new IllegalArgumentException(selectors[0] + " not found");
     }
 
     @Override

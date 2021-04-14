@@ -5,6 +5,7 @@ import com.exadel.project.common.service.rsql.RsqlSpecification;
 import com.exadel.project.common.service.BaseService;
 import com.exadel.project.internship.dto.InternshipDTO;
 import com.exadel.project.internship.dto.InternshipDetailsDTO;
+import com.exadel.project.internship.entity.Country;
 import com.exadel.project.internship.entity.Internship;
 import com.exadel.project.internship.mapper.InternshipDetailsMapper;
 import com.exadel.project.internship.mapper.InternshipMapper;
@@ -33,7 +34,9 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
     public RsqlSpecification getRsqlSpecification() {
         return internshipRsqlSpecification;
     }
+
 //TODO refactor by DTO abstraction
+
     public List<InternshipDTO> getAll(String search, String sortFields) {
         Sort sort = getSort(sortFields);
         return super.findBySpecifications(search, sort).stream()
