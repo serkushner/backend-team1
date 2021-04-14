@@ -5,7 +5,6 @@ import com.exadel.project.trainee.dto.TraineeDTO;
 import com.exadel.project.trainee.entity.AdditionalInfo;
 import com.exadel.project.trainee.entity.InterviewPeriod;
 import com.exadel.project.trainee.entity.Trainee;
-import com.exadel.project.trainee.entity.TraineeStatus;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -19,7 +18,6 @@ public interface TraineeMapper {
     Trainee dtoToEntity(TraineeDTO dto);
 
     @Mapping(target = "dates", expression = "java(getMapDates(interviewPeriods))")
-    @Mapping(target = "traineeStatus", expression = "java(getStatusName(additionalInfo.getStatus()))")
     @Mapping(target = "location", expression = "java(getCountryName(trainee.getCountry()))")
     @Mapping(target = "id", source = "trainee.id")
     TraineeDTO entityToDto(Trainee trainee, AdditionalInfo additionalInfo, List<InterviewPeriod> interviewPeriods);
@@ -29,10 +27,6 @@ public interface TraineeMapper {
 
     default String getCountryName(Country country) {
         return country.getName();
-    }
-
-    default String getStatusName(TraineeStatus traineeStatus){
-        return traineeStatus.getName();
     }
 
     default Map<String, Map<String, String>> getMapDates(List<InterviewPeriod> interviewPeriods){

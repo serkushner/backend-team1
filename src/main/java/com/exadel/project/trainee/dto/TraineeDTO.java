@@ -1,5 +1,6 @@
 package com.exadel.project.trainee.dto;
 
+import com.exadel.project.trainee.entity.TraineeStatus;
 import lombok.Data;
 
 import java.util.Map;

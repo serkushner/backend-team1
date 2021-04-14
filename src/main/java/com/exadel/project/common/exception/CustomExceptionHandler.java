@@ -34,7 +34,7 @@ public class CustomExceptionHandler {
         String exMessage = exceptionLoadMessage(e, "can't upload cv");
         String message = String.format("%s %s", LocalDateTime.now(), exMessage);
         ExceptionResponse exceptionResponse = new ExceptionResponse(message);
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.OK);
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(InvalidDataAccessApiUsageException.class)

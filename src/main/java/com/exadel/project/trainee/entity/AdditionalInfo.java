@@ -32,7 +32,7 @@ public class AdditionalInfo {
     @JoinColumn(name = "internship_id")
     private Internship internship;
 
-    @ManyToOne
-    @JoinColumn(name = "status_id")
-    private TraineeStatus status;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status_trainee", columnDefinition="ENUM('REGISTERED', 'RECRUITER_INTERVIEW_PENDING', 'RECRUITER_INTERVIEW_PASSED', 'TECHNICAL_INTERVIEW_PENDING', 'TECHNICAL_INTERVIEW_PASSED', 'REJECTED', 'ACCEPTED', 'PENDING_FOR_DECISION')")
+    private TraineeStatus traineeStatus;
 }

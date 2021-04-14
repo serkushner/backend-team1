@@ -19,7 +19,7 @@ public class InternshipController {
     @GetMapping
     public List<InternshipDTO> findInternships(@RequestParam(value = "search", required = false) String search,
                                                @RequestParam(value = "sort", required = false) String sort){
-            return internshipService.getAll(search, sort);
+        return internshipService.getAll(search, sort);
     }
 
     @GetMapping("/{id}")

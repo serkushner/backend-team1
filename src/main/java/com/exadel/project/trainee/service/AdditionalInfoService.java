@@ -15,9 +15,8 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class AdditionalInfoService extends BaseService<AdditionalInfo, AdditionalInfoRepository> {
 
-    private AdditionalInfoRepository additionalInfoRepository;
-    private AdditionalInfoMapper additionalInfoMapper;
-    private final TraineeStatusService traineeStatusService;
+    private final AdditionalInfoRepository additionalInfoRepository;
+    private final AdditionalInfoMapper additionalInfoMapper;
 
     @Override
     public RsqlSpecification getRsqlSpecification() {
@@ -30,7 +29,6 @@ public class AdditionalInfoService extends BaseService<AdditionalInfo, Additiona
 
     public AdditionalInfo saveAdditionalInfo(TraineeDTO traineeDTO, Trainee trainee, Internship internship){
         AdditionalInfo additionalInfo = additionalInfoMapper.dtoToEntity(traineeDTO, trainee, internship);
-        additionalInfo.setStatus(traineeStatusService.findTraineeStatusByName(traineeDTO.getTraineeStatus()));
         return additionalInfoRepository.save(additionalInfo);
     }
 }
