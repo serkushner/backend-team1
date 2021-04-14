@@ -1,7 +1,5 @@
 package com.exadel.project.interview.service;
 
-import com.exadel.project.administrator.dto.AdministratorDto;
-import com.exadel.project.administrator.entity.Administrator;
 import com.exadel.project.common.exception.EntityAlreadyExistsException;
 import com.exadel.project.common.exception.EntityNotFoundException;
 import com.exadel.project.common.service.BaseService;
@@ -28,7 +26,7 @@ public class InterviewService extends BaseService<Interview, InterviewRepository
         throw new UnsupportedOperationException();
     }
 
-    public InterviewDTO createInterview(InterviewDTO interviewDTO) throws EntityAlreadyExistsException {
+    public InterviewDTO addInterview(InterviewDTO interviewDTO) throws EntityAlreadyExistsException {
         if (interviewRepository.findById(interviewDTO.getId()).isPresent()) {
             throw new EntityAlreadyExistsException();
         }
@@ -37,14 +35,20 @@ public class InterviewService extends BaseService<Interview, InterviewRepository
         return interviewMapper.entityToDto(interview);
     }
 
-    public void deleteInterviewById(Long id) throws EntityNotFoundException {
-        interviewRepository.delete(interviewRepository.findInterviewById(id));
-    }
-
     private Interview getInterviewById(Long id) throws EntityNotFoundException {
         return Optional.ofNullable(interviewRepository.findInterviewById(id))
                 .orElseThrow(EntityNotFoundException::new);
     }
 
+    public InterviewDTO updateInterviewById(Long id, InterviewDTO interviewDTO) throws EntityNotFoundException {
+        Interview interview = interviewMapper.dtoToEntity(interviewDTO);
+        interview.setId(getEntityById(id).getId());
+        Interview newInterview = interviewRepository.save(interview);
+        return interviewMapper.entityToDto(newInterview);
+    }
+
+    public void deleteInterviewById(Long id) throws EntityNotFoundException {
+        interviewRepository.delete(interviewRepository.findInterviewById(id));
+    }
 
 }
