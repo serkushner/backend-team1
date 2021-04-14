@@ -13,14 +13,16 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Getter
-public abstract class BaseService<T, R extends JpaRepository<T, Long> & JpaSpecificationExecutor<T>>{
+public abstract class BaseService<T, R extends JpaRepository<T, Long> & JpaSpecificationExecutor<T>> {
+
     protected String defaultSortingField = "id";
     protected String defaultSortingDirection = "asc";
+
     @Autowired
     private R repository;
 
-    public List<T> findBySpecifications(String search, Sort sort){
-        if (search == null){
+    public List<T> findBySpecifications(String search, Sort sort) {
+        if (search == null) {
             return repository.findAll(sort);
         }
         return repository.findAll(getRsqlSpecification().rsql(search), sort);
@@ -32,20 +34,20 @@ public abstract class BaseService<T, R extends JpaRepository<T, Long> & JpaSpeci
 
     public abstract RsqlSpecification getRsqlSpecification();
 
-    public Sort getSort(String sortFields){
+    public Sort getSort(String sortFields) {
         return sortFields == null ? Sort.by(getDirection(defaultSortingDirection), defaultSortingField)
                 : Sort.by(getOrders(sortFields));
     }
 
-    public Direction getDirection(String direction){
+    public Direction getDirection(String direction) {
         return Direction.valueOf(direction.toUpperCase());
     }
 
-    public List<Order> getOrders(String sortFields){
+    public List<Order> getOrders(String sortFields) {
         return Stream.of(sortFields)
-                .flatMap(o->Stream.of(o.split(","))
-                        .map(a->a.split(":"))
-                        .map(b->new Order(b.length > 1 ? getDirection(b[1]) : DEFAULT_DIRECTION, b[0])))
+                .flatMap(o -> Stream.of(o.split(","))
+                        .map(a -> a.split(":"))
+                        .map(b -> new Order(b.length > 1 ? getDirection(b[1]) : DEFAULT_DIRECTION, b[0])))
                 .collect(Collectors.toList());
     }
 }
