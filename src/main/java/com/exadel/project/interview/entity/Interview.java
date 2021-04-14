@@ -1,5 +1,7 @@
 package com.exadel.project.interview.entity;
 
+import com.exadel.project.interviewer.entity.Interviewer;
+import com.exadel.project.trainee.entity.Trainee;
 import lombok.Data;
 
 import javax.persistence.*;
