@@ -1,0 +1,12 @@
+package com.exadel.project.trainee.entity;
+
+public enum TraineeStatus {
+    REGISTERED,
+    RECRUITER_INTERVIEW_PENDING,
+    RECRUITER_INTERVIEW_PASSED,
+    TECHNICAL_INTERVIEW_PENDING,
+    TECHNICAL_INTERVIEW_PASSED,
+    REJECTED,
+    ACCEPTED,
+    PENDING_FOR_DECISION
+}
