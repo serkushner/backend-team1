@@ -2,6 +2,7 @@ package com.exadel.project.trainee.entity;
 
 import lombok.Data;
 import javax.persistence.*;
+import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,6 @@ public class InterviewPeriod {
     @ManyToMany(mappedBy = "interviewPeriods")
     private List<Trainee> trainees = new ArrayList<>();
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "day_of_week", columnDefinition="ENUM('MON','TUE','WED','THU','FRI','SAT','SUN')")
+    @Column(name = "day_of_week")
     private DayOfWeek dayOfWeek;
 }

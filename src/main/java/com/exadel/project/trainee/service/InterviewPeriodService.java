@@ -1,14 +1,13 @@
 package com.exadel.project.trainee.service;
 
-import com.exadel.project.common.exception.NoSuchDayOfWeekException;
 import com.exadel.project.common.service.BaseService;
 import com.exadel.project.common.service.rsql.RsqlSpecification;
-import com.exadel.project.trainee.entity.DayOfWeek;
 import com.exadel.project.trainee.entity.InterviewPeriod;
 import com.exadel.project.trainee.entity.Trainee;
 import com.exadel.project.trainee.repository.InterviewPeriodRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,7 +30,7 @@ public class InterviewPeriodService extends BaseService<InterviewPeriod, Intervi
         List<InterviewPeriod> interviewPeriods = new ArrayList<>();
         dates.forEach(map->{
             InterviewPeriod interviewPeriod = new InterviewPeriod();
-            interviewPeriod.setDayOfWeek(getDayOfWeek(map.get("day")));
+            interviewPeriod.setDayOfWeek(DayOfWeek.valueOf(map.get("day").toUpperCase()));
             interviewPeriod.setStartTime(getTimeFromPeriod(map.get("time"), 1));
             interviewPeriod.setEndTime(getTimeFromPeriod(map.get("time"), 3));
             interviewPeriod = interviewPeriodRepository.save(interviewPeriod);
@@ -41,21 +40,8 @@ public class InterviewPeriodService extends BaseService<InterviewPeriod, Intervi
         return interviewPeriods;
     }
 
-    public List<InterviewPeriod> getInterviewPeriodsByTraineeInternship(Trainee trainee){
+    public List<InterviewPeriod> getInterviewPeriodsByTrainee(Trainee trainee){
         return interviewPeriodRepository.findAllByTrainees(trainee);
-    }
-
-    private DayOfWeek getDayOfWeek(String day){
-        switch (day){
-            case "Monday": return DayOfWeek.MON;
-            case "Tuesday": return DayOfWeek.TUE;
-            case "Wednesday": return DayOfWeek.WED;
-            case "Thursday": return DayOfWeek.THU;
-            case "Friday": return DayOfWeek.FRI;
-            case "Saturday": return DayOfWeek.SAT;
-            case "Sunday": return DayOfWeek.SUN;
-            default: throw new NoSuchDayOfWeekException();
-        }
     }
 
     private LocalTime getTimeFromPeriod(String period, int startGroup){

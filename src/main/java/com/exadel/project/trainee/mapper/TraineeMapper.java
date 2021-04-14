@@ -40,7 +40,7 @@ public interface TraineeMapper {
         Map<String, Map<String, String>> counterToDates = new HashMap<>();
         for (InterviewPeriod interviewPeriod : interviewPeriods){
             Map<String, String> dayOfWeekToTime = new HashMap<>();
-            dayOfWeekToTime.put("day", interviewPeriod.getDayOfWeek().getName());
+            dayOfWeekToTime.put("day", interviewPeriod.getDayOfWeek().toString());
             String startTime = interviewPeriod.getStartTime().toString();
             String endTime = interviewPeriod.getEndTime().toString();
             dayOfWeekToTime.put("time", String.join(" - ", startTime, endTime));
