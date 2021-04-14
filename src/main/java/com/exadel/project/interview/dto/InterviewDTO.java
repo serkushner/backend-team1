@@ -1,5 +1,7 @@
 package com.exadel.project.interview.dto;
 
+import com.exadel.project.interviewer.dto.InterviewerDTO;
+import com.exadel.project.trainee.dto.TraineeDTO;
 import lombok.Data;
 
 @Data
