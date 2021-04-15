@@ -52,7 +52,7 @@ public class TraineeService extends BaseService<Trainee, TraineeRepository> {
         trainee = traineeRepository.save(trainee);
         List<InterviewPeriod> interviewPeriods = new ArrayList<>();
         if (traineeDTO.getDates() != null){
-            interviewPeriods = addInterviewPeriodsToTrainee(traineeDTO.getDates().values(), trainee);
+            interviewPeriods = addInterviewPeriodsToTrainee(traineeDTO.getDates(), trainee);
         }
         AdditionalInfo additionalInfo = additionalInfoService.saveAdditionalInfo(traineeDTO, trainee, internship);
         return traineeMapper.entityToDto(trainee, additionalInfo, interviewPeriods);
@@ -63,7 +63,7 @@ public class TraineeService extends BaseService<Trainee, TraineeRepository> {
         trainee.setCountry(country);
     }
 
-    private List<InterviewPeriod> addInterviewPeriodsToTrainee(Collection<Map<String, String>> dates, Trainee trainee){
+    private List<InterviewPeriod> addInterviewPeriodsToTrainee(List<Map<String, String>> dates, Trainee trainee){
         List<InterviewPeriod> interviewPeriods = interviewPeriodService.addInterviewPeriod(dates, trainee);
         trainee.getInterviewPeriods().addAll(interviewPeriods);
         return interviewPeriods;

@@ -1,8 +1,8 @@
 package com.exadel.project.trainee.dto;
 
-import com.exadel.project.trainee.entity.TraineeStatus;
 import lombok.Data;
 
+import java.util.List;
 import java.util.Map;
 
 @Data
@@ -19,5 +19,5 @@ public class TraineeDTO {
     private String english;
     private String cv;
     private String github;
-    private Map<String, Map<String, String>> dates;
+    private List<Map<String, String>> dates;
 }
