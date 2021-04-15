@@ -26,17 +26,17 @@ public class InterviewPeriodService extends BaseService<InterviewPeriod, Intervi
         throw new UnsupportedOperationException();
     }
 
-    public List<InterviewPeriod> addInterviewPeriod(Collection<Map<String, String>> dates, Trainee trainee){
+    public List<InterviewPeriod> addInterviewPeriod(List<Map<String, String>> dates, Trainee trainee){
         List<InterviewPeriod> interviewPeriods = new ArrayList<>();
-        dates.forEach(map->{
+        for (Map<String, String> date : dates) {
             InterviewPeriod interviewPeriod = new InterviewPeriod();
-            interviewPeriod.setDayOfWeek(DayOfWeek.valueOf(map.get("day").toUpperCase()));
-            interviewPeriod.setStartTime(getTimeFromPeriod(map.get("time"), 1));
-            interviewPeriod.setEndTime(getTimeFromPeriod(map.get("time"), 3));
+            interviewPeriod.setDayOfWeek(DayOfWeek.valueOf(date.get("day").toUpperCase()));
+            interviewPeriod.setStartTime(getTimeFromPeriod(date.get("time"), 1));
+            interviewPeriod.setEndTime(getTimeFromPeriod(date.get("time"), 3));
             interviewPeriod = interviewPeriodRepository.save(interviewPeriod);
             interviewPeriod.getTrainees().add(trainee);
             interviewPeriods.add(interviewPeriod);
-        });
+        }
         return interviewPeriods;
     }
 

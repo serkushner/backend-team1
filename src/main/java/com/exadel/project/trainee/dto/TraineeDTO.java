@@ -20,6 +20,6 @@ public class TraineeDTO {
     private String english;
     private String cv;
     private String github;
-    private Map<String, Map<String, String>> dates;
+    private List<Map<String, String>> dates;
     private List<InterviewDTO> interviews;
 }
