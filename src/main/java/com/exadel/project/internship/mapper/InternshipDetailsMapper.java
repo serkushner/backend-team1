@@ -13,15 +13,11 @@ import org.mapstruct.MappingTarget;
                 SkillMapper.class, InternshipTypeMapper.class})
 public interface InternshipDetailsMapper {
 
-    @Mapping(source = "additionalInfoInternship",
-            target = "additionalInfo")
     InternshipDetailsDTO entityToDto(Internship entity);
 
-    @Mapping(source = "additionalInfo", target = "additionalInfoInternship")
     Internship dtoToEntity(InternshipDetailsDTO dto);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(source = "additionalInfo", target = "additionalInfoInternship")
     void updateInternship(InternshipDetailsDTO internshipDetailsDTO,
                           @MappingTarget Internship internship);
 }
