@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -20,6 +21,6 @@ public class InterviewTime {
     @Column(name = "end_date")
     private LocalDateTime endDate;
 
-    @OneToOne(mappedBy = "interviewTime")
-    private Interview interview;
+    @OneToMany(mappedBy = "interviewTime")
+    private List<Interview> interviews;
 }

@@ -15,7 +15,6 @@ public class InternshipDetailsDTO {
     private LocalDate startRequestDate;
     private LocalDate endRequestDate;
     private String description;
-    private String additionalInfo;
     private String image;
     private Format format;
     private String internshipType;

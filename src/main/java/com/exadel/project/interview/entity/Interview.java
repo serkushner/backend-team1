@@ -21,8 +21,7 @@ public class Interview {
     @Column(name = "additional_info")
     private String name;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "time_id", referencedColumnName = "id")
+    @ManyToOne
     private InterviewTime interviewTime;
 
     @ManyToOne
