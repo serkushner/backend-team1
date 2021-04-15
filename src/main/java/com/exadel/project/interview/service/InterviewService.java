@@ -11,7 +11,9 @@ import com.exadel.project.interview.repository.InterviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,8 +37,8 @@ public class InterviewService extends BaseService<Interview, InterviewRepository
         return interviewMapper.entityToDto(interview);
     }
 
-    private Interview getInterviewById(Long id) throws EntityNotFoundException {
-        return Optional.ofNullable(interviewRepository.findInterviewById(id))
+    public Interview getInterviewById(Long id) throws EntityNotFoundException {
+        return interviewRepository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
     }
 
@@ -48,7 +50,20 @@ public class InterviewService extends BaseService<Interview, InterviewRepository
     }
 
     public void deleteInterviewById(Long id) throws EntityNotFoundException {
-        interviewRepository.delete(interviewRepository.findInterviewById(id));
+        interviewRepository.delete(interviewRepository.findById(id).orElseThrow(EntityNotFoundException::new));
     }
 
+    public List<InterviewDTO> getAll(){
+        return interviewRepository.findAll()
+                .stream()
+                .map(interviewMapper::entityToDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<InterviewDTO> getAllByInterviewerId(Long id){
+        return interviewRepository.findAllByInterviewerId(id)
+                .stream()
+                .map(interviewMapper::entityToDto)
+                .collect(Collectors.toList());
+    }
 }
