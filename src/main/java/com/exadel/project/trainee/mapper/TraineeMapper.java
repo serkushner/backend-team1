@@ -1,6 +1,7 @@
 package com.exadel.project.trainee.mapper;
 
 import com.exadel.project.internship.entity.Country;
+import com.exadel.project.interview.mapper.InterviewMapper;
 import com.exadel.project.trainee.dto.TraineeDTO;
 import com.exadel.project.trainee.entity.AdditionalInfo;
 import com.exadel.project.trainee.entity.InterviewPeriod;
@@ -32,9 +33,9 @@ public interface TraineeMapper {
         return country.getName();
     }
 
-    default List<Map<String, String>> getMapDates(List<InterviewPeriod> interviewPeriods){
+    default List<Map<String, String>> getMapDates(List<InterviewPeriod> interviewPeriods) {
         List<Map<String, String>> dates = new ArrayList<>();
-        for (InterviewPeriod interviewPeriod : interviewPeriods){
+        for (InterviewPeriod interviewPeriod : interviewPeriods) {
             Map<String, String> dayOfWeekToTime = new HashMap<>();
             dayOfWeekToTime.put("day", interviewPeriod.getDayOfWeek().toString());
             String startTime = interviewPeriod.getStartTime().toString();
