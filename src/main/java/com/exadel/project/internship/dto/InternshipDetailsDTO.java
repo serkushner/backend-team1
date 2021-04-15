@@ -19,6 +19,7 @@ public class InternshipDetailsDTO {
     private String image;
     private Format format;
     private String internshipType;
+    private String additionalInfoInternship;
     private List<String> countries = new ArrayList<>();
     private List<String> subjects = new ArrayList<>();
     private List<String> skills = new ArrayList<>();
