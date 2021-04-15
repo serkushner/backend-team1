@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,7 +54,8 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
         return internshipDetailsMapper.entityToDto(super.getEntityById(id));
     }
 
-    public InternshipDetailsDTO addInternship(InternshipDetailsDTO internshipDetailsDTO) throws EntityAlreadyExistsException {
+    public InternshipDetailsDTO addInternship(InternshipDetailsDTO internshipDetailsDTO)
+            throws EntityAlreadyExistsException {
         if (checkExistence(internshipDetailsDTO)) {
             throw new EntityAlreadyExistsException();
         }
@@ -63,7 +65,8 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
         return internshipDetailsMapper.entityToDto(internship);
     }
 
-    public InternshipDetailsDTO updateInternship(Long id, InternshipDetailsDTO internshipDetailsDTO) throws EntityNotFoundException {
+    public InternshipDetailsDTO updateInternship(Long id, InternshipDetailsDTO internshipDetailsDTO)
+            throws EntityNotFoundException {
         Internship internship = super.getEntityById(id);
         internshipDetailsMapper.updateInternship(internshipDetailsDTO, internship);
         repository.saveAndFlush(internship);
@@ -80,10 +83,11 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
      * @return true, if internship exists
      */
     private boolean checkExistence(InternshipDetailsDTO internshipDetailsDTO) {
-        boolean internshipExist = false;
+        boolean internshipExist;
         String title  = internshipDetailsDTO.getTitle();
         LocalDate startDate = internshipDetailsDTO.getStartDate();
-        internshipExist = repository.findAllByNameAndStartDate(title, startDate).isPresent();
+        Internship internship = repository.findAllByNameAndStartDate(title, startDate);
+        internshipExist = internship != null ? true : false;
         return internshipExist;
     }
 }

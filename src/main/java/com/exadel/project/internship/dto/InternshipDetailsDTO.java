@@ -1,6 +1,7 @@
 package com.exadel.project.internship.dto;
 
 import com.exadel.project.internship.entity.Format;
+import com.exadel.project.skill.dto.SkillDTO;
 import lombok.Data;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -18,8 +19,8 @@ public class InternshipDetailsDTO {
     private String additionalInfo;
     private String image;
     private Format format;
-    private String internshipType;
-    private List<String> countries = new ArrayList<>();
-    private List<String> subjects = new ArrayList<>();
-    private List<String> skills = new ArrayList<>();
+    private InternshipTypeDTO internshipType;
+    private List<CountryDTO> countries = new ArrayList<>();
+    private List<SubjectDTO> subjects = new ArrayList<>();
+    private List<SkillDTO> skills = new ArrayList<>();
 }

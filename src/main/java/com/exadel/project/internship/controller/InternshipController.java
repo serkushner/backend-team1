@@ -2,6 +2,7 @@ package com.exadel.project.internship.controller;
 
 
 import com.exadel.project.common.exception.EntityNotFoundException;
+import com.exadel.project.common.service.S3Service;
 import com.exadel.project.internship.dto.InternshipDTO;
 import com.exadel.project.internship.dto.InternshipDetailsDTO;
 import com.exadel.project.internship.service.InternshipService;
@@ -9,7 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -17,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class InternshipController {
 
+    private final S3Service s3Service;
     private final InternshipService internshipService;
     private static final String ID = "/{id}";
 
@@ -32,9 +36,14 @@ public class InternshipController {
         return ResponseEntity.ok(internshipService.getById(id));
     }
 
-    @PostMapping( consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/registration")
     public ResponseEntity<InternshipDetailsDTO> addInternship(@RequestBody InternshipDetailsDTO dto) {
         return ResponseEntity.ok(internshipService.addInternship(dto));
+    }
+
+    @PostMapping(value = "/upload")
+    public ResponseEntity<String> uploadImage(@RequestParam MultipartFile file) throws IOException {
+        return ResponseEntity.ok(s3Service.uploadFile(file));
     }
 
     @DeleteMapping(value = ID +"/delete")
