@@ -22,6 +22,7 @@ public class Interview {
     private String name;
 
     @ManyToOne
+    @JoinColumn(name = "time_id", nullable = false)
     private InterviewTime interviewTime;
 
     @ManyToOne
