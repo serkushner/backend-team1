@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import java.time.LocalDate;
 
 public interface InternshipRepository extends JpaRepository<Internship, Long>, JpaSpecificationExecutor<Internship> {
-    Internship findAllByNameAndStartDate(String name, LocalDate startDate);
+    Internship findInternshipByTitleAndStartDate(String title, LocalDate startDate);
 }

@@ -86,7 +86,7 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
         boolean internshipExist;
         String title  = internshipDetailsDTO.getTitle();
         LocalDate startDate = internshipDetailsDTO.getStartDate();
-        Internship internship = repository.findAllByNameAndStartDate(title, startDate);
+        Internship internship = repository.findInternshipByTitleAndStartDate(title, startDate);
         internshipExist = internship != null ? true : false;
         return internshipExist;
     }
