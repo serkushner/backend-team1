@@ -3,7 +3,7 @@ package com.exadel.project.interviewer.service;
 import com.exadel.project.common.exception.EntityNotFoundException;
 import com.exadel.project.common.service.BaseService;
 import com.exadel.project.common.service.rsql.RsqlSpecification;
-import com.exadel.project.interviewer.dto.InterviewerDto;
+import com.exadel.project.interviewer.dto.InterviewerDTO;
 import com.exadel.project.interviewer.entity.Interviewer;
 import com.exadel.project.interviewer.mapper.InterviewerMapper;
 import com.exadel.project.interviewer.repository.InterviewerRepository;
@@ -26,7 +26,7 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
         defaultSortingDirection = "desc";
     }
 
-    public List<InterviewerDto> getAll(String search, String sortFields) {
+    public List<InterviewerDTO> getAll(String search, String sortFields) {
         Sort sort = getSort(sortFields);
         return super.findBySpecifications(search, sort)
                 .stream()
@@ -34,17 +34,17 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
                 .collect(Collectors.toList());
     }
 
-    public InterviewerDto getById(Long id) throws EntityNotFoundException {
+    public InterviewerDTO getById(Long id) throws EntityNotFoundException {
         return interviewerMapper.entityToDto(super.getEntityById(id));
     }
 
-    public InterviewerDto createInterviewer(InterviewerDto interviewerDto) {
+    public InterviewerDTO addInterviewer(InterviewerDTO interviewerDto) {
         Interviewer interviewer = interviewerMapper.dtoToEntity(interviewerDto);
         Interviewer savedInterviewer = interviewerRepository.save(interviewer);
         return interviewerMapper.entityToDto(savedInterviewer);
     }
 
-    public InterviewerDto updateInterviewer(Long id, InterviewerDto interviewerDto) {
+    public InterviewerDTO updateInterviewer(Long id, InterviewerDTO interviewerDto) {
         Interviewer interviewer = interviewerMapper.dtoToEntity(interviewerDto);
         interviewer.setId(getEntityById(id).getId());
         Interviewer savedInterviewer = interviewerRepository.save(interviewer);
