@@ -21,7 +21,6 @@ public class TraineeDTO {
     private String cv;
     private String github;
     private Long administratorId;
-    private Map<String, Map<String, String>> dates;
     private List<Map<String, String>> dates;
     private List<InterviewDTO> interviews;
 }

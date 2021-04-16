@@ -17,8 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Mapper(componentModel = "spring", uses = {AdministratorMapper.class})
-@Mapper(componentModel = "spring", uses = InterviewMapper.class)
+@Mapper(componentModel = "spring", uses = {AdministratorMapper.class, InterviewMapper.class})
 public interface TraineeMapper {
 
     @Mapping(source="administratorId", target="administrator")
