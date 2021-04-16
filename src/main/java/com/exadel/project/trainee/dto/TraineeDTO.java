@@ -1,9 +1,10 @@
 package com.exadel.project.trainee.dto;
 
+import com.exadel.project.interview.dto.InterviewDTO;
 import lombok.Data;
 
+import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Data
 public class TraineeDTO {
@@ -21,4 +22,6 @@ public class TraineeDTO {
     private String github;
     private Long administratorId;
     private Map<String, Map<String, String>> dates;
+    private List<Map<String, String>> dates;
+    private List<InterviewDTO> interviews;
 }

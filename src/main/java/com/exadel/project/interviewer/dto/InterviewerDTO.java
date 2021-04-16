@@ -1,10 +1,13 @@
 package com.exadel.project.interviewer.dto;
 
+import com.exadel.project.interview.dto.InterviewDTO;
 import com.exadel.project.interviewer.entity.InterviewerType;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
-public class InterviewerDto {
+public class InterviewerDTO {
 
     private Long id;
     private String name;
@@ -13,5 +16,5 @@ public class InterviewerDto {
     private String phone;
     private InterviewerType type;
     private String skype;
-
+    private List<InterviewDTO> interviews;
 }
