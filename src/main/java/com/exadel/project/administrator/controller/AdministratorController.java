@@ -2,17 +2,16 @@ package com.exadel.project.administrator.controller;
 
 import com.exadel.project.administrator.dto.AdministratorDto;
 import com.exadel.project.administrator.dto.RoleDto;
-import com.exadel.project.administrator.entity.Administrator;
 import com.exadel.project.administrator.service.AdministratorService;
-import com.exadel.project.common.exception.EntityAlreadyExistsException;
-import com.exadel.project.common.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping(value = "/admin")
+@RequestMapping("admin")
 @RequiredArgsConstructor
 public class AdministratorController {
 
@@ -20,9 +19,15 @@ public class AdministratorController {
 
     private static final String ID = "/{id}";
 
+    @GetMapping()
+    public ResponseEntity<List<AdministratorDto>> getAllAdministrators(@RequestParam(value = "search", required = false) String search,
+                                                                       @RequestParam(value = "sort", required = false) String sort) {
+            return ResponseEntity.ok(administratorService.getAll(search, sort));
+    }
+
     @GetMapping(value = ID)
     public ResponseEntity<AdministratorDto> getAdmin(@PathVariable Long id) {
-            return ResponseEntity.ok(administratorService.getAdministratorById(id));
+        return ResponseEntity.ok(administratorService.getById(id));
     }
 
     @DeleteMapping(value = ID)
@@ -31,14 +36,19 @@ public class AdministratorController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping()
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AdministratorDto> addAdministrator(@RequestBody AdministratorDto dto) {
             return ResponseEntity.ok(administratorService.addAdministrator(dto));
     }
 
-    @PutMapping(value = ID)
+    @PutMapping(value = ID, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AdministratorDto> updateAdministrator(@PathVariable Long id, @RequestBody AdministratorDto dto) {
         return ResponseEntity.ok(administratorService.updateAdministrator(id, dto));
+    }
+
+    @PutMapping(value = "/addtrainee" + ID)
+    public ResponseEntity<AdministratorDto> addTrainee(@PathVariable Long id, @RequestBody String traineeId) {
+        return ResponseEntity.ok(administratorService.addTrainee(id, Long.parseLong(traineeId)));
     }
 
     @PutMapping(value ="/role" + ID)

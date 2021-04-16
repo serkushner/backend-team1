@@ -1,5 +1,6 @@
 package com.exadel.project.trainee.mapper;
 
+import com.exadel.project.administrator.mapper.AdministratorMapper;
 import com.exadel.project.internship.entity.Country;
 import com.exadel.project.trainee.dto.TraineeDTO;
 import com.exadel.project.trainee.entity.AdditionalInfo;
@@ -12,15 +13,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {AdministratorMapper.class})
 public interface TraineeMapper {
 
+    @Mapping(source="administratorId", target="administrator")
     Trainee dtoToEntity(TraineeDTO dto);
+
+    List<Trainee> toEntity(List <TraineeDTO> traineesDTO);
 
     @Mapping(target = "dates", expression = "java(getMapDates(interviewPeriods))")
     @Mapping(target = "location", expression = "java(getCountryName(trainee.getCountry()))")
+    @Mapping(source="trainee.administrator.id", target="administratorId")
     @Mapping(target = "id", source = "trainee.id")
     TraineeDTO entityToDto(Trainee trainee, AdditionalInfo additionalInfo, List<InterviewPeriod> interviewPeriods);
+
+    List<TraineeDTO> toDto(List<Trainee> trainees);
 
     @Mapping(target = "id", ignore = true)
     void updateTrainee(TraineeDTO dto, @MappingTarget Trainee trainee);
@@ -43,4 +50,16 @@ public interface TraineeMapper {
         }
         return counterToDates;
     }
+    /*default Trainee fromId(final Long id) {
+
+        if (id == null) {
+            return null;
+        }
+
+        final Trainee trainee=new Trainee();
+        trainee.setId(id);
+
+        return trainee;
+    }
+    */
 }
