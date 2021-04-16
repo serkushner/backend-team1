@@ -2,7 +2,9 @@ package com.exadel.project.trainee.entity;
 
 import com.exadel.project.administrator.entity.Administrator;
 import com.exadel.project.internship.entity.Country;
+import com.exadel.project.interview.entity.Interview;
 import lombok.Data;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -57,4 +59,7 @@ public class Trainee {
             inverseJoinColumns = @JoinColumn(name = "interview_period_id")
     )
     private List<InterviewPeriod> interviewPeriods = new ArrayList<>();
+
+    @OneToMany(mappedBy = "trainee")
+    private List<Interview> interviews;
 }

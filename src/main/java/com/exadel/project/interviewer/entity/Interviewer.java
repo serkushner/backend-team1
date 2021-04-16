@@ -1,10 +1,12 @@
 package com.exadel.project.interviewer.entity;
 
+import com.exadel.project.interview.entity.Interview;
 import com.exadel.project.interviewer.entity.InterviewerType;
 import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @Data
 @Entity
@@ -38,4 +40,7 @@ public class Interviewer {
 
     @Column(name = "skype")
     private String skype;
+
+    @OneToMany(mappedBy = "interviewer")
+    private List<Interview> interviews;
 }

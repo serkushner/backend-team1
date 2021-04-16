@@ -1,7 +1,7 @@
 package com.exadel.project.interviewer.controller;
 
 import com.exadel.project.common.exception.EntityNotFoundException;
-import com.exadel.project.interviewer.dto.InterviewerDto;
+import com.exadel.project.interviewer.dto.InterviewerDTO;
 import com.exadel.project.interviewer.service.InterviewerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -20,24 +20,24 @@ public class InterviewerController {
     private static final String ID = "/{id}";
 
     @GetMapping(value = ID)
-    public ResponseEntity<InterviewerDto> getInterviewerById(@PathVariable Long id) throws EntityNotFoundException {
+    public ResponseEntity<InterviewerDTO> getInterviewerById(@PathVariable Long id) throws EntityNotFoundException {
         return ResponseEntity.ok(interviewerService.getById(id));
     }
 
     @GetMapping
-    public ResponseEntity<List<InterviewerDto>> findBySpecification(@RequestParam(value = "search", required = false) String search,
+    public ResponseEntity<List<InterviewerDTO>> findBySpecification(@RequestParam(value = "search", required = false) String search,
                                                                     @RequestParam(value = "sort", required = false) String sort) {
-        List<InterviewerDto> dtoList = interviewerService.getAll(search, sort);
+        List<InterviewerDTO> dtoList = interviewerService.getAll(search, sort);
         return ResponseEntity.ok(dtoList);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<InterviewerDto> createInterviewer(@RequestBody InterviewerDto dto) {
-        return ResponseEntity.ok(interviewerService.createInterviewer(dto));
+    public ResponseEntity<InterviewerDTO> createInterviewer(@RequestBody InterviewerDTO dto) {
+        return ResponseEntity.ok(interviewerService.addInterviewer(dto));
     }
 
     @PutMapping(value = ID, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<InterviewerDto> updateInterviewer(@PathVariable Long id, @RequestBody InterviewerDto dto) {
+    public ResponseEntity<InterviewerDTO> updateInterviewer(@PathVariable Long id, @RequestBody InterviewerDTO dto) {
         return ResponseEntity.ok(interviewerService.updateInterviewer(id, dto));
     }
 
