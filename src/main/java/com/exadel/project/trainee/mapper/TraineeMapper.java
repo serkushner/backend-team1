@@ -30,7 +30,7 @@ public interface TraineeMapper {
     void updateTrainee(TraineeDTO dto, @MappingTarget Trainee trainee);
 
     default String getCountryName(Country country) {
-        return country.getName();
+        return country != null ? country.getName() : null;
     }
 
     default List<Map<String, String>> getMapDates(List<InterviewPeriod> interviewPeriods) {
