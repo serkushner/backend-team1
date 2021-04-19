@@ -7,6 +7,7 @@ import com.exadel.project.internship.entity.Internship;
 import com.exadel.project.internship.service.CountryService;
 import com.exadel.project.internship.service.InternshipService;
 import com.exadel.project.trainee.dto.TraineeDTO;
+import com.exadel.project.trainee.dto.TraineeToAdminDTO;
 import com.exadel.project.trainee.entity.AdditionalInfo;
 import com.exadel.project.trainee.entity.InterviewPeriod;
 import com.exadel.project.trainee.entity.Trainee;
@@ -16,7 +17,6 @@ import com.exadel.project.trainee.validator.TraineeValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
