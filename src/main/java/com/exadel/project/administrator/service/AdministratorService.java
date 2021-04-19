@@ -34,7 +34,7 @@ public class AdministratorService extends BaseService<Administrator, Administrat
 
     {
         defaultSortingField = "surname";
-        defaultSortingDirection = "desc";
+        defaultSortingDirection = "asc";
     }
 
     @Override
