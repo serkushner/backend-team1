@@ -15,8 +15,9 @@ import com.exadel.project.trainee.repository.TraineeRepository;
 import com.exadel.project.trainee.validator.TraineeValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +38,7 @@ public class TraineeService extends BaseService<Trainee, TraineeRepository> {
         throw new UnsupportedOperationException();
     }
 
+    @Transactional
     public TraineeDTO addTrainee(TraineeDTO traineeDTO, Long internshipId){
         Trainee trainee = traineeRepository.findTraineeByEmail(traineeDTO.getEmail());
         Internship internship = internshipService.getEntityById(internshipId);
