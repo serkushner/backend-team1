@@ -1,7 +1,9 @@
 package com.exadel.project.trainee.service;
 
+import com.exadel.project.common.exception.EntityNotFoundException;
 import com.exadel.project.common.service.BaseService;
 import com.exadel.project.common.service.rsql.RsqlSpecification;
+import com.exadel.project.internship.dto.InternshipDetailsDTO;
 import com.exadel.project.internship.entity.Country;
 import com.exadel.project.internship.entity.Internship;
 import com.exadel.project.internship.service.CountryService;
@@ -70,4 +72,5 @@ public class TraineeService extends BaseService<Trainee, TraineeRepository> {
         trainee.getInterviewPeriods().addAll(interviewPeriods);
         return interviewPeriods;
     }
+
 }

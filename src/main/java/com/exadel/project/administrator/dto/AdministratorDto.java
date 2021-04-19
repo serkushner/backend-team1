@@ -1,7 +1,11 @@
 package com.exadel.project.administrator.dto;
 
 import com.exadel.project.administrator.entity.Role;
+import com.exadel.project.trainee.dto.TraineeDTO;
 import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class AdministratorDto {
@@ -15,5 +19,6 @@ public class AdministratorDto {
     private String phone;
     private String skype;
     private Role role;
+    private List<TraineeDTO> traineesDTO = new ArrayList<>();
 
 }
