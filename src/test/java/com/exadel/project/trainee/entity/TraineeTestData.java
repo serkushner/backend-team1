@@ -15,15 +15,20 @@ import java.util.Map;
 @Component
 public class TraineeTestData {
 
-    public TraineeDTO getTestTraineeDto(){
-        TraineeDTO traineeDTO = new TraineeDTO();
+    public TraineeDTO getResponseTestTraineeDto(){
+        TraineeDTO traineeDTO = getRequestTestTraineeDto();
         traineeDTO.setId(1L);
+        traineeDTO.setTraineeStatus("REGISTERED");
+        return traineeDTO;
+    }
+
+    public TraineeDTO getRequestTestTraineeDto(){
+        TraineeDTO traineeDTO = new TraineeDTO();
         traineeDTO.setName("Kastus");
         traineeDTO.setSurname("Kalinouski");
         traineeDTO.setEmail("kalinouski@gmail.com");
         traineeDTO.setPhone("375-29-888-18-63");
         traineeDTO.setLocation("Belarus");
-        traineeDTO.setTraineeStatus("REGISTERED");
         traineeDTO.setSkype("skype.com");
         traineeDTO.setRecipient(true);
         traineeDTO.setEnglish("C1");
@@ -50,9 +55,14 @@ public class TraineeTestData {
         return country;
     }
 
-    public Trainee getTestTrainee(){
-        Trainee trainee = new Trainee();
+    public Trainee getResponseTestTrainee(){
+        Trainee trainee = getRequestTestTrainee();
         trainee.setId(1L);
+        return trainee;
+    }
+
+    public Trainee getRequestTestTrainee(){
+        Trainee trainee = new Trainee();
         trainee.setName("Kastus");
         trainee.setSurname("Kalinouski");
         trainee.setEmail("kalinouski@gmail.com");
@@ -63,9 +73,14 @@ public class TraineeTestData {
         return trainee;
     }
 
-    public InterviewPeriod getTestInterviewPeriod(){
-        InterviewPeriod interviewPeriod = new InterviewPeriod();
+    public InterviewPeriod getResponseTestInterviewPeriod(){
+        InterviewPeriod interviewPeriod = getRequestInterviewPeriod();
         interviewPeriod.setId(1L);
+        return interviewPeriod;
+    }
+
+    public InterviewPeriod getRequestInterviewPeriod(){
+        InterviewPeriod interviewPeriod = new InterviewPeriod();
         interviewPeriod.setStartTime(LocalTime.of(10, 0));
         interviewPeriod.setEndTime(LocalTime.of(13, 0));
         interviewPeriod.setDayOfWeek(DayOfWeek.MONDAY);

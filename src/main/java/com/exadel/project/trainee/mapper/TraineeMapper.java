@@ -10,11 +10,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-import java.util.ArrayList;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Mapper(componentModel = "spring", uses = InterviewMapper.class)
 public interface TraineeMapper {
@@ -30,7 +26,7 @@ public interface TraineeMapper {
     void updateTrainee(TraineeDTO dto, @MappingTarget Trainee trainee);
 
     default String getCountryName(Country country) {
-        return country != null ? country.getName() : null;
+        return Optional.ofNullable(country).map(Country::getName).orElse(null);
     }
 
     default List<Map<String, String>> getMapDates(List<InterviewPeriod> interviewPeriods) {

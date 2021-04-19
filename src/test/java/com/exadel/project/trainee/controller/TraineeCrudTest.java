@@ -62,37 +62,32 @@ public class TraineeCrudTest {
 
     @Nested
     @DisplayName("Check Trainee's create method")
-    class testCreateTraineeMethod{
+    class testCreateTraineeClass {
 
         @Test
         @DisplayName("When Trainee doesn't exist in database Then save and return him ")
         void testCreateTrainee() throws Exception{
-            TraineeDTO traineeDTO = traineeTestData.getTestTraineeDto();
-            TraineeDTO savedTraineeDto = traineeTestData.getTestTraineeDto();
-            savedTraineeDto.setId(null);
-            savedTraineeDto.setTraineeStatus(null);
+            TraineeDTO responseTraineeDTO = traineeTestData.getResponseTestTraineeDto();
+            TraineeDTO requestTraineeDto = traineeTestData.getRequestTestTraineeDto();
             Country belarus = traineeTestData.getTestCountry();
-            Trainee trainee = traineeTestData.getTestTrainee();
-            Trainee savedTrainee = traineeTestData.getTestTrainee();
-            savedTrainee.setId(null);
-            InterviewPeriod interviewPeriod = traineeTestData.getTestInterviewPeriod();
-            InterviewPeriod savedInterviewPeriod = traineeTestData.getTestInterviewPeriod();
-            savedInterviewPeriod.setId(null);
+            Trainee responseTrainee = traineeTestData.getResponseTestTrainee();
+            Trainee requestTrainee = traineeTestData.getRequestTestTrainee();
+            InterviewPeriod responseInterviewPeriod = traineeTestData.getResponseTestInterviewPeriod();
+            InterviewPeriod requestInterviewPeriod = traineeTestData.getRequestInterviewPeriod();
             AdditionalInfo additionalInfo = traineeTestData.getTestAdditionalInfo();
             Internship internship = traineeTestData.getTestInternship();
 
-            doReturn(null).when(traineeRepository).findTraineeByEmail(traineeDTO.getEmail());
+            doReturn(null).when(traineeRepository).findTraineeByEmail(responseTraineeDTO.getEmail());
             doReturn(internship).when(internshipService).getEntityById(1L);
             doReturn(null).when(additionalInfoRepository).findAdditionalInfoByInternshipAndTrainee(null, null);
             doReturn(belarus).when(countryRepository).findCountryByName("Belarus");
-            doReturn(trainee).when(traineeRepository).save(savedTrainee);
-            doReturn(interviewPeriod).when(interviewPeriodRepository).save(savedInterviewPeriod);
+            doReturn(responseTrainee).when(traineeRepository).save(requestTrainee);
+            doReturn(responseInterviewPeriod).when(interviewPeriodRepository).save(requestInterviewPeriod);
             doReturn(additionalInfo).when(additionalInfoRepository).save(any());
-
 
             MvcResult result = mockMvc.perform(post("/internship/1/registration")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(savedTraineeDto)))
+                    .content(objectMapper.writeValueAsString(requestTraineeDto)))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                     .andReturn();
@@ -100,7 +95,7 @@ public class TraineeCrudTest {
             String content = result.getResponse().getContentAsString();
             TraineeDTO returnedTraineeDto = objectMapper.readValue(content, TraineeDTO.class);
             returnedTraineeDto.getDates().get(0).put("time", returnedTraineeDto.getDates().get(0).get("time").replaceAll(":", "."));
-            Assertions.assertEquals(traineeDTO, returnedTraineeDto);
+            Assertions.assertEquals(responseTraineeDTO, returnedTraineeDto);
         }
     }
 }
