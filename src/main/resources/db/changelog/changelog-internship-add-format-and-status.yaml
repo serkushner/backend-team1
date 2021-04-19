@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20210419.[BE-52]-add-blended-format
+      author: shpaser2@yandex.ru
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: "2"
+            sql: SELECT count(DISTINCT format) FROM internship
+      changes:
+        - sqlFile:
+            dbms: 'mysql'
+            endDelimiter: "@@"
+            splitStatements: false
+            path: db/sql/internship_add_blended_format.sql
+            stripComments: false
+
+  - changeSet:
+      id: 20210419.[BE-52]-add-status-published-to-internship
+      author: shpaser2@yandex.ru
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - columnExists:
+                tableName: internship
+                columnName: published
+      changes:
+        - addColumn:
+            tableName: internship
+            columns:
+              - column:
+                  name: published
+                  type: boolean
+                  constraints:
+                    nullable: false

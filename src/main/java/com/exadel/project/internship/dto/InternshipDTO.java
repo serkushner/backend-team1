@@ -9,10 +9,10 @@ import java.util.List;
 public class InternshipDTO {
     private Long id;
     private LocalDate startDate;
-    private List<String> countries;
-    private List<String> subjects;
+    private List<CountryDTO> countries;
+    private List<SubjectDTO> subjects;
     private String title;
     private String description;
-    private String internshipType;
+    private InternshipTypeDTO internshipType;
     private String image;
 }
