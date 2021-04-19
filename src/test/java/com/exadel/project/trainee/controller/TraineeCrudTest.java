@@ -81,8 +81,8 @@ public class TraineeCrudTest {
             AdditionalInfo additionalInfo = traineeTestData.getTestAdditionalInfo();
             Internship internship = traineeTestData.getTestInternship();
 
-            doReturn(null).when(traineeRepository).findTraineeByEmail(anyString());
-            doReturn(internship).when(internshipService).getEntityById(anyLong());
+            doReturn(null).when(traineeRepository).findTraineeByEmail(traineeDTO.getEmail());
+            doReturn(internship).when(internshipService).getEntityById(1L);
             doReturn(null).when(additionalInfoRepository).findAdditionalInfoByInternshipAndTrainee(null, null);
             doReturn(belarus).when(countryRepository).findCountryByName("Belarus");
             doReturn(trainee).when(traineeRepository).save(savedTrainee);
