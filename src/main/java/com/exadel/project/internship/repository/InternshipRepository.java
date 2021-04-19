@@ -8,4 +8,5 @@ import java.time.LocalDate;
 
 public interface InternshipRepository extends JpaRepository<Internship, Long>, JpaSpecificationExecutor<Internship> {
     Internship findInternshipByTitleAndStartDate(String title, LocalDate startDate);
+    Internship findByIdAndPublished(Long id, Boolean isPublished);
 }

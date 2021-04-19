@@ -41,8 +41,8 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
         return internshipRsqlSpecification;
     }
 
-//TODO refactor by DTO abstraction
-
+    //TODO 19-04 implement here an addition based on the published column
+    // and make it usable for both types due to the boolean parameter
     public List<InternshipDTO> getAll(String search, String sortFields) {
         Sort sort = getSort(sortFields);
         return super.findBySpecifications(search, sort).stream()
@@ -50,35 +50,53 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
                 .collect(Collectors.toList());
     }
 
-    public InternshipDetailsDTO getById(Long id) throws EntityNotFoundException {
-        return internshipDetailsMapper.entityToDto(super.getEntityById(id));
+    public InternshipDetailsDTO getUnpostedById(Long id) throws EntityNotFoundException {
+        return internshipDetailsMapper.entityToDto(repository.findByIdAndPublished(id, Boolean.FALSE));
     }
 
-    public InternshipDetailsDTO addInternship(InternshipDetailsDTO internshipDetailsDTO)
-            throws EntityAlreadyExistsException {
-        if (checkExistence(internshipDetailsDTO)) {
-            throw new EntityAlreadyExistsException();
-        }
-        Internship internship = internshipDetailsMapper.dtoToEntity(internshipDetailsDTO);
-        //TODO possibly set something by default
-        repository.saveAndFlush(internship);
-        return internshipDetailsMapper.entityToDto(internship);
+    public InternshipDetailsDTO getPostedById(Long id) throws EntityNotFoundException {
+        return internshipDetailsMapper.entityToDto(repository.findByIdAndPublished(id, Boolean.TRUE));
     }
 
-    public InternshipDetailsDTO updateInternship(Long id, InternshipDetailsDTO internshipDetailsDTO)
-            throws EntityNotFoundException {
-        Internship internship = super.getEntityById(id);
+    public InternshipDetailsDTO updateUnpostedInternship(Long id,
+            InternshipDetailsDTO internshipDetailsDTO) throws EntityNotFoundException {
+        return updateInternship(id, internshipDetailsDTO, Boolean.FALSE);
+    }
+
+    public InternshipDetailsDTO updatePostedInternship(Long id,
+            InternshipDetailsDTO internshipDetailsDTO) throws EntityNotFoundException {
+        return updateInternship(id, internshipDetailsDTO, Boolean.TRUE);
+    }
+
+    private InternshipDetailsDTO updateInternship(Long id,
+        InternshipDetailsDTO internshipDetailsDTO, Boolean isPublished) throws EntityNotFoundException {
+        Internship internship = repository.findByIdAndPublished(id, isPublished);
         internshipDetailsMapper.updateInternship(internshipDetailsDTO, internship);
         repository.saveAndFlush(internship);
         return internshipDetailsMapper.entityToDto(internship);
     }
 
-    public void deleteInternshipById(Long id) throws EntityNotFoundException {
-        repository.delete(repository.getOne(id));
+    public InternshipDetailsDTO addUnpostedInternship(InternshipDetailsDTO internshipDetailsDTO)
+            throws EntityAlreadyExistsException {
+        if (checkExistence(internshipDetailsDTO)) {
+            throw new EntityAlreadyExistsException();
+        }
+        Internship internship = internshipDetailsMapper.dtoToEntity(internshipDetailsDTO);
+        internship.setPublished(Boolean.FALSE);
+        repository.saveAndFlush(internship);
+        return internshipDetailsMapper.entityToDto(internship);
+    }
+
+    public void deleteUnpostedInternshipById(Long id) throws EntityNotFoundException {
+        Internship internship = repository.findByIdAndPublished(id, Boolean.FALSE);
+        if (internship == null) {
+            throw new EntityNotFoundException();
+        } else {
+            repository.delete(internship);
+        }
     }
 
     /**
-     *
      * @param internshipDetailsDTO - full description of internship from UI
      * @return true, if internship exists
      */
