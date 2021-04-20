@@ -85,16 +85,19 @@ public class AdministratorService extends BaseService<Administrator, Administrat
 
     public AdministratorDto addTrainee(Long administratorId, Long traineeId) throws EntityNotFoundException {
         Trainee trainee = traineeService.getEntityById(traineeId);
-        Administrator administrator = administratorMapper.dtoToEntity(getById(administratorId));
-        if (trainee.getAdministrator() != null) {
-            Administrator oldAdministrator = administratorMapper.dtoToEntity(getById(trainee.getAdministrator().getId()));
+        Administrator administrator = administratorRepository.findAdministratorById(administratorId);
+        trainee.setAdministrator(administrator);
+        traineeRepository.save(trainee);
+
+        /*if (trainee.getAdministrator() != null) {
+            Administrator oldAdministrator = trainee.getAdministrator();
             oldAdministrator.getTrainees().remove(trainee);
             administratorRepository.save(oldAdministrator);
         }
         trainee.setAdministrator(administrator);
         traineeRepository.save(trainee);
         administrator.getTrainees().add(trainee);
-        administratorRepository.save(administrator);
+        administratorRepository.save(administrator);*/
         return administratorMapper.entityToDto(administrator);
     }
 

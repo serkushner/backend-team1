@@ -67,9 +67,9 @@ public class AdministratorCrudTest {
 
             Administrator administrator = administratorTestData.getAdministrator();
 
-            AdministratorDto administratorDto = administratorTestDataDto.getAdministratorDto();
+            //AdministratorDto administratorDto = administratorTestDataDto.getAdministratorDto();
             doReturn(Optional.of(administrator)).when(administratorRepository).findById(1L);
-            doReturn(administratorDto).when(administratorMapper).entityToDto(administrator);
+            //doReturn(administratorDto).when(administratorMapper).entityToDto(administrator);
 
             MvcResult result = mockMvc.perform(get("/admin/{id}", 1))
                     .andExpect(status().isOk())
