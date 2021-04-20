@@ -15,4 +15,5 @@ public class TraineeToAdminDTO {
     private String adminName;
     private String adminSurname;
     private String internshipName;
+    private String traineeLocation;
 }

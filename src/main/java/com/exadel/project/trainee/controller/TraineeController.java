@@ -3,6 +3,7 @@ package com.exadel.project.trainee.controller;
 import com.exadel.project.common.service.S3Service;
 import com.exadel.project.trainee.dto.TraineeDTO;
 import com.exadel.project.trainee.dto.TraineeToAdminDTO;
+import com.exadel.project.trainee.dto.TraineeToAdminDetailsDTO;
 import com.exadel.project.trainee.entity.Trainee;
 import com.exadel.project.trainee.service.AdditionalInfoService;
 import com.exadel.project.trainee.service.TraineeService;
@@ -40,8 +41,8 @@ public class TraineeController {
     }
 
     @GetMapping("trainee/{id}")
-    public ResponseEntity<TraineeDTO> getTrainee(@PathVariable ("id") Long id){
-        return null;
+    public ResponseEntity<TraineeToAdminDetailsDTO> getTrainee(@PathVariable ("id") Long id){
+        return ResponseEntity.ok(additionalInfoService.getAdditionalInfoById(id));
     }
 
     @GetMapping("trainee/{id}/history")
