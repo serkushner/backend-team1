@@ -6,7 +6,6 @@ import com.exadel.project.common.service.BaseService;
 import com.exadel.project.common.service.rsql.RsqlSpecification;
 import com.exadel.project.internship.dto.InternshipDTO;
 import com.exadel.project.internship.dto.InternshipDetailsDTO;
-import com.exadel.project.internship.entity.Country;
 import com.exadel.project.internship.entity.Internship;
 import com.exadel.project.internship.mapper.InternshipDetailsMapper;
 import com.exadel.project.internship.mapper.InternshipMapper;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -107,5 +105,30 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
         Internship internship = repository.findInternshipByTitleAndStartDate(title, startDate);
         internshipExist = internship != null ? true : false;
         return internshipExist;
+    }
+
+    private List<InternshipDTO> findAllBySpecifications(String search, String sortFields,
+                                                     Boolean isPublished) {
+        StringBuffer stringBuffer = new StringBuffer(search);
+        if (search == null) {
+            stringBuffer.append("?query=published==\"").append(isPublished).append("\"");
+        } else {
+            stringBuffer.append(";published==\"").append(isPublished).append("\"");
+        }
+        search = stringBuffer.toString();
+        Sort sort = getSort(sortFields);
+        List<Internship> foundInternships = repository.findAll(getRsqlSpecification().rsql(search),
+                sort);
+        return foundInternships.stream()
+                .map(internship -> internshipMapper.entityToDto(internship))
+                .collect(Collectors.toList());
+    }
+
+    public List<InternshipDTO> getAllPosted(String search, String sortFields) {
+        return findAllBySpecifications(search, sortFields, Boolean.TRUE);
+    }
+
+    public List<InternshipDTO> getAllUnposted(String search, String sortFields) {
+        return findAllBySpecifications(search, sortFields, Boolean.FALSE);
     }
 }
