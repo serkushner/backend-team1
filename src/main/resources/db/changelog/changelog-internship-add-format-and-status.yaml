@@ -33,3 +33,20 @@ databaseChangeLog:
                   type: boolean
                   constraints:
                     nullable: false
+
+  - changeSet:
+      id: 20210420.[BE-52]-change-status-to-published-in-internships-in-db
+      author: shpaser2@yandex.ru
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - sqlCheck:
+                expectedResult: "0"
+                sql: SELECT count(*) FROM internship WHERE published = false
+      changes:
+        - sqlFile:
+            dbms: 'mysql'
+            endDelimiter: "@@"
+            splitStatements: false
+            path: db/sql/internships_status_change_to_published.sql
+            stripComments: false
