@@ -3,9 +3,8 @@ package com.exadel.project.administrator.controller;
 import com.exadel.project.administrator.dto.AdministratorDto;
 import com.exadel.project.administrator.entity.Administrator;
 import com.exadel.project.administrator.mapper.AdministratorMapper;
-import com.exadel.project.administrator.service.AdministratorService;
-import com.exadel.project.administrator.testentity.AdministratorTestData;
 import com.exadel.project.administrator.repository.AdministratorRepository;
+import com.exadel.project.administrator.testentity.AdministratorTestData;
 import com.exadel.project.administrator.testentity.AdministratorTestDataDto;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,8 +27,10 @@ import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -38,9 +39,6 @@ public class AdministratorCrudTest {
 
     @MockBean
     private AdministratorRepository administratorRepository;
-
-    @MockBean
-    private AdministratorService administratorService;
 
     @MockBean
     private AdministratorMapper administratorMapper;
@@ -62,14 +60,14 @@ public class AdministratorCrudTest {
     class testGetByIdMethod {
 
         @Test
-        @DisplayName("When Administrator exists then return him from database")
+        @DisplayName("When Administrator is exist Then return him from database")
         void getAdministratorById() throws Exception {
 
-            Administrator administrator = administratorTestData.getAdministrator();
+            Administrator administrator = administratorTestData.getAdministrator(1L, "Neo");
+            AdministratorDto administratorDto = administratorTestDataDto.getAdministratorDto(1L, "Neo");
 
-            //AdministratorDto administratorDto = administratorTestDataDto.getAdministratorDto();
+            doReturn(administratorDto).when(administratorMapper).entityToDto(administrator);
             doReturn(Optional.of(administrator)).when(administratorRepository).findById(1L);
-            //doReturn(administratorDto).when(administratorMapper).entityToDto(administrator);
 
             MvcResult result = mockMvc.perform(get("/admin/{id}", 1))
                     .andExpect(status().isOk())
@@ -77,18 +75,18 @@ public class AdministratorCrudTest {
                     .andReturn();
 
             String content = result.getResponse().getContentAsString();
-            Administrator returnedAdministrator = objectMapper.readValue(content, Administrator.class);
+            AdministratorDto returnedAdministrator = objectMapper.readValue(content, AdministratorDto.class);
 
-            Assertions.assertEquals(returnedAdministrator, administrator);
+            Assertions.assertEquals(returnedAdministrator, administratorDto);
         }
 
         @Test
-        @DisplayName("When Administrator does not exist then response status - Entity not found")
+        @DisplayName("When Interviewer does't exist Then response status - Entity not found")
         void testAdministratorByIdNotFound() throws Exception {
 
-            doReturn(Optional.empty()).when(administratorRepository).findById(5L);
+            doReturn(Optional.empty()).when(administratorRepository).findById(1358L);
 
-            mockMvc.perform(get("/admin/{id}", 5))
+            mockMvc.perform(get("/admin/{id}", 1358))
                     .andExpect(status().isNotFound());
         }
     }
@@ -99,16 +97,17 @@ public class AdministratorCrudTest {
 
         @Test
         @DisplayName("When Administrators exist Then return array of them ")
-        void getAllAdministrators() throws Exception {
+        void getAllInterviewers() throws Exception {
 
-            AdministratorDto administratorDto = administratorTestDataDto.getAdministratorDto();
-            AdministratorDto administratorSecondDto = administratorTestDataDto.getSecondAdministratorDto();
-            Administrator firstAdministrator = administratorTestData.getAdministrator();
-            Administrator secondAdministrator = administratorTestData.getSecondAdministrator();
+            AdministratorDto administratorDto = administratorTestDataDto.getAdministratorDto(1L, "Neo");
+            AdministratorDto administratorSecondDto = administratorTestDataDto.getAdministratorDto(2L, "Smith");
+            Administrator firstAdministrator = administratorTestData.getAdministrator(1L, "Neo");
+            Administrator secondAdministrator = administratorTestData.getAdministrator(2L, "Smith");
 
             doReturn(administratorDto).when(administratorMapper).entityToDto(firstAdministrator);
             doReturn(administratorSecondDto).when(administratorMapper).entityToDto(secondAdministrator);
-            doReturn(Arrays.asList(firstAdministrator, secondAdministrator)).when(administratorRepository).findAll(Sort.by(Sort.Direction.DESC, "surname"));
+
+            doReturn(Arrays.asList(firstAdministrator, secondAdministrator)).when(administratorRepository).findAll(Sort.by(Sort.Direction.ASC, "surname"));
 
             MvcResult result = mockMvc.perform(get("/admin"))
                     .andExpect(status().isOk())
@@ -117,28 +116,30 @@ public class AdministratorCrudTest {
 
             String content = result.getResponse().getContentAsString();
 
-            List<Administrator> administratorList = objectMapper.readValue(content, new TypeReference<>() {
+            List<AdministratorDto> administratorList = objectMapper.readValue(content, new TypeReference<>() {
             });
 
-            Assertions.assertEquals(administratorList.get(0), firstAdministrator);
-            Assertions.assertEquals(administratorList.get(1), secondAdministrator);
+            Assertions.assertEquals(administratorList.get(0), administratorDto);
+            Assertions.assertEquals(administratorList.get(1), administratorSecondDto);
         }
     }
 
     @Nested
-    @DisplayName("Check Administrator's add method")
-    class testAddAdministratorMethod {
+    @DisplayName("Check Administrator's create method")
+    class testCreateAdministratorMethod {
 
         @Test
         @DisplayName("When Administrator doesn't exist in database Then save and return him ")
-        void testAddAdministrator() throws Exception {
+        void testCreateAdministrator() throws Exception {
 
-            Administrator administrator = administratorTestData.getAdministrator();
-            AdministratorDto savedAdministratorDto = administratorTestDataDto.getAdministratorDto();
-            Administrator savedAdministrator = administratorTestData.getAdministrator();
+            Administrator administrator = administratorTestData.getAdministrator(1L, "Neo");
+            Administrator savedAdministrator = administratorTestData.getAdministrator(1L, "Neo");
+            AdministratorDto administratorDto = administratorTestDataDto.getAdministratorDto(1L, "Neo");
+            AdministratorDto savedAdministratorDto = administratorTestDataDto.getAdministratorDto(1L, "Neo");
             savedAdministrator.setId(null);
             savedAdministratorDto.setId(null);
-            AdministratorDto administratorDto = administratorTestDataDto.getAdministratorDto();
+            savedAdministrator.setLogin("Neo");
+            savedAdministratorDto.setLogin("Neo");
 
             doReturn(administratorDto).when(administratorMapper).entityToDto(administrator);
             doReturn(savedAdministrator).when(administratorMapper).dtoToEntity(savedAdministratorDto);
@@ -153,9 +154,10 @@ public class AdministratorCrudTest {
                     .andReturn();
 
             String content = result.getResponse().getContentAsString();
-            Administrator returnedAdministrator = objectMapper.readValue(content, Administrator.class);
+            AdministratorDto returnedAdministrator = objectMapper.readValue(content, AdministratorDto.class);
 
-            Assertions.assertEquals(returnedAdministrator, administrator);
+            Assertions.assertEquals(returnedAdministrator, administratorDto);
+
         }
     }
 
@@ -166,9 +168,10 @@ public class AdministratorCrudTest {
         @Test
         @DisplayName("When Administrator exist Then save Administrator with updates and return him")
         void testUpdateAdministrator() throws Exception {
-            Administrator administrator = administratorTestData.getAdministrator();
-            AdministratorDto updateAdministratorDto = administratorTestDataDto.getSecondAdministratorDto();
-            Administrator updateAdministrator = administratorTestData.getSecondAdministrator();
+            Administrator administrator = administratorTestData.getAdministrator(1L, "Neo");
+            AdministratorDto administratorDto = administratorTestDataDto.getAdministratorDto(1L, "Neo");
+            AdministratorDto updateAdministratorDto = administratorTestDataDto.getAdministratorDto(2L, "Smith");
+            Administrator updateAdministrator = administratorTestData.getAdministrator(2L, "Smith");
             updateAdministrator.setId(1L);
             updateAdministratorDto.setId(1L);
 
@@ -176,21 +179,38 @@ public class AdministratorCrudTest {
             doReturn(updateAdministrator).when(administratorMapper).dtoToEntity(updateAdministratorDto);
             doReturn(updateAdministratorDto).when(administratorMapper).entityToDto(updateAdministrator);
 
-            doReturn(administrator).when(administratorRepository).findAdministratorById(1L);
+            doReturn(Optional.of(administrator)).when(administratorRepository).findById(1L);
             doReturn(updateAdministrator).when(administratorRepository).save(administrator);
 
-            MvcResult result = mockMvc.perform(put("/admin/{id}", 1L)
+            MvcResult result = mockMvc.perform(put("/admin/{id}", 1)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(updateAdministrator)))
                     .andExpect(status().isOk())
                     .andReturn();
 
             String content = result.getResponse().getContentAsString();
-            Administrator returnedAdministrator = objectMapper.readValue(content, Administrator.class);
+            AdministratorDto returnedAdministrator = objectMapper.readValue(content, AdministratorDto.class);
 
-            Assertions.assertEquals(returnedAdministrator, updateAdministrator);
-            Assertions.assertNotEquals(returnedAdministrator, administrator);
+            Assertions.assertEquals(returnedAdministrator, updateAdministratorDto);
+            Assertions.assertNotEquals(returnedAdministrator, administratorDto);
+
         }
+
+        @Test
+        @DisplayName("When updated Administrator doesn't exist Then response back status is Not Found")
+        void testUpdateAdministratorNotFound() throws Exception {
+
+            Administrator administratorToPut = administratorTestData.getAdministrator(1L, "Neo");
+
+            doReturn(Optional.of(administratorToPut)).when(administratorRepository).findById(2L);
+
+            mockMvc.perform(put("/admin/{id}", 135)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(administratorToPut)))
+                    .andExpect(status().isNotFound());
+
+        }
+
     }
 
     @Nested
@@ -200,15 +220,11 @@ public class AdministratorCrudTest {
         @Test
         @DisplayName("When Administrator exist Then delete Administrator")
         void testDeleteAdministrator() throws Exception {
-            Administrator administrator = administratorTestData.getAdministrator();
-            doReturn(administrator).when(administratorRepository).findAdministratorById(1L);
-            doNothing().when(administratorService).deleteAdministratorById(1L);
+            Administrator administrator = administratorTestData.getAdministrator(1L, "Neo");
+            doReturn(Optional.of(administrator)).when(administratorRepository).findById(1L);
             mockMvc.perform(
                     delete("/admin/{id}", 1L))
                     .andExpect(status().isNoContent());
-            verify(administratorService, times(1)).deleteAdministratorById(administrator.getId());
-            verifyNoMoreInteractions(administratorService);
         }
     }
 }
-

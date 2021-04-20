@@ -66,26 +66,26 @@ public class AdministratorService extends BaseService<Administrator, Administrat
     }
 
     public AdministratorDto updateAdministrator(Long id, AdministratorDto administratorDto) throws EntityNotFoundException {
-        Administrator administrator = findAdministratorById(id);
+        Administrator administrator = getEntityById(id);//findAdministratorById(id);
         administratorMapper.updateAdministrator(administratorDto, administrator);
         administratorRepository.save(administrator);
         return administratorMapper.entityToDto(administrator);
     }
 
     public AdministratorDto changeAdministratorRole(Long id, RoleDto role) throws EntityNotFoundException {
-        Administrator existingAdministrator = findAdministratorById(id);
+        Administrator existingAdministrator = getEntityById(id); //findAdministratorById(id);
         existingAdministrator.setRole(Role.valueOf(role.getRole().toUpperCase()));
         administratorRepository.save(existingAdministrator);
         return administratorMapper.entityToDto(existingAdministrator);
     }
 
     public void deleteAdministratorById(Long id) throws EntityNotFoundException {
-        administratorRepository.delete(findAdministratorById(id));
+        administratorRepository.delete(getEntityById(id));//(findAdministratorById(id));
     }
 
     public AdministratorDto addTrainee(Long administratorId, Long traineeId) throws EntityNotFoundException {
         Trainee trainee = traineeService.getEntityById(traineeId);
-        Administrator administrator = administratorRepository.findAdministratorById(administratorId);
+        Administrator administrator = getEntityById(administratorId);//administratorRepository.findById(administratorId);
         trainee.setAdministrator(administrator);
         traineeRepository.save(trainee);
 
@@ -99,11 +99,6 @@ public class AdministratorService extends BaseService<Administrator, Administrat
         administrator.getTrainees().add(trainee);
         administratorRepository.save(administrator);*/
         return administratorMapper.entityToDto(administrator);
-    }
-
-    private Administrator findAdministratorById(Long id) throws EntityNotFoundException {
-        return Optional.ofNullable(administratorRepository.findAdministratorById(id))
-                .orElseThrow(()-> new EntityNotFoundException());
     }
 
 }
