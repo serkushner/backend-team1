@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,26 +35,26 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
         defaultSortingDirection = "desc";
     }
 
+//    @Override
+//    public RsqlSpecification getRsqlSpecification() {
+//        return internshipRsqlSpecification;
+//    }
     @Override
     public RsqlSpecification getRsqlSpecification() {
-        return internshipRsqlSpecification;
+        throw new UnsupportedOperationException();
     }
 
-    //TODO 19-04 implement here an addition based on the published column
-    // and make it usable for both types due to the boolean parameter
-    public List<InternshipDTO> getAll(String search, String sortFields) {
-        Sort sort = getSort(sortFields);
-        return super.findBySpecifications(search, sort).stream()
-                .map(internship -> internshipMapper.entityToDto(internship))
-                .collect(Collectors.toList());
-    }
 
     public InternshipDetailsDTO getUnpostedById(Long id) throws EntityNotFoundException {
-        return internshipDetailsMapper.entityToDto(repository.findByIdAndPublished(id, Boolean.FALSE));
+        return internshipDetailsMapper.entityToDto(
+                Optional.ofNullable(repository.findByIdAndPublished(id, Boolean.FALSE))
+                        .orElseThrow(EntityNotFoundException::new));
     }
 
     public InternshipDetailsDTO getPostedById(Long id) throws EntityNotFoundException {
-        return internshipDetailsMapper.entityToDto(repository.findByIdAndPublished(id, Boolean.TRUE));
+        return internshipDetailsMapper.entityToDto(
+                Optional.ofNullable(repository.findByIdAndPublished(id, Boolean.TRUE))
+                .orElseThrow(EntityNotFoundException::new));
     }
 
     public InternshipDetailsDTO updateUnpostedInternship(Long id,
@@ -68,7 +69,8 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
 
     private InternshipDetailsDTO updateInternship(Long id,
         InternshipDetailsDTO internshipDetailsDTO, Boolean isPublished) throws EntityNotFoundException {
-        Internship internship = repository.findByIdAndPublished(id, isPublished);
+        Internship internship = Optional.ofNullable(repository.findByIdAndPublished(id, isPublished))
+                .orElseThrow(EntityNotFoundException::new);
         internshipDetailsMapper.updateInternship(internshipDetailsDTO, internship);
         repository.saveAndFlush(internship);
         return internshipDetailsMapper.entityToDto(internship);
@@ -107,28 +109,40 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
         return internshipExist;
     }
 
-    private List<InternshipDTO> findAllBySpecifications(String search, String sortFields,
-                                                     Boolean isPublished) {
-        StringBuffer stringBuffer = new StringBuffer(search);
-        if (search == null) {
-            stringBuffer.append("?query=published==\"").append(isPublished).append("\"");
-        } else {
-            stringBuffer.append(";published==\"").append(isPublished).append("\"");
-        }
-        search = stringBuffer.toString();
-        Sort sort = getSort(sortFields);
-        List<Internship> foundInternships = repository.findAll(getRsqlSpecification().rsql(search),
-                sort);
-        return foundInternships.stream()
+    public List<InternshipDTO> getAllPosted() {
+        return repository.findAllByPublished(Boolean.TRUE).stream()
                 .map(internship -> internshipMapper.entityToDto(internship))
                 .collect(Collectors.toList());
     }
 
-    public List<InternshipDTO> getAllPosted(String search, String sortFields) {
-        return findAllBySpecifications(search, sortFields, Boolean.TRUE);
+    public List<InternshipDTO> getAllUnposted() {
+        return repository.findAllByPublished(Boolean.FALSE).stream()
+                .map(internship -> internshipMapper.entityToDto(internship))
+                .collect(Collectors.toList());
     }
 
-    public List<InternshipDTO> getAllUnposted(String search, String sortFields) {
-        return findAllBySpecifications(search, sortFields, Boolean.FALSE);
-    }
+//    public List<InternshipDTO> getAllPosted(String search, String sortFields) {
+//        return getAllBySpecifications(search, sortFields, Boolean.TRUE);
+//    }
+//
+//    public List<InternshipDTO> getAllUnposted(String search, String sortFields) {
+//        return getAllBySpecifications(search, sortFields, Boolean.FALSE);
+//    }
+//
+//    private List<InternshipDTO> getAllBySpecifications(String search, String sortFields,
+//                                                     Boolean isPublished) {
+//        StringBuffer stringBuffer = new StringBuffer();
+//        if (search == null) {
+//            stringBuffer.append("?published==").append(isPublished.toString());
+//        } else {
+//            stringBuffer.append(search);
+//            stringBuffer.append(";published==").append(isPublished.toString());
+//        }
+//        search = stringBuffer.toString();
+//        Sort sort = getSort(sortFields);
+//        List<Internship> foundInternships = repository.findAll(getRsqlSpecification().rsql(search), sort);
+//        return foundInternships.stream()
+//                .map(internship -> internshipMapper.entityToDto(internship))
+//                .collect(Collectors.toList());
+//    }
 }
