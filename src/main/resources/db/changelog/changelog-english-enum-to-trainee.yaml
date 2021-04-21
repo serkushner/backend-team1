@@ -2,7 +2,14 @@ databaseChangeLog:
 
   - changeSet:
       id: 20210421.[BE-67]-add-english-enum-to-trainee
-      author: nazar_furdychka
+      author: nazar_furdychkaANDshpaser3@yandex.ru
+      preConditions:
+        - onFail: MARK_RAN
+        - onError: MARK_RAN
+        - not:
+            - columnExists:
+                tableName: additional_info
+                columnName: english
       changes:
         - sqlFile:
             dbms: 'mysql'

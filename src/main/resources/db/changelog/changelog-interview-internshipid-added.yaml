@@ -1,0 +1,23 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: 20210421.[BE-66]-add-relation-interview-to-internship
+      author: shpaser3@yandex.ru
+      preConditions:
+        - onFail: MARK_RAN
+        - onError: MARK_RAN
+        - not:
+          - columnExists:
+              tableName: interview
+              columnName: internship_id
+      changes:
+        - addColumn:
+            tableName: interview
+            columns:
+              - column:
+                  name: internship_id
+                  type: bigint
+                  constraints:
+                    nullable: true
+                    foreignKeyName: interview_internship
+                    references: internship(id)
