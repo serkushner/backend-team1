@@ -35,19 +35,21 @@ public class TraineeController {
     }
 
     @GetMapping("trainee")
-    public ResponseEntity<List<TraineeToAdminDTO>> getActualTrainees(@RequestParam(value = "search", required = false) String search,
-                                                                     @RequestParam(value = "sort", required = false) String sort){
+    public ResponseEntity<List<TraineeToAdminDTO>> getActualTraineesRegistrations(@RequestParam(value = "search", required = false) String search,
+                                                                                  @RequestParam(value = "sort", required = false) String sort){
         return ResponseEntity.ok(additionalInfoService.findByNotFinishedInternships(search, sort));
     }
 
-    @GetMapping("trainee/{id}")
-    public ResponseEntity<TraineeToAdminDetailsDTO> getTrainee(@PathVariable Long id){
+    @GetMapping("trainee/ai/{id}")
+    public ResponseEntity<TraineeToAdminDetailsDTO> getTraineeAdditionalInfo(@PathVariable Long id){
         return ResponseEntity.ok(additionalInfoService.getAdditionalInfoById(id));
     }
 
     @GetMapping("trainee/{id}/history")
-    public ResponseEntity<List<TraineeHistoryDTO>> getTraineeHistory(@PathVariable Long id){
-        return ResponseEntity.ok(additionalInfoService.getTraineeHistory(id));
+    public ResponseEntity<List<TraineeHistoryDTO>> getTraineeHistory(@RequestParam(value = "search", required = false) String search,
+                                                                     @RequestParam(value = "sort", required = false) String sort,
+                                                                     @PathVariable Long id){
+        return ResponseEntity.ok(additionalInfoService.getTraineeHistory(id, search, sort));
     }
 
     @PutMapping("trainee/{id}")

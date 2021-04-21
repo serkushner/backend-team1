@@ -29,11 +29,17 @@ public class InterviewPeriodService extends BaseService<InterviewPeriod, Intervi
     public List<InterviewPeriod> addInterviewPeriod(List<Map<String, String>> dates, Trainee trainee){
         List<InterviewPeriod> interviewPeriods = new ArrayList<>();
         for (Map<String, String> date : dates) {
-            InterviewPeriod interviewPeriod = new InterviewPeriod();
-            interviewPeriod.setDayOfWeek(DayOfWeek.valueOf(date.get("day").toUpperCase()));
-            interviewPeriod.setStartTime(getTimeFromPeriod(date.get("time"), 1));
-            interviewPeriod.setEndTime(getTimeFromPeriod(date.get("time"), 3));
-            interviewPeriod = interviewPeriodRepository.save(interviewPeriod);
+            DayOfWeek dayOfWeek = DayOfWeek.valueOf(date.get("day").toUpperCase());
+            LocalTime startTime = getTimeFromPeriod(date.get("time"), 1);
+            LocalTime endTime = getTimeFromPeriod(date.get("time"), 3);
+            InterviewPeriod interviewPeriod = interviewPeriodRepository.findByDayOfWeekAndAndStartTimeAndEndTime(dayOfWeek, startTime, endTime);
+            if (interviewPeriod == null){
+                interviewPeriod = new InterviewPeriod();
+                interviewPeriod.setDayOfWeek(dayOfWeek);
+                interviewPeriod.setStartTime(startTime);
+                interviewPeriod.setEndTime(endTime);
+                interviewPeriod = interviewPeriodRepository.save(interviewPeriod);
+            }
             interviewPeriod.getTrainees().add(trainee);
             interviewPeriods.add(interviewPeriod);
         }

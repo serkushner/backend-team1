@@ -63,16 +63,17 @@ public class TraineeService extends BaseService<Trainee, TraineeRepository> {
     public void deleteTrainee(Long id){
         traineeRepository.delete(getEntityById(id));
     }
-//TODO
+
+    @Transactional
     public TraineeDTO updateTrainee(TraineeDTO traineeDTO, Long id){
         Trainee trainee = getEntityById(id);
         traineeMapper.updateTrainee(traineeDTO, trainee);
-        System.out.println("DTO");
-        System.out.println(traineeDTO);
-        System.out.println("TRAINEE");
-        System.out.println(trainee);
         trainee = traineeRepository.save(trainee);
-        return traineeMapper.entityToDto(trainee, null, null);
+        List<InterviewPeriod> interviewPeriods = new ArrayList<>();
+        if (traineeDTO.getDates() != null){
+            interviewPeriods = addInterviewPeriodsToTrainee(traineeDTO.getDates(), trainee);
+        }
+        return traineeMapper.entityToDto(trainee, null, interviewPeriods);
     }
 
     private void addCountryToTrainee(String location, Trainee trainee){
@@ -81,6 +82,7 @@ public class TraineeService extends BaseService<Trainee, TraineeRepository> {
     }
 
     private List<InterviewPeriod> addInterviewPeriodsToTrainee(List<Map<String, String>> dates, Trainee trainee){
+        trainee.getInterviewPeriods().clear();
         List<InterviewPeriod> interviewPeriods = interviewPeriodService.addInterviewPeriod(dates, trainee);
         trainee.getInterviewPeriods().addAll(interviewPeriods);
         return interviewPeriods;

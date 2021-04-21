@@ -43,7 +43,6 @@ public class AdditionalInfoService extends BaseService<AdditionalInfo, Additiona
     }
 
     public List<TraineeToAdminDTO> findByNotFinishedInternships(String search, String sortFields){
-        Sort sort = getSort(sortFields);
         return additionalInfoRepository.findAllByInternship_EndDateAfter(LocalDate.now()).stream()
                 .map(additionalInfoMapper::entityToDto)
                 .collect(Collectors.toList());
@@ -54,7 +53,7 @@ public class AdditionalInfoService extends BaseService<AdditionalInfo, Additiona
         return additionalInfoMapper.entityToDto(additionalInfo, null);
     }
 
-    public List<TraineeHistoryDTO> getTraineeHistory(Long id){
+    public List<TraineeHistoryDTO> getTraineeHistory(Long id, String search, String sortFields){
         return additionalInfoRepository.findAllByTraineeId(id).stream()
                 .map(additionalInfo -> additionalInfoMapper.entityToTraineeHistoryDTO(additionalInfo, null))
                 .collect(Collectors.toList());
