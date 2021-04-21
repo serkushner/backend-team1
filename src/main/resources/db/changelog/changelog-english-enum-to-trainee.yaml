@@ -1,0 +1,12 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: 20210421.[BE-67]-add-english-enum-to-trainee
+      author: nazar_furdychka
+      changes:
+        - sqlFile:
+            dbms: 'mysql'
+            endDelimiter: "@@"
+            splitStatements: false
+            path: db/sql/change-english-add-to-enum-trainee.sql
+            stripComments: false

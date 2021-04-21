@@ -25,3 +25,5 @@ databaseChangeLog:
       file: db/changelog/changelog-replace-trainee-status.yaml
   - include:
       file: db/changelog/changelog-add-administrators.yaml
+  - include:
+      file: db/changelog/changelog-english-enum-to-trainee.yaml
