@@ -22,7 +22,7 @@ public class AdministratorController {
     @GetMapping
     public ResponseEntity<List<AdministratorDto>> findBySpecification(@RequestParam(value = "search", required = false) String search,
                                                                        @RequestParam(value = "sort", required = false) String sort) {
-            return ResponseEntity.ok(administratorService.getAll(search, sort));
+            return ResponseEntity.ok(administratorService.findBySpecification(search, sort));
     }
 
     @GetMapping(value = ID)

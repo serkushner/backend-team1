@@ -9,15 +9,15 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping
 @RequiredArgsConstructor
-public class AddTraineeController {
+public class AdministratorTraineeManagerController {
 
     private final AdministratorService administratorService;
 
     private static final String ID = "/{id}";
 
     @PutMapping(value = "/trainee-to-admin" + ID)
-    public ResponseEntity<AdministratorDto> addTrainee(@PathVariable Long id, @RequestBody String traineeId) {
-        return ResponseEntity.ok(administratorService.addTrainee(id, Long.parseLong(traineeId)));
+    public ResponseEntity<AdministratorDto> addTraineeToAdministrator(@PathVariable Long id, @RequestBody String traineeId) {
+        return ResponseEntity.ok(administratorService.addTraineeToAdministrator(id, Long.parseLong(traineeId)));
     }
 
 }

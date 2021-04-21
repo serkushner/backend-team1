@@ -10,7 +10,7 @@ public class AdministratorTestData {
     public Administrator getAdministrator(Long id, String login){
         Administrator administrator = new Administrator();
         administrator.setId(id);
-        administrator.setLogin("login");
+        administrator.setLogin(login);
         administrator.setName("Keanu");
         administrator.setSurname("Reeves");
         administrator.setEmail("neo.forever@gmail.com");
