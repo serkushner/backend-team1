@@ -2,11 +2,20 @@ databaseChangeLog:
 
   - changeSet:
       id: 20210421.[BE-64]-change-interview-traineeid-can-be-null
-      author: nazar_furdychka
+      author: nazar_furdychkaANDshpaser3@yandex.ru
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: "NO"
+            sql: select c.is_nullable from information_schema.columns c
+                  where c.table_schema not in ('mysql', 'sys', 'information_schema', 'performance_schema')
+                        and c.table_schema = 'exadel_internships'
+                        and c.table_name = 'interview'
+                        and c.column_name = 'trainee_id'
       changes:
         - sqlFile:
             dbms: 'mysql'
             endDelimiter: "@@"
-            splitStatements: true
+            splitStatements: false
             path: db/sql/change-interview-table-traineeid-can-be-null.sql
             stripComments: false
