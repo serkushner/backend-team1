@@ -1,10 +1,13 @@
 package com.exadel.project.administrator.entity;
 
+import com.exadel.project.trainee.entity.Trainee;
 import lombok.Data;
 import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @ToString(exclude = {"password"})
@@ -47,5 +50,8 @@ public class Administrator {
     @Enumerated(EnumType.STRING)
     @Column(name = "role", columnDefinition="ENUM('ADMIN','SUPERADMIN')")
     private Role role;
+
+    @OneToMany(mappedBy = "administrator")
+    private List<Trainee> trainees = new ArrayList<>();
 
 }

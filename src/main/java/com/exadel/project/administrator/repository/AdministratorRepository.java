@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface AdministratorRepository extends JpaRepository<Administrator, Long>, JpaSpecificationExecutor<Administrator> {
 
-    public Administrator findAdministratorByEmail(String email);
+    Administrator findAdministratorByEmail(String email);
 
-    public Administrator findAdministratorById(Long id);
 }
