@@ -7,6 +7,7 @@ import com.exadel.project.common.service.rsql.RsqlSpecification;
 import com.exadel.project.internship.dto.InternshipDTO;
 import com.exadel.project.internship.dto.InternshipDetailsDTO;
 import com.exadel.project.internship.entity.Internship;
+import com.exadel.project.internship.entity.Published;
 import com.exadel.project.internship.mapper.InternshipDetailsMapper;
 import com.exadel.project.internship.mapper.InternshipMapper;
 import com.exadel.project.internship.repository.InternshipRepository;
@@ -42,28 +43,28 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
 
     public InternshipDetailsDTO getUnpostedById(Long id) throws EntityNotFoundException {
         return internshipDetailsMapper.entityToDto(
-                Optional.ofNullable(repository.findByIdAndPublished(id, Boolean.FALSE))
+                Optional.ofNullable(repository.findByIdAndPublished(id, Published.VISIBLE_FOR_ADMINS))
                         .orElseThrow(EntityNotFoundException::new));
     }
 
     public InternshipDetailsDTO getPostedById(Long id) throws EntityNotFoundException {
         return internshipDetailsMapper.entityToDto(
-                Optional.ofNullable(repository.findByIdAndPublished(id, Boolean.TRUE))
+                Optional.ofNullable(repository.findByIdAndPublished(id, Published.VISIBLE_FOR_INTERNS))
                 .orElseThrow(EntityNotFoundException::new));
     }
 
     public InternshipDetailsDTO updateUnpostedInternship(Long id,
             InternshipDetailsDTO internshipDetailsDTO) throws EntityNotFoundException {
-        return updateInternship(id, internshipDetailsDTO, Boolean.FALSE);
+        return updateInternship(id, internshipDetailsDTO, Published.VISIBLE_FOR_ADMINS);
     }
 
     public InternshipDetailsDTO updatePostedInternship(Long id,
             InternshipDetailsDTO internshipDetailsDTO) throws EntityNotFoundException {
-        return updateInternship(id, internshipDetailsDTO, Boolean.TRUE);
+        return updateInternship(id, internshipDetailsDTO, Published.VISIBLE_FOR_INTERNS);
     }
 
     private InternshipDetailsDTO updateInternship(Long id,
-        InternshipDetailsDTO internshipDetailsDTO, Boolean isPublished) throws EntityNotFoundException {
+        InternshipDetailsDTO internshipDetailsDTO, Published isPublished) throws EntityNotFoundException {
         Internship internship = Optional.ofNullable(repository.findByIdAndPublished(id, isPublished))
                 .orElseThrow(EntityNotFoundException::new);
         internshipDetailsMapper.updateInternship(internshipDetailsDTO, internship);
@@ -77,13 +78,13 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
             throw new EntityAlreadyExistsException();
         }
         Internship internship = internshipDetailsMapper.dtoToEntity(internshipDetailsDTO);
-        internship.setPublished(Boolean.FALSE);
+        internship.setPublished(Published.VISIBLE_FOR_ADMINS);  //TODO change on Published.VISIBLE_FOR_INTERNS for fast demo on ready landing
         repository.saveAndFlush(internship);
         return internshipDetailsMapper.entityToDto(internship);
     }
 
     public void deleteUnpostedInternshipById(Long id) throws EntityNotFoundException {
-        Internship internship = repository.findByIdAndPublished(id, Boolean.FALSE);
+        Internship internship = repository.findByIdAndPublished(id, Published.VISIBLE_FOR_ADMINS);
         if (internship == null) {
             throw new EntityNotFoundException();
         } else {
@@ -105,18 +106,18 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
     }
 
     public List<InternshipDTO> getAllPosted(String search, String sortFields) {
-        return getAll(search, sortFields, Boolean.TRUE);
+        return getAll(search, sortFields, Published.VISIBLE_FOR_INTERNS);
     }
 
     public List<InternshipDTO> getAllUnposted(String search, String sortFields) {
-        return getAll(search, sortFields, Boolean.FALSE);
+        return getAll(search, sortFields, Published.VISIBLE_FOR_ADMINS);
     }
 
-    public List<InternshipDTO> getAll(String search, String sortFields, Boolean isPublished) {
+    public List<InternshipDTO> getAll(String search, String sortFields, Published isPublished) {
         Sort sort = getSort(sortFields);
         StringBuffer stringBuffer = new StringBuffer();
         if (search == null) {
-            stringBuffer.append("?search=published==").append(isPublished.toString());
+            stringBuffer.append("published==").append(isPublished.toString());
         } else {
             stringBuffer.append(search);
             stringBuffer.append(";published==").append(isPublished.toString());

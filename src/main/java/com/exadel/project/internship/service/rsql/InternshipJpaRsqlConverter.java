@@ -33,6 +33,7 @@ public class InternshipJpaRsqlConverter extends JpaRsqlConverter {
     public Object checkAndConvertToEnum(String selector, String argument) {
         switch (selector){
             case "format": return Format.valueOf(argument);
+            case "published": return Published.valueOf(argument.toUpperCase());
             default: return argument;
         }
     }

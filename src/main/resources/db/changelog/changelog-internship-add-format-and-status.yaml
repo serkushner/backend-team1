@@ -30,7 +30,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: published
-                  type: ENUM('VisibleForAdmins','VisibleForInterns')
+                  type: ENUM('VISIBLE_FOR_ADMINS','VISIBLE_FOR_INTERNS')
                   constraints:
                     nullable: false
 
@@ -41,7 +41,7 @@ databaseChangeLog:
         - onFail: MARK_RAN
         - sqlCheck:
             expectedResult: "0"
-            sql: SELECT count(*) FROM internship WHERE published = 'VisibleForInterns'
+            sql: SELECT count(*) FROM internship WHERE published = 'VISIBLE_FOR_INTERNS'
       changes:
         - sqlFile:
             dbms: 'mysql'

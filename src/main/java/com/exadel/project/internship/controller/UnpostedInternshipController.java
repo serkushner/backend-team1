@@ -46,7 +46,7 @@ public class UnpostedInternshipController {
         return ResponseEntity.ok(s3Service.uploadFile(file));
     }
 
-    @DeleteMapping(value = ID + "/delete")
+    @DeleteMapping(value = ID)
     public ResponseEntity<Void> deleteUnpostedInternship(@PathVariable Long id) {
         internshipService.deleteUnpostedInternshipById(id);
         return ResponseEntity.noContent().build();

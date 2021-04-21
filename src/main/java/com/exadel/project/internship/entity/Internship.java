@@ -80,6 +80,7 @@ public class Internship {
     @JoinColumn(name = "type_id")
     private InternshipType internshipType;
 
-    @Column(name = "published")
-    private Boolean published;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "published", columnDefinition="ENUM('VISIBLE_FOR_ADMINS', 'VISIBLE_FOR_INTERNS')")
+    private Published published;
 }
