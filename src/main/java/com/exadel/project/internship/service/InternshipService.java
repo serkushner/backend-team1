@@ -121,13 +121,15 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
                 .collect(Collectors.toList());
     }
 
-//    public List<InternshipDTO> getAllPosted(String search, String sortFields) {
+    public List<InternshipDTO> getAllPosted(String search, String sortFields) {
 //        return getAllBySpecifications(search, sortFields, Boolean.TRUE);
-//    }
-//
-//    public List<InternshipDTO> getAllUnposted(String search, String sortFields) {
+        return getAll(search, sortFields, Boolean.TRUE);
+    }
+
+    public List<InternshipDTO> getAllUnposted(String search, String sortFields) {
 //        return getAllBySpecifications(search, sortFields, Boolean.FALSE);
-//    }
+        return getAll(search, sortFields, Boolean.FALSE);
+    }
 //
 //    private List<InternshipDTO> getAllBySpecifications(String search, String sortFields,
 //                                                     Boolean isPublished) {
@@ -141,8 +143,24 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
 //        search = stringBuffer.toString();
 //        Sort sort = getSort(sortFields);
 //        List<Internship> foundInternships = repository.findAll(getRsqlSpecification().rsql(search), sort);
+
 //        return foundInternships.stream()
 //                .map(internship -> internshipMapper.entityToDto(internship))
 //                .collect(Collectors.toList());
 //    }
+
+    public List<InternshipDTO> getAll(String search, String sortFields, Boolean isPublished) {
+        Sort sort = getSort(sortFields);
+        StringBuffer stringBuffer = new StringBuffer();
+        if (search == null) {
+            stringBuffer.append("?search=published==").append(isPublished.toString());
+        } else {
+            stringBuffer.append(search);
+            stringBuffer.append(";published==").append(isPublished.toString());
+        }
+        search = stringBuffer.toString();
+        return super.findBySpecifications(search, sort).stream()
+                .map(internship -> internshipMapper.entityToDto(internship))
+                .collect(Collectors.toList());
+    }
 }
