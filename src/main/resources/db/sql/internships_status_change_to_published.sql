@@ -1,5 +1,5 @@
 -- liquibase formatted sql
 
--- changeset 20210420.[BE-52]-change-status-to-published-in-internships-in-db
+-- changeset 20210421.[BE-52]-change-status-to-published-in-internships-in-db
 
-UPDATE internship SET published = true WHERE published = false
+UPDATE internship SET published = 'VisibleForInterns' WHERE published = 'VisibleForAdmins'
