@@ -11,7 +11,7 @@ import java.util.List;
 @Component
 public class InterviewerTestData {
 
-    public Interviewer getTechInterviewer(){
+    public Interviewer getTechInterviewer() {
         Interviewer interviewer = new Interviewer();
         interviewer.setId(1L);
         interviewer.setName("Vladimir");
@@ -36,7 +36,7 @@ public class InterviewerTestData {
         return interviewer;
     }
 
-    public Interviewer getHrInterviewer(){
+    public Interviewer getHrInterviewer() {
         Interviewer interviewer = new Interviewer();
         interviewer.setId(2L);
         interviewer.setName("Yulia");

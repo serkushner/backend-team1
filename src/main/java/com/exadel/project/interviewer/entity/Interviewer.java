@@ -46,4 +46,11 @@ public class Interviewer {
 
     @OneToMany(mappedBy = "interviewer")
     private List<Interview> interviews;
+
+    @ManyToMany
+    @JoinTable(name = "interviewer_subject",
+            joinColumns = @JoinColumn(name = "interviewer_id"),
+            inverseJoinColumns = @JoinColumn(name = "subject_id")
+    )
+    private List<Subject> subjects = new ArrayList<>();
 }
