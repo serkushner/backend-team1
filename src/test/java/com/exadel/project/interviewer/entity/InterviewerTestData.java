@@ -1,6 +1,12 @@
 package com.exadel.project.interviewer.entity;
 
+import com.exadel.project.internship.entity.Subject;
+import com.exadel.project.interview.entity.Interview;
+import com.exadel.project.interview.entity.InterviewTime;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Component
 public class InterviewerTestData {
@@ -14,6 +20,19 @@ public class InterviewerTestData {
         interviewer.setPhone("80554445588");
         interviewer.setType(InterviewerType.TECH);
         interviewer.setSkype("Vlad_tech");
+
+        Subject subject = new Subject();
+        subject.setId(1L);
+        subject.setName("Java");
+        interviewer.setSubjects(List.of(subject));
+
+        Interview interview = new Interview();
+        InterviewTime interviewTime = new InterviewTime();
+        interviewTime.setEndDate(LocalDateTime.now());
+        interview.setName("java tech interview with Vlad");
+        interview.setInterviewTime(interviewTime);
+        interviewer.setInterviews(List.of(interview));
+
         return interviewer;
     }
 

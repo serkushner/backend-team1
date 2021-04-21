@@ -1,11 +1,14 @@
 package com.exadel.project.interviewer.entity;
 
+import com.exadel.project.internship.entity.Subject;
 import com.exadel.project.interview.entity.Interview;
 import com.exadel.project.interviewer.entity.InterviewerType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
