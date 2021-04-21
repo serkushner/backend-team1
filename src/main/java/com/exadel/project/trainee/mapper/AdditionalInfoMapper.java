@@ -6,6 +6,7 @@ import com.exadel.project.internship.entity.Internship;
 import com.exadel.project.internship.entity.Subject;
 import com.exadel.project.interview.entity.Interview;
 import com.exadel.project.trainee.dto.TraineeDTO;
+import com.exadel.project.trainee.dto.TraineeHistoryDTO;
 import com.exadel.project.trainee.dto.TraineeToAdminDTO;
 import com.exadel.project.trainee.dto.TraineeToAdminDetailsDTO;
 import com.exadel.project.trainee.entity.AdditionalInfo;
@@ -25,6 +26,7 @@ public interface AdditionalInfoMapper {
     @Mapping(target = "traineeStatus", expression = "java(getTraineeStatus(dto.getTraineeStatus()))")
     AdditionalInfo dtoToEntity(TraineeDTO dto, Trainee trainee, Internship internship);
 
+    @Mapping(target = "additionalInfoId", source = "id")
     @Mapping(target = "traineeName", expression = "java(additionalInfo.getTrainee().getName())")
     @Mapping(target = "traineeSurname", expression = "java(additionalInfo.getTrainee().getSurname())")
     @Mapping(target = "email", expression = "java(additionalInfo.getTrainee().getEmail())")
@@ -41,6 +43,7 @@ public interface AdditionalInfoMapper {
     @Mapping(target = "phone", expression = "java(additionalInfo.getTrainee().getPhone())")
     @Mapping(target = "skype", expression = "java(additionalInfo.getTrainee().getSkype())")
     @Mapping(target = "location", expression = "java(additionalInfo.getTrainee().getCountry().getName())")
+    @Mapping(target = "recipient", expression = "java(additionalInfo.getTrainee().getRecipient())")
     @Mapping(target = "adminName", expression = "java(getAdminName(additionalInfo.getTrainee().getAdministrator()))")
     @Mapping(target = "adminSurname", expression = "java(getAdminSurname(additionalInfo.getTrainee().getAdministrator()))")
     @Mapping(target = "dates", expression = "java(getMapDates(additionalInfo.getTrainee().getInterviewPeriods()))")
@@ -48,6 +51,15 @@ public interface AdditionalInfoMapper {
     @Mapping(target = "techInterview")
     @Mapping(target = "hrInterview")
     TraineeToAdminDetailsDTO entityToDto(AdditionalInfo additionalInfo, List<Interview> interviews);
+
+    @Mapping(target = "internshipId", expression = "java(additionalInfo.getInternship().getId())")
+    @Mapping(target = "internshipTitle", expression = "java(additionalInfo.getInternship().getTitle())")
+    @Mapping(target = "startDate", expression = "java(additionalInfo.getInternship().getStartDate())")
+    @Mapping(target = "endDate", expression = "java(additionalInfo.getInternship().getEndDate())")
+    @Mapping(target = "subjects", expression = "java(getSubjectsName(additionalInfo.getInternship().getSubjects()))")
+    @Mapping(target = "techInterview")
+    @Mapping(target = "hrInterview")
+    TraineeHistoryDTO entityToTraineeHistoryDTO(AdditionalInfo additionalInfo, List<Interview> interviews);
 
     default TraineeStatus getTraineeStatus(String traineeStatus){
         return traineeStatus == null ? TraineeStatus.REGISTERED : TraineeStatus.valueOf(traineeStatus);

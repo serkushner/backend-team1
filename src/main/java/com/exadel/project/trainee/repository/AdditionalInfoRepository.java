@@ -14,4 +14,5 @@ import java.util.List;
 public interface AdditionalInfoRepository extends JpaRepository<AdditionalInfo, Long>, JpaSpecificationExecutor<AdditionalInfo> {
     AdditionalInfo findAdditionalInfoByInternshipAndTrainee(Internship internship, Trainee trainee);
     List<AdditionalInfo> findAllByInternship_EndDateAfter(LocalDate localDate);
+    List<AdditionalInfo> findAllByTraineeId(Long id);
 }

@@ -6,7 +6,7 @@ import java.util.List;
 @Data
 public class TraineeToAdminDTO {
 
-    private Long id;
+    private Long additionalInfoId;
     private String traineeName;
     private String traineeSurname;
     private String email;

@@ -2,6 +2,7 @@ package com.exadel.project.trainee.controller;
 
 import com.exadel.project.common.service.S3Service;
 import com.exadel.project.trainee.dto.TraineeDTO;
+import com.exadel.project.trainee.dto.TraineeHistoryDTO;
 import com.exadel.project.trainee.dto.TraineeToAdminDTO;
 import com.exadel.project.trainee.dto.TraineeToAdminDetailsDTO;
 import com.exadel.project.trainee.entity.Trainee;
@@ -16,7 +17,6 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("internship")
 @RequiredArgsConstructor
 public class TraineeController {
 
@@ -24,12 +24,12 @@ public class TraineeController {
     private final TraineeService traineeService;
     private final AdditionalInfoService additionalInfoService;
 
-    @PostMapping("/{id}/upload")
+    @PostMapping("internship/{id}/upload")
     public ResponseEntity<String> uploadCv(@RequestParam MultipartFile file) throws IOException {
         return ResponseEntity.ok(s3Service.uploadFile(file));
     }
 
-    @PostMapping("/{id}/registration")
+    @PostMapping("internship/{id}/registration")
     public ResponseEntity<TraineeDTO> addTrainee(@RequestBody TraineeDTO traineeDTO, @PathVariable Long id){
         return ResponseEntity.ok(traineeService.addTrainee(traineeDTO, id));
     }
@@ -41,17 +41,23 @@ public class TraineeController {
     }
 
     @GetMapping("trainee/{id}")
-    public ResponseEntity<TraineeToAdminDetailsDTO> getTrainee(@PathVariable ("id") Long id){
+    public ResponseEntity<TraineeToAdminDetailsDTO> getTrainee(@PathVariable Long id){
         return ResponseEntity.ok(additionalInfoService.getAdditionalInfoById(id));
     }
 
     @GetMapping("trainee/{id}/history")
-    public ResponseEntity<TraineeDTO> getTraineeHistory(@PathVariable ("id") Long id){
-        return null;
+    public ResponseEntity<List<TraineeHistoryDTO>> getTraineeHistory(@PathVariable Long id){
+        return ResponseEntity.ok(additionalInfoService.getTraineeHistory(id));
+    }
+
+    @PutMapping("trainee/{id}")
+    public ResponseEntity<TraineeDTO> updateTrainee(@RequestBody TraineeDTO traineeDTO, @PathVariable Long id){
+        return ResponseEntity.ok(traineeService.updateTrainee(traineeDTO, id));
     }
 
     @DeleteMapping("trainee/{id}/delete")
-    public ResponseEntity<Void> deleteTrainee(@PathVariable ("id") Long id){
-        return null;
+    public ResponseEntity<Void> deleteTrainee(@PathVariable Long id){
+        traineeService.deleteTrainee(id);
+        return ResponseEntity.noContent().build();
     }
 }

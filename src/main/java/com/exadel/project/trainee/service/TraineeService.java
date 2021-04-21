@@ -60,6 +60,21 @@ public class TraineeService extends BaseService<Trainee, TraineeRepository> {
         return traineeMapper.entityToDto(trainee, additionalInfo, interviewPeriods);
     }
 
+    public void deleteTrainee(Long id){
+        traineeRepository.delete(getEntityById(id));
+    }
+//TODO
+    public TraineeDTO updateTrainee(TraineeDTO traineeDTO, Long id){
+        Trainee trainee = getEntityById(id);
+        traineeMapper.updateTrainee(traineeDTO, trainee);
+        System.out.println("DTO");
+        System.out.println(traineeDTO);
+        System.out.println("TRAINEE");
+        System.out.println(trainee);
+        trainee = traineeRepository.save(trainee);
+        return traineeMapper.entityToDto(trainee, null, null);
+    }
+
     private void addCountryToTrainee(String location, Trainee trainee){
         Country country = countryService.getByName(location);
         trainee.setCountry(country);

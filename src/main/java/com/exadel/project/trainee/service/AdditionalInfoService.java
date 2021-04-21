@@ -5,6 +5,7 @@ import com.exadel.project.common.service.BaseService;
 import com.exadel.project.common.service.rsql.RsqlSpecification;
 import com.exadel.project.internship.entity.Internship;
 import com.exadel.project.trainee.dto.TraineeDTO;
+import com.exadel.project.trainee.dto.TraineeHistoryDTO;
 import com.exadel.project.trainee.dto.TraineeToAdminDTO;
 import com.exadel.project.trainee.dto.TraineeToAdminDetailsDTO;
 import com.exadel.project.trainee.entity.AdditionalInfo;
@@ -14,6 +15,7 @@ import com.exadel.project.trainee.repository.AdditionalInfoRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -48,6 +50,13 @@ public class AdditionalInfoService extends BaseService<AdditionalInfo, Additiona
     }
 
     public TraineeToAdminDetailsDTO getAdditionalInfoById(Long id) throws EntityNotFoundException {
-        return additionalInfoMapper.entityToDto(super.getEntityById(id), null);
+        AdditionalInfo additionalInfo = super.getEntityById(id);
+        return additionalInfoMapper.entityToDto(additionalInfo, null);
+    }
+
+    public List<TraineeHistoryDTO> getTraineeHistory(Long id){
+        return additionalInfoRepository.findAllByTraineeId(id).stream()
+                .map(additionalInfo -> additionalInfoMapper.entityToTraineeHistoryDTO(additionalInfo, null))
+                .collect(Collectors.toList());
     }
 }
