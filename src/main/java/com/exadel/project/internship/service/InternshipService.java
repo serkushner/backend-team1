@@ -35,15 +35,10 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
         defaultSortingDirection = "desc";
     }
 
-//    @Override
-//    public RsqlSpecification getRsqlSpecification() {
-//        return internshipRsqlSpecification;
-//    }
     @Override
     public RsqlSpecification getRsqlSpecification() {
-        throw new UnsupportedOperationException();
+        return internshipRsqlSpecification;
     }
-
 
     public InternshipDetailsDTO getUnpostedById(Long id) throws EntityNotFoundException {
         return internshipDetailsMapper.entityToDto(
@@ -109,45 +104,13 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
         return internshipExist;
     }
 
-    public List<InternshipDTO> getAllPosted() {
-        return repository.findAllByPublished(Boolean.TRUE).stream()
-                .map(internship -> internshipMapper.entityToDto(internship))
-                .collect(Collectors.toList());
-    }
-
-    public List<InternshipDTO> getAllUnposted() {
-        return repository.findAllByPublished(Boolean.FALSE).stream()
-                .map(internship -> internshipMapper.entityToDto(internship))
-                .collect(Collectors.toList());
-    }
-
     public List<InternshipDTO> getAllPosted(String search, String sortFields) {
-//        return getAllBySpecifications(search, sortFields, Boolean.TRUE);
         return getAll(search, sortFields, Boolean.TRUE);
     }
 
     public List<InternshipDTO> getAllUnposted(String search, String sortFields) {
-//        return getAllBySpecifications(search, sortFields, Boolean.FALSE);
         return getAll(search, sortFields, Boolean.FALSE);
     }
-//
-//    private List<InternshipDTO> getAllBySpecifications(String search, String sortFields,
-//                                                     Boolean isPublished) {
-//        StringBuffer stringBuffer = new StringBuffer();
-//        if (search == null) {
-//            stringBuffer.append("?published==").append(isPublished.toString());
-//        } else {
-//            stringBuffer.append(search);
-//            stringBuffer.append(";published==").append(isPublished.toString());
-//        }
-//        search = stringBuffer.toString();
-//        Sort sort = getSort(sortFields);
-//        List<Internship> foundInternships = repository.findAll(getRsqlSpecification().rsql(search), sort);
-
-//        return foundInternships.stream()
-//                .map(internship -> internshipMapper.entityToDto(internship))
-//                .collect(Collectors.toList());
-//    }
 
     public List<InternshipDTO> getAll(String search, String sortFields, Boolean isPublished) {
         Sort sort = getSort(sortFields);

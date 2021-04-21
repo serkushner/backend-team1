@@ -10,5 +10,4 @@ import java.util.List;
 public interface InternshipRepository extends JpaRepository<Internship, Long>, JpaSpecificationExecutor<Internship> {
     Internship findInternshipByTitleAndStartDate(String title, LocalDate startDate);
     Internship findByIdAndPublished(Long id, Boolean isPublished);
-    List<Internship> findAllByPublished(Boolean isPublished);
 }

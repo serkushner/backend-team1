@@ -23,8 +23,7 @@ public class PostedInternshipController {
     @GetMapping
     public ResponseEntity<List<InternshipDTO>> findPostedInternships(@RequestParam(value = "search",
             required = false) String search, @RequestParam(value = "sort", required = false) String sort){
-//        return ResponseEntity.ok(internshipService.getAllPosted(search, sort));
-        return ResponseEntity.ok(internshipService.getAllPosted());
+        return ResponseEntity.ok(internshipService.getAllPosted(search, sort));
     }
 
     @GetMapping(value = ID)

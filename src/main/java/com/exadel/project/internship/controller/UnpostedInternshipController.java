@@ -28,8 +28,7 @@ public class UnpostedInternshipController {
     public ResponseEntity<List<InternshipDTO>> findUnpostedInternships(
             @RequestParam(value = "search", required = false) String search,
             @RequestParam(value = "sort", required = false) String sort) {
-//        return ResponseEntity.ok(internshipService.getAllUnposted(search, sort));
-        return ResponseEntity.ok(internshipService.getAllUnposted());
+        return ResponseEntity.ok(internshipService.getAllUnposted(search, sort));
     }
 
     @GetMapping(value = ID)

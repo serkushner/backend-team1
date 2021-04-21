@@ -80,7 +80,6 @@ public class Internship {
     @JoinColumn(name = "type_id")
     private InternshipType internshipType;
 
-    @NotBlank(message = "Status of internship should not be empty")
     @Column(name = "published")
     private Boolean published;
 }
