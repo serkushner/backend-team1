@@ -9,5 +9,5 @@ databaseChangeLog:
             dbms: 'mysql'
             endDelimiter: "@@"
             splitStatements: true
-            path: db/sql/add-interviewer-subject-table-with-data.sql
+            path: db/sql/add-interviewer-subject-table-and-filled.sql
             stripComments: false

@@ -1,0 +1,12 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: 20210421.[BE-64]-change-interview-traineeid-can-be-null
+      author: nazar_furdychka
+      changes:
+        - sqlFile:
+            dbms: 'mysql'
+            endDelimiter: "@@"
+            splitStatements: true
+            path: db/sql/change-interview-table-traineeid-can-be-null.sql
+            stripComments: false

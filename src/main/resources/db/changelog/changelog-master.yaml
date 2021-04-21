@@ -31,3 +31,6 @@ databaseChangeLog:
       file: db/changelog/changelog-change-trainee-status
   - include:
       file: db/changelog/changelog-add-interviewer-subject-with-data.yaml
+  - include:
+      file: db/changelog/changelog-interview-traineeid-can-be-null.yaml
+
