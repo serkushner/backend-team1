@@ -6,7 +6,7 @@ import com.exadel.project.interviewer.dto.InterviewerDTO;
 import com.exadel.project.interviewer.entity.Interviewer;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring", uses = InterviewMapper.class)
+@Mapper(componentModel = "spring", uses = {InterviewMapper.class,SubjectMapper.class})
 public interface InterviewerMapper {
 
     InterviewerDTO entityToDto(Interviewer entity);
