@@ -69,8 +69,8 @@ public class InterviewService extends BaseService<Interview, InterviewRepository
                 .collect(Collectors.toList());
     }
 
-    public List<InterviewDTO> getAllByTraineeAndInternshipId(Trainee trainee, Internship internship) {
-        return interviewRepository.findAllByTraineeAndInternship(trainee, internship)
+    public List<InterviewDTO> getAllByTraineeAndInternshipId(Long traineeId, Long internshipId) {
+        return interviewRepository.findAllByTraineeIdAndInternshipId(traineeId, internshipId)
                 .stream()
                 .map(interviewMapper::entityToDto)
                 .collect(Collectors.toList());

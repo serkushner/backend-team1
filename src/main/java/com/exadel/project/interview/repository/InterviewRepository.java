@@ -12,5 +12,5 @@ import java.util.List;
 public interface InterviewRepository extends JpaRepository<Interview, Long>, JpaSpecificationExecutor<Interview> {
     List<Interview> findAllByInterviewerId(Long id);
 
-    List<Interview> findAllByTraineeAndInternship(Trainee trainee, Internship internship);
+    List<Interview> findAllByTraineeIdAndInternshipId(Long traineeId, Long internshipId);
 }
