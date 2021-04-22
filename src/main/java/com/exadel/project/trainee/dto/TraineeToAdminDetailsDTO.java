@@ -17,6 +17,8 @@ public class TraineeToAdminDetailsDTO {
     private String cv;
     private String english;
     private Boolean recipient;
+    private String email;
+    private String traineeStatus;
     private String adminName;
     private String adminSurname;
     private List<Map<String, String>> dates;

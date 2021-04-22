@@ -46,6 +46,7 @@ public interface AdditionalInfoMapper {
     @Mapping(target = "skype", expression = "java(additionalInfo.getTrainee().getSkype())")
     @Mapping(target = "location", expression = "java(additionalInfo.getTrainee().getCountry().getName())")
     @Mapping(target = "recipient", expression = "java(additionalInfo.getTrainee().getRecipient())")
+    @Mapping(target = "email", expression = "java(additionalInfo.getTrainee().getEmail())")
     @Mapping(target = "adminName", expression = "java(getAdminName(additionalInfo.getTrainee().getAdministrator()))")
     @Mapping(target = "adminSurname", expression = "java(getAdminSurname(additionalInfo.getTrainee().getAdministrator()))")
     @Mapping(target = "dates", expression = "java(getMapDates(additionalInfo.getTrainee().getInterviewPeriods()))")
