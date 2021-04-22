@@ -12,11 +12,10 @@ import com.exadel.project.trainee.entity.AdditionalInfo;
 import com.exadel.project.trainee.entity.Trainee;
 import com.exadel.project.trainee.mapper.AdditionalInfoMapper;
 import com.exadel.project.trainee.repository.AdditionalInfoRepository;
+import com.exadel.project.trainee.service.rsql.AdditionalInfoRsqlSpecification;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,10 +26,14 @@ public class AdditionalInfoService extends BaseService<AdditionalInfo, Additiona
 
     private final AdditionalInfoRepository additionalInfoRepository;
     private final AdditionalInfoMapper additionalInfoMapper;
+    private final AdditionalInfoRsqlSpecification additionalInfoRsqlSpecification;
+    {
+        defaultSortingField = "internship.title";
+    }
 
     @Override
     public RsqlSpecification getRsqlSpecification() {
-        throw new UnsupportedOperationException();
+        return additionalInfoRsqlSpecification;
     }
 
     public AdditionalInfo getAdditionalInfoByInternshipAndTrainee(Internship internship, Trainee trainee){
@@ -43,7 +46,10 @@ public class AdditionalInfoService extends BaseService<AdditionalInfo, Additiona
     }
 
     public List<TraineeToAdminDTO> findByNotFinishedInternships(String search, String sortFields){
-        return additionalInfoRepository.findAllByInternship_EndDateAfter(LocalDate.now()).stream()
+        String endDateToday = "internship.endDate>" + LocalDate.now();
+        search = search == null ? endDateToday : search + ";" + endDateToday;
+        Sort sort = getSort(sortFields);
+        return super.findBySpecifications(search, sort).stream()
                 .map(additionalInfoMapper::entityToDto)
                 .collect(Collectors.toList());
     }
