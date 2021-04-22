@@ -4,6 +4,8 @@ import com.exadel.project.common.exception.EntityNotFoundException;
 import com.exadel.project.common.service.BaseService;
 import com.exadel.project.common.service.rsql.RsqlSpecification;
 import com.exadel.project.internship.entity.Internship;
+import com.exadel.project.interview.dto.InterviewDTO;
+import com.exadel.project.interview.service.InterviewService;
 import com.exadel.project.trainee.dto.TraineeDTO;
 import com.exadel.project.trainee.dto.TraineeHistoryDTO;
 import com.exadel.project.trainee.dto.TraineeToAdminDTO;
@@ -23,13 +25,13 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class AdditionalInfoService extends BaseService<AdditionalInfo, AdditionalInfoRepository> {
-
-    private final AdditionalInfoRepository additionalInfoRepository;
-    private final AdditionalInfoMapper additionalInfoMapper;
-    private final AdditionalInfoRsqlSpecification additionalInfoRsqlSpecification;
     {
         defaultSortingField = "internship.title";
     }
+    private final AdditionalInfoRepository additionalInfoRepository;
+    private final AdditionalInfoMapper additionalInfoMapper;
+    private final AdditionalInfoRsqlSpecification additionalInfoRsqlSpecification;
+    private final InterviewService interviewService;
 
     @Override
     public RsqlSpecification getRsqlSpecification() {
@@ -56,12 +58,13 @@ public class AdditionalInfoService extends BaseService<AdditionalInfo, Additiona
 
     public TraineeToAdminDetailsDTO getAdditionalInfoById(Long id) throws EntityNotFoundException {
         AdditionalInfo additionalInfo = super.getEntityById(id);
-        return additionalInfoMapper.entityToDto(additionalInfo, null);
+        List<InterviewDTO> interviews = interviewService.getAllByTraineeAndInternshipId(additionalInfo.getTrainee().getId(), additionalInfo.getInternship().getId());
+        return additionalInfoMapper.entityToDto(additionalInfo, interviews);
     }
 
     public List<TraineeHistoryDTO> getTraineeHistory(Long id, String search, String sortFields){
         return additionalInfoRepository.findAllByTraineeId(id).stream()
-                .map(additionalInfo -> additionalInfoMapper.entityToTraineeHistoryDTO(additionalInfo, null))
+                .map(additionalInfo -> additionalInfoMapper.entityToTraineeHistoryDTO(additionalInfo, interviewService.getAllByTraineeAndInternshipId(additionalInfo.getTrainee().getId(), additionalInfo.getInternship().getId())))
                 .collect(Collectors.toList());
     }
 }

@@ -4,7 +4,9 @@ import com.exadel.project.administrator.entity.Administrator;
 import com.exadel.project.common.utils.MapperUtil;
 import com.exadel.project.internship.entity.Internship;
 import com.exadel.project.internship.entity.Subject;
+import com.exadel.project.interview.dto.InterviewDTO;
 import com.exadel.project.interview.entity.Interview;
+import com.exadel.project.interviewer.entity.InterviewerType;
 import com.exadel.project.trainee.dto.TraineeDTO;
 import com.exadel.project.trainee.dto.TraineeHistoryDTO;
 import com.exadel.project.trainee.dto.TraineeToAdminDTO;
@@ -48,18 +50,18 @@ public interface AdditionalInfoMapper {
     @Mapping(target = "adminSurname", expression = "java(getAdminSurname(additionalInfo.getTrainee().getAdministrator()))")
     @Mapping(target = "dates", expression = "java(getMapDates(additionalInfo.getTrainee().getInterviewPeriods()))")
     @Mapping(target = "internshipTitle", expression = "java(additionalInfo.getInternship().getTitle())")
-    @Mapping(target = "techInterview")
-    @Mapping(target = "hrInterview")
-    TraineeToAdminDetailsDTO entityToDto(AdditionalInfo additionalInfo, List<Interview> interviews);
+    @Mapping(target = "techInterview", expression = "java(getInterviewDescription(\"tech\", interviews))")
+    @Mapping(target = "hrInterview", expression = "java(getInterviewDescription(\"hr\", interviews))")
+    TraineeToAdminDetailsDTO entityToDto(AdditionalInfo additionalInfo, List<InterviewDTO> interviews);
 
     @Mapping(target = "internshipId", expression = "java(additionalInfo.getInternship().getId())")
     @Mapping(target = "internshipTitle", expression = "java(additionalInfo.getInternship().getTitle())")
     @Mapping(target = "startDate", expression = "java(additionalInfo.getInternship().getStartDate())")
     @Mapping(target = "endDate", expression = "java(additionalInfo.getInternship().getEndDate())")
     @Mapping(target = "subjects", expression = "java(getSubjectsName(additionalInfo.getInternship().getSubjects()))")
-    @Mapping(target = "techInterview")
-    @Mapping(target = "hrInterview")
-    TraineeHistoryDTO entityToTraineeHistoryDTO(AdditionalInfo additionalInfo, List<Interview> interviews);
+    @Mapping(target = "techInterview", expression = "java(getInterviewDescription(\"tech\", interviews))")
+    @Mapping(target = "hrInterview", expression = "java(getInterviewDescription(\"hr\", interviews))")
+    TraineeHistoryDTO entityToTraineeHistoryDTO(AdditionalInfo additionalInfo, List<InterviewDTO> interviews);
 
     default TraineeStatus getTraineeStatus(String traineeStatus){
         return traineeStatus == null ? TraineeStatus.REGISTERED : TraineeStatus.valueOf(traineeStatus);
@@ -79,5 +81,12 @@ public interface AdditionalInfoMapper {
 
     default List<Map<String, String>> getMapDates(List<InterviewPeriod> interviewPeriods){
         return MapperUtil.getMapDates(interviewPeriods);
+    }
+
+    default String getInterviewDescription(String type, List<InterviewDTO> interviews){
+        InterviewerType interviewerType = InterviewerType.valueOf(type.toUpperCase());
+        return interviews.stream()
+                .filter(dto->dto.getInterviewer().getType() == interviewerType).map(InterviewDTO::getName)
+                .findFirst().orElse(null);
     }
 }
