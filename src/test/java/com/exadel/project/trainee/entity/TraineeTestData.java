@@ -90,7 +90,7 @@ public class TraineeTestData {
     public AdditionalInfo getTestAdditionalInfo(){
         AdditionalInfo additionalInfo = new AdditionalInfo();
         additionalInfo.setId(1L);
-        additionalInfo.setEnglish("C1");
+        additionalInfo.setEnglish(EnglishLevel.C1);
         additionalInfo.setCv("CV link");
         additionalInfo.setGithub("GitHub link");
         additionalInfo.setInternship(getTestInternship());
