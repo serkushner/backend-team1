@@ -26,5 +26,6 @@ public class InterviewPeriod {
     private List<Trainee> trainees = new ArrayList<>();
 
     @Column(name = "day_of_week")
+    @Enumerated(EnumType.STRING)
     private DayOfWeek dayOfWeek;
 }
