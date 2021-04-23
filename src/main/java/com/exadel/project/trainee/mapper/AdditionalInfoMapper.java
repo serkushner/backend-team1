@@ -50,6 +50,7 @@ public interface AdditionalInfoMapper {
     @Mapping(target = "adminName", expression = "java(getAdminName(additionalInfo.getTrainee().getAdministrator()))")
     @Mapping(target = "adminSurname", expression = "java(getAdminSurname(additionalInfo.getTrainee().getAdministrator()))")
     @Mapping(target = "dates", expression = "java(getMapDates(additionalInfo.getTrainee().getInterviewPeriods()))")
+    @Mapping(target = "InternshipId", expression = "java(additionalInfo.getInternship().getId())")
     @Mapping(target = "internshipTitle", expression = "java(additionalInfo.getInternship().getTitle())")
     @Mapping(target = "techInterview", expression = "java(getInterviewDescription(\"tech\", interviews))")
     @Mapping(target = "hrInterview", expression = "java(getInterviewDescription(\"hr\", interviews))")

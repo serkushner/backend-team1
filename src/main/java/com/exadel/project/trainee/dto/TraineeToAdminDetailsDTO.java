@@ -22,6 +22,7 @@ public class TraineeToAdminDetailsDTO {
     private String adminName;
     private String adminSurname;
     private List<Map<String, String>> dates;
+    private Long InternshipId;
     private String internshipTitle;
     private String techInterview;
     private String hrInterview;

@@ -18,7 +18,7 @@ public class MapperUtil {
     public static List<Map<String, String>> getMapDates(List<InterviewPeriod> interviewPeriods) {
         List<Map<String, String>> dates = new ArrayList<>();
         for (InterviewPeriod interviewPeriod : interviewPeriods) {
-            Map<String, String> dayOfWeekToTime = new HashMap<>();
+            Map<String, String> dayOfWeekToTime = new TreeMap<>();
             dayOfWeekToTime.put("day", interviewPeriod.getDayOfWeek().toString());
             String startTime = interviewPeriod.getStartTime().toString();
             String endTime = interviewPeriod.getEndTime().toString();
