@@ -20,8 +20,8 @@ public class MapperUtil {
         for (InterviewPeriod interviewPeriod : interviewPeriods) {
             Map<String, String> dayOfWeekToTime = new TreeMap<>();
             dayOfWeekToTime.put("day", interviewPeriod.getDayOfWeek().toString());
-            String startTime = interviewPeriod.getStartTime().toString();
-            String endTime = interviewPeriod.getEndTime().toString();
+            String startTime = interviewPeriod.getStartTime().toString().replaceAll(":", ".");
+            String endTime = interviewPeriod.getEndTime().toString().replaceAll(":", ".");
             dayOfWeekToTime.put("time", String.join(" - ", startTime, endTime));
             dates.add(dayOfWeekToTime);
         }
