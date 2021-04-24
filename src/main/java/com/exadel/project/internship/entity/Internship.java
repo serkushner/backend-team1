@@ -28,7 +28,6 @@ public class Internship {
     @Column(name = "name")
     private String title;
 
-    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "internship_subject",
             joinColumns = @JoinColumn(name = "internship_id"),
@@ -53,14 +52,11 @@ public class Internship {
     @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
 
-
     @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
 
-
     @Column(name = "start_request_date")
     private LocalDate startRequestDate;
-
 
     @Column(name = "end_request_date")
     private LocalDate endRequestDate;

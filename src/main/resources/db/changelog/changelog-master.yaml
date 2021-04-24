@@ -27,3 +27,13 @@ databaseChangeLog:
       file: db/changelog/changelog-add-administrators.yaml
   - include:
       file: db/changelog/changelog-internship-add-format-and-status.yaml
+  - include:
+      file: db/changelog/changelog-english-enum-to-trainee.yaml
+  - include:
+      file: db/changelog/changelog-change-trainee-status.yaml
+  - include:
+      file: db/changelog/changelog-add-interviewer-subject-with-data.yaml
+  - include:
+      file: db/changelog/changelog-interview-traineeid-can-be-null.yaml
+  - include:
+      file: db/changelog/changelog-add-relation-interview-to-internship.yaml

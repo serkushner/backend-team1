@@ -1,5 +1,6 @@
 package com.exadel.project.interview.entity;
 
+import com.exadel.project.internship.entity.Internship;
 import com.exadel.project.interviewer.entity.Interviewer;
 import com.exadel.project.trainee.entity.Trainee;
 import lombok.Data;
@@ -26,8 +27,12 @@ public class Interview {
     private InterviewTime interviewTime;
 
     @ManyToOne
-    @JoinColumn(name = "trainee_id", nullable = false)
+    @JoinColumn(name = "trainee_id")
     private Trainee trainee;
+
+    @ManyToOne
+    @JoinColumn(name = "internship_id")
+    private Internship internship;
 
     @ManyToOne
     @JoinColumn(name = "interviewer_id", nullable = false)
