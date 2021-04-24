@@ -1,19 +1,11 @@
-package com.exadel.project.internship.service;
+package com.exadel.project.country.service;
 
-import com.exadel.project.common.exception.EntityNotFoundException;
 import com.exadel.project.common.service.BaseService;
 import com.exadel.project.common.service.rsql.RsqlSpecification;
-import com.exadel.project.internship.entity.Country;
-import com.exadel.project.internship.repository.CountryRepository;
+import com.exadel.project.country.entity.Country;
+import com.exadel.project.country.repository.CountryRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Example;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 @Service
 @AllArgsConstructor

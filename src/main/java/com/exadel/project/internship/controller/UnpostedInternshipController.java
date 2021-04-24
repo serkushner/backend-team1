@@ -36,6 +36,11 @@ public class UnpostedInternshipController {
         return ResponseEntity.ok(internshipService.getUnpostedById(id));
     }
 
+    @GetMapping(value = ID + "/approve")
+    public ResponseEntity<InternshipDetailsDTO> findAndPostUnpostedInternshipById(@PathVariable ("id") Long id) throws EntityNotFoundException {
+        return ResponseEntity.ok(internshipService.approveUnpostedById(id));
+    }
+
     @PostMapping(value = "/registration")
     public ResponseEntity<InternshipDetailsDTO> addUnpostedInternship(@RequestBody InternshipDetailsDTO dto) {
         return ResponseEntity.ok(internshipService.addUnpostedInternship(dto));

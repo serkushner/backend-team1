@@ -31,6 +31,11 @@ public class PostedInternshipController {
         return ResponseEntity.ok(internshipService.getPostedById(id));
     }
 
+    @GetMapping(value = ID + "/disapprove")
+    public ResponseEntity<InternshipDetailsDTO> findAndPostUnpostedInternshipById(@PathVariable ("id") Long id) throws EntityNotFoundException {
+        return ResponseEntity.ok(internshipService.disapproveUnpostedById(id));
+    }
+
     @PutMapping(value = ID, consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<InternshipDetailsDTO> updatePostedInternship(@PathVariable Long id,

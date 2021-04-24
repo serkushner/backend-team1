@@ -1,6 +1,6 @@
-package com.exadel.project.internship.repository;
+package com.exadel.project.country.repository;
 
-import com.exadel.project.internship.entity.Country;
+import com.exadel.project.country.entity.Country;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 

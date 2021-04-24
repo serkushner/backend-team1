@@ -1,4 +1,4 @@
-package com.exadel.project.internship.dto;
+package com.exadel.project.country.dto;
 
 import lombok.Data;
 

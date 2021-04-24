@@ -1,7 +1,7 @@
-package com.exadel.project.internship.mapper;
+package com.exadel.project.subject.mapper;
 
-import com.exadel.project.internship.dto.SubjectDTO;
-import com.exadel.project.internship.entity.Subject;
+import com.exadel.project.subject.dto.SubjectDTO;
+import com.exadel.project.subject.entity.Subject;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

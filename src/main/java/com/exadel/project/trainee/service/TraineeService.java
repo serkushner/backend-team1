@@ -1,12 +1,10 @@
 package com.exadel.project.trainee.service;
 
-import com.exadel.project.common.exception.EntityNotFoundException;
 import com.exadel.project.common.service.BaseService;
 import com.exadel.project.common.service.rsql.RsqlSpecification;
-import com.exadel.project.internship.dto.InternshipDetailsDTO;
-import com.exadel.project.internship.entity.Country;
+import com.exadel.project.country.entity.Country;
+import com.exadel.project.country.service.CountryService;
 import com.exadel.project.internship.entity.Internship;
-import com.exadel.project.internship.service.CountryService;
 import com.exadel.project.internship.service.InternshipService;
 import com.exadel.project.trainee.dto.TraineeDTO;
 import com.exadel.project.trainee.entity.AdditionalInfo;

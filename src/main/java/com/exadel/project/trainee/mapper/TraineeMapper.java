@@ -2,7 +2,7 @@ package com.exadel.project.trainee.mapper;
 
 import com.exadel.project.administrator.entity.Administrator;
 import com.exadel.project.administrator.mapper.AdministratorMapper;
-import com.exadel.project.internship.entity.Country;
+import com.exadel.project.country.entity.Country;
 import com.exadel.project.interview.mapper.InterviewMapper;
 import com.exadel.project.trainee.dto.TraineeDTO;
 import com.exadel.project.trainee.entity.AdditionalInfo;

@@ -1,8 +1,8 @@
 package com.exadel.project.internship.dto;
 
 import com.exadel.project.internship.entity.Format;
-import com.exadel.project.skill.dto.SkillDTO;
 import lombok.Data;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
