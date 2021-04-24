@@ -39,9 +39,9 @@ public class InterviewService extends BaseService<Interview, InterviewRepository
         return interviewMapper.entityToDto(interview);
     }
 
-    public Interview getInterviewById(Long id) throws EntityNotFoundException {
-        return interviewRepository.findById(id)
-                .orElseThrow(EntityNotFoundException::new);
+    public InterviewDTO getInterviewById(Long id) throws EntityNotFoundException {
+        return interviewMapper.entityToDto(interviewRepository.findById(id)
+                .orElseThrow(EntityNotFoundException::new));
     }
 
     public InterviewDTO updateInterviewById(Long id, InterviewDTO interviewDTO) throws EntityNotFoundException {
