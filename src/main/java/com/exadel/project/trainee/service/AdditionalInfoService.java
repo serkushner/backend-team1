@@ -67,4 +67,8 @@ public class AdditionalInfoService extends BaseService<AdditionalInfo, Additiona
                 .map(additionalInfo -> additionalInfoMapper.entityToTraineeHistoryDTO(additionalInfo, interviewService.getAllByTraineeAndInternshipId(additionalInfo.getTrainee().getId(), additionalInfo.getInternship().getId())))
                 .collect(Collectors.toList());
     }
+
+    public void deleteAdditionalInfo(Long id){
+        additionalInfoRepository.deleteById(id);
+    }
 }

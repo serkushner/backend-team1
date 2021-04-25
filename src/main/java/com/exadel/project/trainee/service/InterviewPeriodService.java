@@ -40,7 +40,9 @@ public class InterviewPeriodService extends BaseService<InterviewPeriod, Intervi
                 interviewPeriod.setEndTime(endTime);
                 interviewPeriod = interviewPeriodRepository.save(interviewPeriod);
             }
-            interviewPeriod.getTrainees().add(trainee);
+            if (!interviewPeriod.getTrainees().contains(trainee)){
+                interviewPeriod.getTrainees().add(trainee);
+            }
             interviewPeriods.add(interviewPeriod);
         }
         return interviewPeriods;

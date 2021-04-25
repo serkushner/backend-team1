@@ -7,6 +7,7 @@ import java.util.Map;
 
 @Data
 public class TraineeToAdminDetailsDTO {
+    private Long id;
     private Long traineeId;
     private String name;
     private String surname;
