@@ -63,7 +63,7 @@ public class TraineeController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("ai/{id}/delete")
+    @DeleteMapping("trainee/ai/{id}/delete")
     public ResponseEntity<Void> deleteAdditionalInfo(@PathVariable Long id){
         additionalInfoService.deleteAdditionalInfo(id);
         return ResponseEntity.noContent().build();
