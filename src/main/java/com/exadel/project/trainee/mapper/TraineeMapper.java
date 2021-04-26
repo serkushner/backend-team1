@@ -1,10 +1,12 @@
 package com.exadel.project.trainee.mapper;
 
+import com.exadel.project.common.utils.MapperUtil;
 import com.exadel.project.administrator.entity.Administrator;
 import com.exadel.project.administrator.mapper.AdministratorMapper;
 import com.exadel.project.country.entity.Country;
 import com.exadel.project.interview.mapper.InterviewMapper;
 import com.exadel.project.trainee.dto.TraineeDTO;
+import com.exadel.project.trainee.dto.TraineeToAdminDTO;
 import com.exadel.project.trainee.entity.AdditionalInfo;
 import com.exadel.project.trainee.entity.InterviewPeriod;
 import com.exadel.project.trainee.entity.Trainee;
@@ -36,16 +38,7 @@ public interface TraineeMapper {
         return Optional.ofNullable(administrator).map(Administrator::getId).orElse(null);
     }
 
-    default List<Map<String, String>> getMapDates(List<InterviewPeriod> interviewPeriods) {
-        List<Map<String, String>> dates = new ArrayList<>();
-        for (InterviewPeriod interviewPeriod : interviewPeriods) {
-            Map<String, String> dayOfWeekToTime = new HashMap<>();
-            dayOfWeekToTime.put("day", interviewPeriod.getDayOfWeek().toString());
-            String startTime = interviewPeriod.getStartTime().toString();
-            String endTime = interviewPeriod.getEndTime().toString();
-            dayOfWeekToTime.put("time", String.join(" - ", startTime, endTime));
-            dates.add(dayOfWeekToTime);
-        }
-        return dates;
+    default List<Map<String, String>> getMapDates(List<InterviewPeriod> interviewPeriods){
+        return MapperUtil.getMapDates(interviewPeriods);
     }
 }

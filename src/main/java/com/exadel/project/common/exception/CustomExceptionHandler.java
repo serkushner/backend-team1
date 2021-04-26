@@ -53,7 +53,7 @@ public class CustomExceptionHandler {
         String exMessage = exceptionLoadMessage(e, "trainee already registered on the internship");
         String message = String.format("%s %s", LocalDateTime.now(), exMessage);
         ExceptionResponse exceptionResponse = new ExceptionResponse(message);
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(DoubleInternshipRegistrationException.class)

@@ -3,14 +3,13 @@ package com.exadel.project.trainee.entity;
 import com.exadel.project.country.entity.Country;
 import com.exadel.project.internship.entity.Internship;
 import com.exadel.project.trainee.dto.TraineeDTO;
+import com.exadel.project.trainee.dto.TraineeToAdminDTO;
+import com.exadel.project.trainee.dto.TraineeToAdminDetailsDTO;
 import org.springframework.stereotype.Component;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class TraineeTestData {
@@ -35,6 +34,17 @@ public class TraineeTestData {
         traineeDTO.setCv("CV link");
         traineeDTO.setGithub("GitHub link");
         traineeDTO.setDates(getDates());
+        return traineeDTO;
+    }
+
+    public TraineeDTO getTestUpdateTraineeDTO(){
+        TraineeDTO traineeDTO = getResponseTestTraineeDto();
+        traineeDTO.setSkype("new skype");
+        traineeDTO.setEmail("new email");
+        traineeDTO.setTraineeStatus(null);
+        traineeDTO.setEnglish(null);
+        traineeDTO.setCv(null);
+        traineeDTO.setGithub(null);
         return traineeDTO;
     }
 
@@ -73,6 +83,13 @@ public class TraineeTestData {
         return trainee;
     }
 
+    public Trainee getTestUpdateTrainee(){
+        Trainee trainee = getResponseTestTrainee();
+        trainee.setSkype("new skype");
+        trainee.setEmail("new email");
+        return trainee;
+    }
+
     public InterviewPeriod getResponseTestInterviewPeriod(){
         InterviewPeriod interviewPeriod = getRequestInterviewPeriod();
         interviewPeriod.setId(1L);
@@ -95,6 +112,7 @@ public class TraineeTestData {
         additionalInfo.setGithub("GitHub link");
         additionalInfo.setInternship(getTestInternship());
         additionalInfo.setTraineeStatus(TraineeStatus.REGISTERED);
+        additionalInfo.setTrainee(getResponseTestTrainee());
         return additionalInfo;
     }
 
@@ -102,5 +120,33 @@ public class TraineeTestData {
         Internship internship = new Internship();
         internship.setId(1L);
         return internship;
+    }
+
+    public TraineeToAdminDTO getTestTraineeToAdminDTO(){
+        TraineeToAdminDTO traineeToAdminDTO = new TraineeToAdminDTO();
+        traineeToAdminDTO.setTraineeStatus("REGISTERED");
+        traineeToAdminDTO.setTraineeName("Kastus");
+        traineeToAdminDTO.setEmail("kalinouski@gmail.com");
+        traineeToAdminDTO.setAdditionalInfoId(1L);
+        traineeToAdminDTO.setTraineeLocation("Belarus");
+        traineeToAdminDTO.setTraineeSurname("Kalinouski");
+        traineeToAdminDTO.setSubjects(Collections.emptyList());
+        return traineeToAdminDTO;
+    }
+
+    public TraineeToAdminDetailsDTO getTestTraineeToAdminDetailsDTO(){
+        TraineeToAdminDetailsDTO traineeToAdminDetailsDTO = new TraineeToAdminDetailsDTO();
+        traineeToAdminDetailsDTO.setTraineeId(1L);
+        traineeToAdminDetailsDTO.setDates(Collections.emptyList());
+        traineeToAdminDetailsDTO.setEnglish("C1");
+        traineeToAdminDetailsDTO.setCv("CV link");
+        traineeToAdminDetailsDTO.setGithub("GitHub link");
+        traineeToAdminDetailsDTO.setLocation("Belarus");
+        traineeToAdminDetailsDTO.setName("Kastus");
+        traineeToAdminDetailsDTO.setPhone("375-29-888-18-63");
+        traineeToAdminDetailsDTO.setRecipient(true);
+        traineeToAdminDetailsDTO.setSkype("skype.com");
+        traineeToAdminDetailsDTO.setSurname("Kalinouski");
+        return traineeToAdminDetailsDTO;
     }
 }
