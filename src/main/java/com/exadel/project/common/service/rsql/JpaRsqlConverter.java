@@ -3,6 +3,7 @@ package com.exadel.project.common.service.rsql;
 import cz.jirutka.rsql.parser.ast.*;
 import lombok.Getter;
 import javax.persistence.criteria.*;
+import java.time.LocalDate;
 import java.util.List;
 import static cz.jirutka.rsql.parser.ast.RSQLOperators.*;
 
@@ -38,8 +39,16 @@ public abstract class JpaRsqlConverter implements RSQLVisitor<Predicate, Root> {
             }
             return getBuilder().or(predicates);
         }
+        if (operator.equals(GREATER_THAN)){
+            return getBuilder().greaterThan(attrPath, getArgument(node, arguments.get(0)));
+        }
         return null;
     }
+
+    public Comparable getArgument(ComparisonNode node, String str){
+        return str;
+    }
+
 //TODO refactor by reflection
     public abstract Object checkAndConvertToEnum(String selector, String argument);
 
