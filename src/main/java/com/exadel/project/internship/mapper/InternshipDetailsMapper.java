@@ -9,12 +9,19 @@ import com.exadel.project.skill.entity.Skill;
 import com.exadel.project.subject.entity.Subject;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+
+import java.util.List;
 
 
-@Mapper(componentModel = "spring",
-        uses = {CountryMapper.class, SubjectMapper.class,
-                SkillMapper.class, InternshipTypeMapper.class})
+@Mapper(componentModel = "spring")
 public interface InternshipDetailsMapper {
+
+    @Mapping(target = "subjects", expression = "java(getSubjectsNames(entity.getSubjects()))")
+    @Mapping(target = "countries", expression = "java(getCountriesNames(entity.getCountries()))")
+    @Mapping(target = "internshipType", expression = "java(getInternshipType(entity.getInternshipType()))")
+    @Mapping(target = "skills", expression = "java(getSkillsNames(entity.getSkills()))")
+    InternshipDetailsDTO entityToDto(Internship entity);
 
     @Mapping(target = "countries", ignore = true)
     @Mapping(target = "subjects", ignore = true)
@@ -23,7 +30,19 @@ public interface InternshipDetailsMapper {
     @Mapping(target = "id", ignore = true)
     Internship dtoToEntity(InternshipDetailsDTO dto);
 
-    @Mapping(target = "id", ignore = true)
-    void updateInternship(InternshipDetailsDTO internshipDetailsDTO,
-                          @MappingTarget Internship internship);
+    default List<String> getSubjectsNames(List<Subject> subjects) {
+        return MapperUtil.getStrings(subjects, Subject::getName);
+    }
+
+    default List<String> getCountriesNames(List<Country> subjects) {
+        return MapperUtil.getStrings(subjects, Country::getName);
+    }
+
+    default String getInternshipType(InternshipType internshipType) {
+        return internshipType.getType();
+    }
+
+    default List<String> getSkillsNames(List<Skill> skills) {
+        return MapperUtil.getStrings(skills, Skill::getName);
+    }
 }
