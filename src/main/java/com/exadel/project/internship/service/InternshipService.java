@@ -104,8 +104,8 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
         Internship internship = getInternshipFromInternshipDetailsDto(dto);
         //TODO change on Published.VISIBLE_FOR_INTERNS for fast demo on ready landing
         internship.setPublished(Published.VISIBLE_FOR_ADMINS);
-        repository.save(internship);
-        return internshipDetailsMapper.entityToDto(internship);
+        Internship createdInternship = repository.save(internship);
+        return internshipDetailsMapper.entityToDto(createdInternship);
     }
 
     private Internship getInternshipFromInternshipDetailsDto(InternshipDetailsDTO dto) {

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -43,7 +44,8 @@ public class UnpostedInternshipController {
 
     @PostMapping(value = "/registration")
     public ResponseEntity<InternshipDetailsDTO> addUnpostedInternship(@RequestBody InternshipDetailsDTO dto) {
-        return ResponseEntity.ok(internshipService.addUnpostedInternship(dto));
+        InternshipDetailsDTO dtoCreated = internshipService.addUnpostedInternship(dto);
+        return ResponseEntity.created(URI.create("/unposted-internship/" + dtoCreated.getId())).body(dtoCreated);
     }
 
     @PostMapping(value = "/upload-image")
