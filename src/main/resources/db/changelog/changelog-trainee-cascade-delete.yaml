@@ -1,0 +1,18 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: 20210421.[BE-62]-add-trainee-foreign-key -in-additional-info-ondelete-cascade
+      author: aliakseikaliada@gmail.com
+      preConditions:
+          - onFail: MARK_RAN
+          - onError: MARK_RAN
+          - tableNotExists:
+            schemaName: exadel_internships
+            tableName: additional_info  
+      changes:
+        - sqlFile:
+            dbms: 'mysql'
+            endDelimiter: "@@"
+            splitStatements: true
+            path: db/sql/change-trainee-fk-oncascade-delete.sql
+            stripComments: false

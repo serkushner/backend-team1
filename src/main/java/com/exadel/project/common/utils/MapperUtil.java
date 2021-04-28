@@ -1,8 +1,8 @@
 package com.exadel.project.common.utils;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import com.exadel.project.trainee.entity.InterviewPeriod;
+
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -13,5 +13,18 @@ public class MapperUtil {
                 .flatMap(Collection::stream)
                 .map(function)
                 .collect(Collectors.toList());
+    }
+
+    public static List<Map<String, String>> getMapDates(List<InterviewPeriod> interviewPeriods) {
+        List<Map<String, String>> dates = new ArrayList<>();
+        for (InterviewPeriod interviewPeriod : interviewPeriods) {
+            Map<String, String> dayOfWeekToTime = new TreeMap<>();
+            dayOfWeekToTime.put("day", interviewPeriod.getDayOfWeek().toString());
+            String startTime = interviewPeriod.getStartTime().toString().replaceAll(":", ".");
+            String endTime = interviewPeriod.getEndTime().toString().replaceAll(":", ".");
+            dayOfWeekToTime.put("time", String.join(" - ", startTime, endTime));
+            dates.add(dayOfWeekToTime);
+        }
+        return dates;
     }
 }
