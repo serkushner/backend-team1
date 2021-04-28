@@ -3,9 +3,15 @@ package com.exadel.project.interviewer.service;
 import com.exadel.project.common.exception.EntityNotFoundException;
 import com.exadel.project.common.service.BaseService;
 import com.exadel.project.common.service.rsql.RsqlSpecification;
+import com.exadel.project.internship.entity.Subject;
+import com.exadel.project.interviewer.dto.InterviewerAppointmentDTO;
 import com.exadel.project.interviewer.dto.InterviewerDTO;
+import com.exadel.project.interviewer.dto.SubjectDTO;
 import com.exadel.project.interviewer.entity.Interviewer;
+import com.exadel.project.interviewer.entity.InterviewerType;
+import com.exadel.project.interviewer.mapper.InterviewerAppointmentMapper;
 import com.exadel.project.interviewer.mapper.InterviewerMapper;
+import com.exadel.project.interviewer.mapper.SubjectMapper;
 import com.exadel.project.interviewer.repository.InterviewerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -20,6 +26,8 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
 
     private final InterviewerMapper interviewerMapper;
     private final InterviewerRepository interviewerRepository;
+    private final SubjectMapper subjectMapper;
+    private final InterviewerAppointmentMapper interviewerAppointmentMapper;
 
     {
         defaultSortingField = "type";
@@ -32,6 +40,23 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
                 .stream()
                 .map(interviewerMapper::entityToDto)
                 .collect(Collectors.toList());
+    }
+
+    public List<InterviewerAppointmentDTO> getAllAvailable(InterviewerType interviewerType, List<SubjectDTO> subjectDTOS) {
+        //TODO sorting by dates
+        if (interviewerType == InterviewerType.TECH) {
+            List<Subject> subjects = subjectDTOS.stream()
+                    .map(subjectMapper::dtoToEntity)
+                    .collect(Collectors.toList());
+            List<Interviewer> interviewers = interviewerRepository.findAllBySubjects(subjects);
+            return interviewers.stream()
+                    .map(interviewerAppointmentMapper::entityToDto)
+                    .collect(Collectors.toList());
+        } else {
+            return interviewerRepository.findAll().stream()
+                    .map(interviewerAppointmentMapper::entityToDto)
+                    .collect(Collectors.toList());
+        }
     }
 
     public InterviewerDTO getById(Long id) throws EntityNotFoundException {

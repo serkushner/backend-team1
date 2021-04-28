@@ -1,7 +1,11 @@
 package com.exadel.project.interviewer.controller;
 
 import com.exadel.project.common.exception.EntityNotFoundException;
+import com.exadel.project.internship.entity.Subject;
+import com.exadel.project.interviewer.dto.InterviewerAppointmentDTO;
 import com.exadel.project.interviewer.dto.InterviewerDTO;
+import com.exadel.project.interviewer.dto.SubjectDTO;
+import com.exadel.project.interviewer.entity.InterviewerType;
 import com.exadel.project.interviewer.service.InterviewerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -24,10 +28,17 @@ public class InterviewerController {
         return ResponseEntity.ok(interviewerService.getById(id));
     }
 
+
     @GetMapping
     public ResponseEntity<List<InterviewerDTO>> findBySpecification(@RequestParam(value = "search", required = false) String search,
                                                                     @RequestParam(value = "sort", required = false) String sort) {
         List<InterviewerDTO> dtoList = interviewerService.getAll(search, sort);
+        return ResponseEntity.ok(dtoList);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<InterviewerAppointmentDTO>> getAllAvailableInterviewers(@RequestBody InterviewerType interviewerType, @RequestBody List<SubjectDTO> subjects) {
+        List<InterviewerAppointmentDTO> dtoList = interviewerService.getAllAvailable(interviewerType, subjects);
         return ResponseEntity.ok(dtoList);
     }
 
