@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,7 +49,7 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
             List<Subject> subjects = subjectDTOS.stream()
                     .map(subjectMapper::dtoToEntity)
                     .collect(Collectors.toList());
-            List<Interviewer> interviewers = interviewerRepository.findAllBySubjectsIn(subjects);
+            List<Interviewer> interviewers = interviewerRepository.findAllBySubjectsIn(Collections.singleton(subjects));
             return interviewers.stream()
                     .map(interviewerAppointmentMapper::entityToDto)
                     .collect(Collectors.toList());
