@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,17 +46,18 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
 
     public List<InterviewerAppointmentDTO> getAllAvailable(InterviewerType interviewerType, List<SubjectDTO> subjectDTOS) {
         //TODO sorting by dates
+
         if (interviewerType == InterviewerType.TECH) {
             List<Subject> subjects = subjectDTOS.stream()
                     .map(subjectMapper::dtoToEntity)
                     .collect(Collectors.toList());
             List<Interviewer> interviewers = interviewerRepository.findAllBySubjectsIn(Collections.singleton(subjects));
             return interviewers.stream()
-                    .map(interviewerAppointmentMapper::entityToDto)
+                    .map(interviewerAppointmentMapper::entityToDto).filter(interviewerAppointmentDTO -> Optional.ofNullable(interviewerAppointmentDTO.getInterviewTime()).isPresent())
                     .collect(Collectors.toList());
         } else {
             return interviewerRepository.findAll().stream()
-                    .map(interviewerAppointmentMapper::entityToDto)
+                    .map(interviewerAppointmentMapper::entityToDto).filter(interviewerAppointmentDTO -> Optional.ofNullable(interviewerAppointmentDTO.getInterviewTime()).isPresent())
                     .collect(Collectors.toList());
         }
     }

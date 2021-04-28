@@ -7,7 +7,6 @@ import lombok.Data;
 
 @Data
 public class InterviewAppointmentDTO {
-    private Long id;
     private InterviewTimeDTO interviewTime;
     private Long traineeId;
     private Long internshipId;

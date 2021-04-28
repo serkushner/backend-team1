@@ -16,6 +16,8 @@ import com.exadel.project.interviewer.service.InterviewerService;
 import com.exadel.project.trainee.entity.Trainee;
 import com.exadel.project.trainee.service.TraineeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,12 +27,21 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class InterviewService extends BaseService<Interview, InterviewRepository> {
 
+    //TODO solve bean cycle:
+    // condition: if all fields are defined in constructor
+//traineeService defined in file [backend-team1/target/classes/com/exadel/project/trainee/service/TraineeService.class]
+//↑     ↓
+//|  additionalInfoService defined in file [backend-team1/target/classes/com/exadel/project/trainee/service/AdditionalInfoService.class]
+//↑     ↓
+//|  interviewService defined in file [backend-team1/target/classes/com/exadel/project/interview/service/InterviewService.class]
+//└─────┘
+//
+//
     private final InterviewMapper interviewMapper;
     private final InterviewRepository interviewRepository;
     private final TraineeService traineeService;
     private final InternshipService internshipService;
     private final InterviewerService interviewerService;
-
 
     @Override
     public RsqlSpecification getRsqlSpecification() {
@@ -38,20 +49,13 @@ public class InterviewService extends BaseService<Interview, InterviewRepository
     }
 
     public InterviewAppointmentDTO addInterview(InterviewAppointmentDTO interviewAppointmentDTO) throws EntityAlreadyExistsException {
-        if (interviewRepository.findById(interviewAppointmentDTO.getId()).isPresent()) {
-            throw new EntityAlreadyExistsException();
-        }
-
-        //TODO add code for creating interview
         Interview interview = new Interview();
-        interview.setId(interviewAppointmentDTO.getId());
-//        interview.setInternship(internshipService.getById(interviewAppointmentDTO.getInternshipId()));
-
-
-//        Interview interview = interviewAppointmentMapper.dtoToEntity(interviewAppointmentDTO);
-//        interviewRepository.save(interview);
-//        return interviewAppointmentMapper.entityToDto(interview);
-        return null;
+        interview.setInternship(internshipService.getEntityById(interviewAppointmentDTO.getInternshipId()));
+        interview.setTrainee(traineeService.getEntityById(interviewAppointmentDTO.getTraineeId()));
+        interview.setInterviewer(interviewerService.getEntityById(interviewAppointmentDTO.getInterviewerId()));
+        interviewRepository.save(interview);
+        //TODO send emails
+        return interviewAppointmentDTO;
     }
 
     public InterviewDTO getInterviewById(Long id) throws EntityNotFoundException {
