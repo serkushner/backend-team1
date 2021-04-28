@@ -1,6 +1,7 @@
 package com.exadel.project.interviewer.controller;
 
 import com.exadel.project.common.exception.EntityNotFoundException;
+import com.exadel.project.interview.dto.InterviewTimeDTO;
 import com.exadel.project.interviewer.dto.InterviewerDTO;
 import com.exadel.project.interviewer.service.InterviewerService;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +45,17 @@ public class InterviewerController {
     @DeleteMapping(value = ID + "/delete")
     public ResponseEntity<Void> deleteInterviewer(@PathVariable Long id) {
         interviewerService.deleteInterviewer(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping(ID + "/time")
+    public ResponseEntity<InterviewTimeDTO> addTimeToInterviewer(@PathVariable Long id, @RequestBody InterviewTimeDTO interviewTimeDTO){
+        return ResponseEntity.ok(interviewerService.addInterviewTimeToInterviewer(interviewTimeDTO, id));
+    }
+
+    @DeleteMapping(ID + "/time/delete")
+    public ResponseEntity<Void> deleteTimeFromInterviewer(@PathVariable Long id, @RequestBody InterviewTimeDTO interviewTimeDTO){
+        interviewerService.deleteInterviewTimeFromInterviewer(interviewTimeDTO, id);
         return ResponseEntity.noContent().build();
     }
 

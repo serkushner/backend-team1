@@ -18,5 +18,5 @@ public class InterviewerDTO {
     private InterviewerType type;
     private String skype;
     private List<InterviewDTO> interviews;
-    private List<SubjectDTO> subjects = new ArrayList<>();
+    private List<String> subjects;
 }
