@@ -36,6 +36,7 @@ public class InterviewerController {
         return ResponseEntity.ok(dtoList);
     }
 
+    @RequestMapping("/available")
     @GetMapping
     public ResponseEntity<List<InterviewerAppointmentDTO>> getAllAvailableInterviewers(@RequestBody InterviewerType interviewerType, @RequestBody List<SubjectDTO> subjects) {
         List<InterviewerAppointmentDTO> dtoList = interviewerService.getAllAvailable(interviewerType, subjects);

@@ -22,6 +22,4 @@ public class InterviewerTime {
     @Column(name = "end_date")
     private LocalDateTime endDate;
 
-    @OneToMany(mappedBy = "interviewerTime")
-    private List<Interviewer> interviewers;
 }

@@ -48,7 +48,7 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
             List<Subject> subjects = subjectDTOS.stream()
                     .map(subjectMapper::dtoToEntity)
                     .collect(Collectors.toList());
-            List<Interviewer> interviewers = interviewerRepository.findAllBySubjects(subjects);
+            List<Interviewer> interviewers = interviewerRepository.findAllBySubjectsIn(subjects);
             return interviewers.stream()
                     .map(interviewerAppointmentMapper::entityToDto)
                     .collect(Collectors.toList());

@@ -9,5 +9,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import java.util.List;
 
 public interface InterviewerRepository extends JpaRepository<Interviewer,Long>,JpaSpecificationExecutor<Interviewer> {
-    List<Interviewer> findAllBySubjects(List<Subject> subjectList);
+    List<Interviewer> findAllBySubjectsIn(List<Subject> subjectList);
 }
