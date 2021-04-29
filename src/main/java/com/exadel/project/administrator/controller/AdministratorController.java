@@ -19,10 +19,10 @@ public class AdministratorController {
 
     private static final String ID = "/{id}";
 
-    @GetMapping()
-    public ResponseEntity<List<AdministratorDto>> getAllAdministrators(@RequestParam(value = "search", required = false) String search,
+    @GetMapping
+    public ResponseEntity<List<AdministratorDto>> findBySpecification(@RequestParam(value = "search", required = false) String search,
                                                                        @RequestParam(value = "sort", required = false) String sort) {
-            return ResponseEntity.ok(administratorService.getAll(search, sort));
+            return ResponseEntity.ok(administratorService.findBySpecification(search, sort));
     }
 
     @GetMapping(value = ID)
@@ -44,11 +44,6 @@ public class AdministratorController {
     @PutMapping(value = ID, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AdministratorDto> updateAdministrator(@PathVariable Long id, @RequestBody AdministratorDto dto) {
         return ResponseEntity.ok(administratorService.updateAdministrator(id, dto));
-    }
-
-    @PutMapping(value = "/addtrainee" + ID)
-    public ResponseEntity<AdministratorDto> addTrainee(@PathVariable Long id, @RequestBody String traineeId) {
-        return ResponseEntity.ok(administratorService.addTrainee(id, Long.parseLong(traineeId)));
     }
 
     @PutMapping(value ="/role" + ID)

@@ -1,0 +1,18 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: 20210421.[BE-65]-add-interviewer-subject
+      author:  nazar_furdychkaANDshpaser3@yandex.ru
+      comment: "Create interview_subject table. Insertion of initial data to interview_subject table"
+      preConditions:
+          - onFail: MARK_RAN
+          - not:
+              - tableExists:
+                    tableName: interview_subject
+      changes:
+        - sqlFile:
+            dbms: 'mysql'
+            endDelimiter: "@@"
+            splitStatements: true
+            path: db/sql/add-interviewer-subject-table-and-filled.sql
+            stripComments: false

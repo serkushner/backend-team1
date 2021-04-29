@@ -1,0 +1,19 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: 20210421.[BE-60]-change-trainee-status
+      author: nazar_furdychkaANDshpaser3@yandex.ru
+      preConditions:
+        - onFail: MARK_RAN
+        - onError: MARK_RAN
+        - not:
+          - sqlCheck:
+              expectedResult: "10"
+              sql: SELECT count(DISTINCT format) FROM internship
+      changes:
+        - sqlFile:
+            dbms: 'mysql'
+            endDelimiter: "@@"
+            splitStatements: false
+            path: db/sql/change-trainee-status.sql
+            stripComments: false

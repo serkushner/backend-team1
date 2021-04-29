@@ -19,7 +19,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,7 +41,7 @@ public class AdministratorService extends BaseService<Administrator, Administrat
         throw new UnsupportedOperationException();
     }
 
-    public List<AdministratorDto> getAll(String search, String sortFields) {
+    public List<AdministratorDto> findBySpecification(String search, String sortFields) {
         Sort sort = getSort(sortFields);
         return super.findBySpecifications(search, sort)
                 .stream()
@@ -60,47 +59,34 @@ public class AdministratorService extends BaseService<Administrator, Administrat
         }
         //TODO check if login already exists
         Administrator administrator = administratorMapper.dtoToEntity(administratorDto);
-        //administrator.setRole(Role.ADMIN);
         administratorRepository.save(administrator);
         return administratorMapper.entityToDto(administrator);
     }
 
     public AdministratorDto updateAdministrator(Long id, AdministratorDto administratorDto) throws EntityNotFoundException {
-        Administrator administrator = findAdministratorById(id);
+        Administrator administrator = getEntityById(id);
         administratorMapper.updateAdministrator(administratorDto, administrator);
         administratorRepository.save(administrator);
         return administratorMapper.entityToDto(administrator);
     }
 
     public AdministratorDto changeAdministratorRole(Long id, RoleDto role) throws EntityNotFoundException {
-        Administrator existingAdministrator = findAdministratorById(id);
+        Administrator existingAdministrator = getEntityById(id);
         existingAdministrator.setRole(Role.valueOf(role.getRole().toUpperCase()));
         administratorRepository.save(existingAdministrator);
         return administratorMapper.entityToDto(existingAdministrator);
     }
 
     public void deleteAdministratorById(Long id) throws EntityNotFoundException {
-        administratorRepository.delete(findAdministratorById(id));
+        administratorRepository.delete(getEntityById(id));
     }
 
-    public AdministratorDto addTrainee(Long administratorId, Long traineeId) throws EntityNotFoundException {
+    public AdministratorDto addTraineeToAdministrator(Long administratorId, Long traineeId) {
         Trainee trainee = traineeService.getEntityById(traineeId);
-        Administrator administrator = administratorMapper.dtoToEntity(getById(administratorId));
-        if (trainee.getAdministrator() != null) {
-            Administrator oldAdministrator = administratorMapper.dtoToEntity(getById(trainee.getAdministrator().getId()));
-            oldAdministrator.getTrainees().remove(trainee);
-            administratorRepository.save(oldAdministrator);
-        }
+        Administrator administrator = getEntityById(administratorId);
         trainee.setAdministrator(administrator);
         traineeRepository.save(trainee);
-        administrator.getTrainees().add(trainee);
-        administratorRepository.save(administrator);
         return administratorMapper.entityToDto(administrator);
-    }
-
-    private Administrator findAdministratorById(Long id) throws EntityNotFoundException {
-        return Optional.ofNullable(administratorRepository.findAdministratorById(id))
-                .orElseThrow(()-> new EntityNotFoundException());
     }
 
 }
