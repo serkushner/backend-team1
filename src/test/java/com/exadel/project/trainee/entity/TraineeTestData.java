@@ -39,12 +39,13 @@ public class TraineeTestData {
 
     public TraineeDTO getTestUpdateTraineeDTO(){
         TraineeDTO traineeDTO = getResponseTestTraineeDto();
+        traineeDTO.setId(1L);
         traineeDTO.setSkype("new skype");
         traineeDTO.setEmail("new email");
-        traineeDTO.setTraineeStatus(null);
-        traineeDTO.setEnglish(null);
-        traineeDTO.setCv(null);
-        traineeDTO.setGithub(null);
+        traineeDTO.setTraineeStatus("REGISTERED");
+        traineeDTO.setEnglish("C1");
+        traineeDTO.setCv("CV link");
+        traineeDTO.setGithub("GitHub link");
         return traineeDTO;
     }
 
@@ -98,9 +99,9 @@ public class TraineeTestData {
 
     public InterviewPeriod getRequestInterviewPeriod(){
         InterviewPeriod interviewPeriod = new InterviewPeriod();
+        interviewPeriod.setDayOfWeek(DayOfWeek.MONDAY);
         interviewPeriod.setStartTime(LocalTime.of(10, 0));
         interviewPeriod.setEndTime(LocalTime.of(13, 0));
-        interviewPeriod.setDayOfWeek(DayOfWeek.MONDAY);
         return interviewPeriod;
     }
 
@@ -136,11 +137,15 @@ public class TraineeTestData {
 
     public TraineeToAdminDetailsDTO getTestTraineeToAdminDetailsDTO(){
         TraineeToAdminDetailsDTO traineeToAdminDetailsDTO = new TraineeToAdminDetailsDTO();
+        traineeToAdminDetailsDTO.setId(1L);
         traineeToAdminDetailsDTO.setTraineeId(1L);
         traineeToAdminDetailsDTO.setDates(Collections.emptyList());
         traineeToAdminDetailsDTO.setEnglish("C1");
         traineeToAdminDetailsDTO.setCv("CV link");
         traineeToAdminDetailsDTO.setGithub("GitHub link");
+        traineeToAdminDetailsDTO.setInternshipId(1L);
+        traineeToAdminDetailsDTO.setTraineeStatus("REGISTERED");
+        traineeToAdminDetailsDTO.setEmail("kalinouski@gmail.com");
         traineeToAdminDetailsDTO.setLocation("Belarus");
         traineeToAdminDetailsDTO.setName("Kastus");
         traineeToAdminDetailsDTO.setPhone("375-29-888-18-63");

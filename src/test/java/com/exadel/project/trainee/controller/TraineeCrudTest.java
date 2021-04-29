@@ -24,6 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -121,7 +123,7 @@ public class TraineeCrudTest {
             additionalInfoList.add(additionalInfo);
             TraineeToAdminDTO traineeToAdminDTO = traineeTestData.getTestTraineeToAdminDTO();
 
-            doReturn(additionalInfoList).when(additionalInfoRepository).findAllByInternship_EndDateAfter(any());
+            doReturn(additionalInfoList).when(additionalInfoRepository).findAll(any(Specification.class), any(Sort.class));
 
             MvcResult result = mockMvc.perform(get("/trainee"))
                     .andExpect(status().isOk())
@@ -156,7 +158,7 @@ public class TraineeCrudTest {
             String content = result.getResponse().getContentAsString();
             TraineeToAdminDetailsDTO returnedTraineeToAdminDetailsDTO = objectMapper.readValue(content, TraineeToAdminDetailsDTO.class);
 
-            Assertions.assertEquals(returnedTraineeToAdminDetailsDTO, traineeToAdminDetailsDTO);
+            Assertions.assertEquals(traineeToAdminDetailsDTO, returnedTraineeToAdminDetailsDTO);
         }
 
         @Test
@@ -175,17 +177,20 @@ public class TraineeCrudTest {
     class testTraineeUpdateClass{
         @Test
         @DisplayName("When Trainee exist Then save Trainee with updates and return him")
-        void testUpdateInterviewer() throws Exception {
+        void testUpdateTrainee() throws Exception {
             Trainee existTrainee = traineeTestData.getResponseTestTrainee();
             Trainee updateTrainee = traineeTestData.getTestUpdateTrainee();
             TraineeDTO updateTraineeDTO = traineeTestData.getTestUpdateTraineeDTO();
             InterviewPeriod interviewPeriod = traineeTestData.getResponseTestInterviewPeriod();
+            AdditionalInfo additionalInfo = traineeTestData.getTestAdditionalInfo();
 
             doReturn(Optional.of(existTrainee)).when(traineeRepository).findById(1L);
             doReturn(updateTrainee).when(traineeRepository).save(updateTrainee);
             doReturn(interviewPeriod).when(interviewPeriodRepository).findByDayOfWeekAndAndStartTimeAndEndTime(DayOfWeek.MONDAY, LocalTime.of(10, 0), LocalTime.of(13, 0));
+            doReturn(Optional.of(additionalInfo)).when(additionalInfoRepository).findById(1L);
+            doReturn(additionalInfo).when(additionalInfoRepository).save(additionalInfo);
 
-            MvcResult result = mockMvc.perform(put("/trainee/{id}", 1)
+            MvcResult result = mockMvc.perform(put("/trainee/{id}", 1L)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(updateTraineeDTO)))
                     .andExpect(status().isOk())
