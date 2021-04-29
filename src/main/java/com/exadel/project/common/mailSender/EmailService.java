@@ -1,4 +1,4 @@
-package com.exadel.project.common.mailSendler;
+package com.exadel.project.common.mailSender;
 
 public interface EmailService {
 

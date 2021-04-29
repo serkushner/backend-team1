@@ -1,4 +1,4 @@
-package com.exadel.project.common.mailSendler;
+package com.exadel.project.common.mailSender;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
