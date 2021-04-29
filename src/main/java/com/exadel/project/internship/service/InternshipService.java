@@ -5,6 +5,7 @@ import com.exadel.project.InternshipType.service.InternshipTypeService;
 import com.exadel.project.common.exception.DoubleInternshipRegistrationException;
 import com.exadel.project.common.exception.EntityAlreadyExistsException;
 import com.exadel.project.common.exception.EntityNotFoundException;
+import com.exadel.project.common.exception.PublishedStatusBadRequestException;
 import com.exadel.project.common.service.BaseService;
 import com.exadel.project.common.service.rsql.RsqlSpecification;
 import com.exadel.project.country.entity.Country;
@@ -59,31 +60,60 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
         return internshipRsqlSpecification;
     }
 
-    public InternshipDetailsDTO getUnpostedById(Long id) throws EntityNotFoundException {
-        return internshipDetailsMapper.entityToDto(getInternshipByIdAndPublished(id, Published.VISIBLE_FOR_ADMINS));
+    //two public methods for interns and common access
+    public List<InternshipDTO> getAllPosted(String search, String sortFields) {
+        String validatedSearch = validateSearchInGetAllPosted(search);
+        return getAll(validatedSearch, sortFields);
+    }
+
+    private String validateSearchInGetAllPosted(String search) {
+        final String STATUS_POSTED = "published==VISIBLE_FOR_INTERNS";
+        final String STATUS_UNPOSTED = "published==VISIBLE_FOR_ADMINS";
+        boolean containsUnposted = false;
+        boolean containsPosted = false;
+
+        if (search != null) {
+            //check, that search contains Published.VISIBLE_FOR_INTERNS or not mentioned
+            containsUnposted = search.contains(STATUS_UNPOSTED);
+            if (containsUnposted) {
+                throw new PublishedStatusBadRequestException(
+                        "Change internship status to published for interns in search filter to posted");
+            }
+            containsPosted = search.contains(STATUS_POSTED);
+        }
+
+        StringBuffer stringBuffer = new StringBuffer();
+        if (!containsPosted) {
+            if (search == null) {
+                stringBuffer.append("published==").append(Published.VISIBLE_FOR_INTERNS.toString());
+            } else {
+                stringBuffer.append(search);
+                stringBuffer.append(";published==").append(Published.VISIBLE_FOR_INTERNS.toString());;
+            }
+        }
+        search = stringBuffer.toString();
+        return search;
     }
 
     public InternshipDetailsDTO getPostedById(Long id) throws EntityNotFoundException {
         return internshipDetailsMapper.entityToDto(getInternshipByIdAndPublished(id, Published.VISIBLE_FOR_INTERNS));
     }
 
+    //next public methods for admins only
+    public InternshipDetailsDTO getById(Long id) throws EntityNotFoundException {
+        return internshipDetailsMapper.entityToDto(getInternshipById(id));
+    }
+
     public InternshipDetailsDTO updateUnpostedInternship(Long id,
-            InternshipDetailsDTO internshipDetailsDTO) throws EntityNotFoundException {
-        return updateInternship(id, internshipDetailsDTO, Published.VISIBLE_FOR_ADMINS);
-    }
-
-    public InternshipDetailsDTO updatePostedInternship(Long id,
-            InternshipDetailsDTO internshipDetailsDTO) throws EntityNotFoundException {
-        return updateInternship(id, internshipDetailsDTO, Published.VISIBLE_FOR_INTERNS);
-    }
-
-    private InternshipDetailsDTO updateInternship(Long id,
-                                                  InternshipDetailsDTO internshipDetailsDTO,
-                                                  Published isPublished) throws EntityNotFoundException {
-        Internship internship = getInternshipByIdAndPublished(id, isPublished);
+                InternshipDetailsDTO internshipDetailsDTO) throws EntityNotFoundException {
+        Internship internship = getInternshipById(id);
+        if (internship.getPublished() == Published.VISIBLE_FOR_INTERNS) {
+            throw new PublishedStatusBadRequestException(
+                    "You can not change data in an internship with posted status. Change its status to published for admins.");
+        }
         Internship internshipFromDto = getInternshipFromInternshipDetailsDto(internshipDetailsDTO);
         internshipFromDto.setId(internship.getId());
-        internshipFromDto.setPublished(isPublished);
+        internshipFromDto.setPublished(Published.VISIBLE_FOR_ADMINS);
         repository.save(internshipFromDto);
         return internshipDetailsMapper.entityToDto(internshipFromDto);
     }
@@ -98,8 +128,7 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
     }
 
     @Transactional
-    public InternshipDetailsDTO addUnpostedInternship(InternshipDetailsDTO dto)
-            throws EntityAlreadyExistsException {
+    public InternshipDetailsDTO addUnpostedInternship(InternshipDetailsDTO dto) throws EntityAlreadyExistsException {
         checkDoubleRegistration(dto);
         Internship internship = getInternshipFromInternshipDetailsDto(dto);
         //TODO change on Published.VISIBLE_FOR_INTERNS for fast demo on ready landing
@@ -155,11 +184,13 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
     }
 
     public void deleteUnpostedInternshipById(Long id) throws EntityNotFoundException {
-        Internship internship = repository.findByIdAndPublished(id, Published.VISIBLE_FOR_ADMINS);
-        if (internship == null) {
-            throw new EntityNotFoundException();
+        Optional<Internship> internship = repository.findById(id);
+        internship.orElseThrow(EntityNotFoundException::new);
+        if (internship.get().getPublished() == Published.VISIBLE_FOR_ADMINS) {
+            repository.delete(internship.get());
         } else {
-            repository.delete(internship);
+            throw new PublishedStatusBadRequestException(
+                    "Unavailable to delete the internship with the posted status.");
         }
     }
 
@@ -179,43 +210,33 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
         }
     }
 
-    public List<InternshipDTO> getAllPosted(String search, String sortFields) {
-        return getAll(search, sortFields, Published.VISIBLE_FOR_INTERNS);
-    }
-
-    public List<InternshipDTO> getAllUnposted(String search, String sortFields) {
-        return getAll(search, sortFields, Published.VISIBLE_FOR_ADMINS);
-    }
-
-    public List<InternshipDTO> getAll(String search, String sortFields, Published isPublished) {
+    public List<InternshipDTO> getAll(String search, String sortFields) {
         Sort sort = getSort(sortFields);
-        StringBuffer stringBuffer = new StringBuffer();
-        if (search == null) {
-            stringBuffer.append("published==").append(isPublished.toString());
-        } else {
-            stringBuffer.append(search);
-            stringBuffer.append(";published==").append(isPublished.toString());
-        }
-        search = stringBuffer.toString();
         return super.findBySpecifications(search, sort).stream()
                 .map(internship -> internshipMapper.entityToDto(internship))
                 .collect(Collectors.toList());
     }
 
-    public InternshipDetailsDTO approveUnpostedById(Long id) {
-        return changePublisheddById(id, Published.VISIBLE_FOR_INTERNS);
+    public InternshipDetailsDTO changeInternshipPublishedStatusById(Long id, String published) {
+        boolean isVisibleForAdmins = false;
+        boolean isVisibleForInterns = false;
+        isVisibleForAdmins = Published.VISIBLE_FOR_ADMINS.toString().equals(published);
+        if (!isVisibleForAdmins) {
+            isVisibleForInterns = Published.VISIBLE_FOR_INTERNS.toString().equals(published);
+        }
+        if (isVisibleForAdmins) {
+            return changePublishedById(id, Published.VISIBLE_FOR_ADMINS);
+        } else if (isVisibleForInterns) {
+            return changePublishedById(id, Published.VISIBLE_FOR_INTERNS);
+        } else {
+            throw new IllegalArgumentException();
+        }
     }
 
-
-    public InternshipDetailsDTO disapproveUnpostedById(Long id) {
-        return changePublisheddById(id, Published.VISIBLE_FOR_ADMINS);
-    }
-
-    private InternshipDetailsDTO changePublisheddById(Long id, Published published) {
+    private InternshipDetailsDTO changePublishedById(Long id, Published published) {
         Internship internship = getInternshipById(id);
         internship.setPublished(published);
         repository.save(internship);
         return internshipDetailsMapper.entityToDto(internship);
     }
-
 }

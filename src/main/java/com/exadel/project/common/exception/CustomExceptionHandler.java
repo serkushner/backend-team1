@@ -65,6 +65,14 @@ public class CustomExceptionHandler {
         return new ResponseEntity<>(exceptionResponse, HttpStatus.FORBIDDEN);
     }
 
+    @ExceptionHandler(PublishedStatusBadRequestException.class)
+    public ResponseEntity<ExceptionResponse> handlerPublishedStatusBadRequestException(Exception e){
+        String exMessage = exceptionLoadMessage(e, "attempt to do a wrong request");
+        String message = String.format("%s %s", LocalDateTime.now(), exMessage);
+        ExceptionResponse exceptionResponse = new ExceptionResponse(message);
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
     private String exceptionLoadMessage(Exception e, String defaultMessage) {
         String exMessage;
         if (e.getMessage() != null) {
