@@ -23,12 +23,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 @Service
 @RequiredArgsConstructor
 public class InterviewService extends BaseService<Interview, InterviewRepository> {
 
-    //TODO solve bean cycle:
-    // condition: if all fields are defined in constructor
 //traineeService defined in file [backend-team1/target/classes/com/exadel/project/trainee/service/TraineeService.class]
 //↑     ↓
 //|  additionalInfoService defined in file [backend-team1/target/classes/com/exadel/project/trainee/service/AdditionalInfoService.class]
@@ -37,11 +36,14 @@ public class InterviewService extends BaseService<Interview, InterviewRepository
 //└─────┘
 //
 //
+
     private final InterviewMapper interviewMapper;
-    private final InterviewRepository interviewRepository;
-    private final TraineeService traineeService;
-    private final InternshipService internshipService;
-    private final InterviewerService interviewerService;
+    private final  InterviewRepository interviewRepository;
+    @Lazy
+    @Autowired
+    private  TraineeService traineeService;
+    private final  InternshipService internshipService;
+    private final  InterviewerService interviewerService;
 
     @Override
     public RsqlSpecification getRsqlSpecification() {
