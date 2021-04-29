@@ -97,7 +97,7 @@ public class AdministratorCrudTest {
 
         @Test
         @DisplayName("When Administrators exist Then return array of them ")
-        void getAllInterviewers() throws Exception {
+        void findBySpecification() throws Exception {
 
             AdministratorDto administratorDto = administratorTestDataDto.getAdministratorDto(1L, "Neo");
             AdministratorDto administratorSecondDto = administratorTestDataDto.getAdministratorDto(2L, "Smith");

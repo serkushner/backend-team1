@@ -19,6 +19,6 @@ public class AdministratorDto {
     private String phone;
     private String skype;
     private Role role;
-    private List<TraineeDTO> traineesDTO = new ArrayList<>();
+    //private RoleDto roleDto;
 
 }
