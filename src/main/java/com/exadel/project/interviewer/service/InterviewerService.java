@@ -4,8 +4,7 @@ import com.exadel.project.common.exception.EntityAlreadyExistsException;
 import com.exadel.project.common.exception.EntityNotFoundException;
 import com.exadel.project.common.service.BaseService;
 import com.exadel.project.common.service.rsql.RsqlSpecification;
-import com.exadel.project.internship.entity.Subject;
-import com.exadel.project.internship.service.SubjectService;
+import com.exadel.project.subject.entity.Subject;
 import com.exadel.project.interview.dto.InterviewTimeDTO;
 import com.exadel.project.interview.entity.InterviewTime;
 import com.exadel.project.interview.mapper.InterviewTimeMapper;
@@ -14,6 +13,7 @@ import com.exadel.project.interviewer.dto.InterviewerDTO;
 import com.exadel.project.interviewer.entity.Interviewer;
 import com.exadel.project.interviewer.mapper.InterviewerMapper;
 import com.exadel.project.interviewer.repository.InterviewerRepository;
+import com.exadel.project.subject.service.SubjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -92,7 +92,7 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
     }
 
     private List<Subject> getSubjectsByNames(List<String> subjectNames){
-        return subjectNames.stream().map(subjectService::findSubjectByName).collect(Collectors.toList());
+        return subjectNames.stream().map(subjectService::getByName).collect(Collectors.toList());
     }
 
     @Override

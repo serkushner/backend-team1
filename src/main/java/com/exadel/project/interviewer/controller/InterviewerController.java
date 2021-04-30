@@ -1,10 +1,10 @@
 package com.exadel.project.interviewer.controller;
 
 import com.exadel.project.common.exception.EntityNotFoundException;
-import com.exadel.project.internship.service.SubjectService;
 import com.exadel.project.interview.dto.InterviewTimeDTO;
 import com.exadel.project.interviewer.dto.InterviewerDTO;
 import com.exadel.project.interviewer.service.InterviewerService;
+import com.exadel.project.subject.service.SubjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
