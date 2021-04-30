@@ -66,5 +66,4 @@ public class InterviewerController {
         interviewerService.deleteInterviewTimeFromInterviewer(interviewTimeDTO, id);
         return ResponseEntity.noContent().build();
     }
-
 }

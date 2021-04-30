@@ -1,5 +1,6 @@
 package com.exadel.project.interviewer.service;
 
+import com.exadel.project.common.exception.EntityAlreadyExistsException;
 import com.exadel.project.common.exception.EntityNotFoundException;
 import com.exadel.project.common.service.BaseService;
 import com.exadel.project.common.service.rsql.RsqlSpecification;
@@ -47,6 +48,7 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
     }
 
     public InterviewerDTO addInterviewer(InterviewerDTO interviewerDto) {
+        checkDoubleRegistration(interviewerDto.getEmail());
         Interviewer interviewer = interviewerMapper.dtoToEntity(interviewerDto);
         interviewer.setSubjects(getSubjectsByNames(interviewerDto.getSubjects()));
         Interviewer savedInterviewer = interviewerRepository.save(interviewer);
@@ -70,6 +72,9 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
         interviewTimeDTO = interviewTimeService.saveInterviewTime(interviewTimeDTO);
         InterviewTime interviewTime = interviewTimeMapper.dtoToEntity(interviewTimeDTO);
         Interviewer interviewer = getEntityById(id);
+        if (interviewer.getInterviewTimes().contains(interviewTime)){
+            throw new EntityAlreadyExistsException();
+        }
         interviewer.getInterviewTimes().add(interviewTime);
         return interviewTimeDTO;
     }
@@ -88,5 +93,11 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
     @Override
     public RsqlSpecification getRsqlSpecification() {
         throw new UnsupportedOperationException();
+    }
+
+    public void checkDoubleRegistration(String email){
+        if (interviewerRepository.findByEmail(email) != null){
+            throw new EntityAlreadyExistsException();
+        }
     }
 }
