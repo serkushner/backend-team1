@@ -1,8 +1,10 @@
 package com.exadel.project.interviewer.controller;
 
 import com.exadel.project.common.exception.EntityNotFoundException;
+import com.exadel.project.internship.service.SubjectService;
 import com.exadel.project.interview.dto.InterviewTimeDTO;
 import com.exadel.project.interviewer.dto.InterviewerDTO;
+import com.exadel.project.interviewer.dto.SubjectDTO;
 import com.exadel.project.interviewer.service.InterviewerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -17,6 +19,7 @@ import java.util.List;
 public class InterviewerController {
 
     private final InterviewerService interviewerService;
+    private final SubjectService subjectService;
 
     private static final String ID = "/{id}";
 
@@ -46,6 +49,11 @@ public class InterviewerController {
     public ResponseEntity<Void> deleteInterviewer(@PathVariable Long id) {
         interviewerService.deleteInterviewer(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/subjects")
+    public ResponseEntity<List<String>> getSubjectsToInterviewer(){
+        return ResponseEntity.ok(subjectService.getSubjectsNames());
     }
 
     @PostMapping(ID + "/time")

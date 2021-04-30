@@ -10,4 +10,5 @@ public interface InterviewTimeMapper {
     InterviewTimeDTO entityToDto(InterviewTime entity);
 
     InterviewTime dtoToEntity(InterviewTimeDTO dto);
+
 }

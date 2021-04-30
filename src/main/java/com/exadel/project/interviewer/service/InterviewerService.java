@@ -76,10 +76,9 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
 
     @Transactional
     public void deleteInterviewTimeFromInterviewer(InterviewTimeDTO interviewTimeDTO, Long id){
-        InterviewTime interviewTime = interviewTimeMapper.dtoToEntity(interviewTimeDTO);
+        InterviewTime interviewTime = interviewTimeService.getEntityById(interviewTimeDTO.getId());
         Interviewer interviewer = getEntityById(id);
         interviewer.getInterviewTimes().remove(interviewTime);
-        interviewTimeService.deleteInterviewTime(interviewTimeDTO);
     }
 
     private List<Subject> getSubjectsByNames(List<String> subjectNames){
