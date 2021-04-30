@@ -1,6 +1,6 @@
 package com.exadel.project.trainee.entity;
 
-import com.exadel.project.internship.entity.Country;
+import com.exadel.project.country.entity.Country;
 import com.exadel.project.internship.entity.Internship;
 import com.exadel.project.trainee.dto.TraineeDTO;
 import com.exadel.project.trainee.dto.TraineeToAdminDTO;

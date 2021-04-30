@@ -1,8 +1,8 @@
 package com.exadel.project.trainee.controller;
 
-import com.exadel.project.internship.entity.Country;
+import com.exadel.project.country.entity.Country;
 import com.exadel.project.internship.entity.Internship;
-import com.exadel.project.internship.repository.CountryRepository;
+import com.exadel.project.country.repository.CountryRepository;
 import com.exadel.project.internship.service.InternshipService;
 import com.exadel.project.trainee.dto.TraineeDTO;
 import com.exadel.project.trainee.dto.TraineeToAdminDTO;
