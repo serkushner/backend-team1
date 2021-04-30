@@ -1,0 +1,51 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20210419.[BE-52]-add-blended-format
+      author: shpaser2@yandex.ru
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: "2"
+            sql: SELECT count(DISTINCT format) FROM internship
+      changes:
+        - sqlFile:
+            dbms: 'mysql'
+            endDelimiter: "@@"
+            splitStatements: false
+            path: db/sql/internship_add_blended_format.sql
+            stripComments: false
+
+  - changeSet:
+      id: 20210421.[BE-52]-add-status-published-to-internship
+      author: shpaser2@yandex.ru
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - columnExists:
+                tableName: internship
+                columnName: published
+      changes:
+        - addColumn:
+            tableName: internship
+            columns:
+              - column:
+                  name: published
+                  type: ENUM('VISIBLE_FOR_ADMINS','VISIBLE_FOR_INTERNS')
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 20210421.[BE-52]-change-status-to-published-in-internships-in-db
+      author: shpaser2@yandex.ru
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: "0"
+            sql: SELECT count(*) FROM internship WHERE published = 'VISIBLE_FOR_INTERNS'
+      changes:
+        - sqlFile:
+            dbms: 'mysql'
+            endDelimiter: "@@"
+            splitStatements: false
+            path: db/sql/internships_status_change_to_published.sql
+            stripComments: false
