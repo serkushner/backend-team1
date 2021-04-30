@@ -1,10 +1,8 @@
 package com.exadel.project.interviewer.entity;
 
-import com.exadel.project.internship.entity.Subject;
 import com.exadel.project.interview.entity.Interview;
 import com.exadel.project.interview.entity.InterviewTime;
-import com.exadel.project.interviewer.entity.InterviewerType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.exadel.project.subject.entity.Subject;
 import lombok.Data;
 
 import javax.persistence.*;

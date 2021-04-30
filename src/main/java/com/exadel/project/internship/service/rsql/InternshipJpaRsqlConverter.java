@@ -1,9 +1,18 @@
 package com.exadel.project.internship.service.rsql;
 
+import com.exadel.project.InternshipType.entity.InternshipType;
 import com.exadel.project.common.service.rsql.JpaRsqlConverter;
-import com.exadel.project.internship.entity.*;
+import com.exadel.project.country.entity.Country;
+import com.exadel.project.internship.entity.Format;
+import com.exadel.project.internship.entity.Internship;
+import com.exadel.project.internship.entity.Published;
+import com.exadel.project.subject.entity.Subject;
 import cz.jirutka.rsql.parser.ast.ComparisonNode;
-import javax.persistence.criteria.*;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Root;
 
 public class InternshipJpaRsqlConverter extends JpaRsqlConverter {
 
@@ -32,7 +41,8 @@ public class InternshipJpaRsqlConverter extends JpaRsqlConverter {
     @Override
     public Object checkAndConvertToEnum(String selector, String argument) {
         switch (selector){
-            case "format": return Format.valueOf(argument.toUpperCase());
+            case "format": return Format.valueOf(argument);
+            case "published": return Published.valueOf(argument.toUpperCase());
             default: return argument;
         }
     }

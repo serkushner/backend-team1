@@ -1,10 +1,9 @@
-package com.exadel.project.internship.entity;
+package com.exadel.project.InternshipType.entity;
 
 import lombok.Data;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @Entity
