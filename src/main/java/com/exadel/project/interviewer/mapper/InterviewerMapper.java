@@ -18,10 +18,10 @@ public interface InterviewerMapper {
     InterviewerDTO entityToDto(Interviewer entity);
 
     @Mapping(target = "subjects", ignore = true)
+    @Mapping(target = "interviewTimes", ignore = true)
     Interviewer dtoToEntity(InterviewerDTO dto);
 
     default List<String> getSubjectsName(List<Subject> subjects){
         return MapperUtil.getStrings(subjects, Subject::getName);
     }
-
 }

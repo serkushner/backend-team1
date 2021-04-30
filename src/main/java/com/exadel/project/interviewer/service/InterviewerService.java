@@ -47,11 +47,13 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
         return interviewerMapper.entityToDto(super.getEntityById(id));
     }
 
+    @Transactional
     public InterviewerDTO addInterviewer(InterviewerDTO interviewerDto) {
         checkDoubleRegistration(interviewerDto.getEmail());
         Interviewer interviewer = interviewerMapper.dtoToEntity(interviewerDto);
         interviewer.setSubjects(getSubjectsByNames(interviewerDto.getSubjects()));
         Interviewer savedInterviewer = interviewerRepository.save(interviewer);
+        addInterviewTimeToInterviewer(interviewerDto.getInterviewTimes(), savedInterviewer.getId());
         return interviewerMapper.entityToDto(savedInterviewer);
     }
 
@@ -68,15 +70,18 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
     }
 
     @Transactional
-    public InterviewTimeDTO addInterviewTimeToInterviewer(InterviewTimeDTO interviewTimeDTO, Long id){
-        interviewTimeDTO = interviewTimeService.saveInterviewTime(interviewTimeDTO);
-        InterviewTime interviewTime = interviewTimeMapper.dtoToEntity(interviewTimeDTO);
-        Interviewer interviewer = getEntityById(id);
-        if (interviewer.getInterviewTimes().contains(interviewTime)){
-            throw new EntityAlreadyExistsException();
+    public List<InterviewTimeDTO> addInterviewTimeToInterviewer(List<InterviewTimeDTO> interviewTimeDTOList, Long id){
+        for (int i = 0; i < interviewTimeDTOList.size(); i++) {
+            InterviewTimeDTO interviewTimeDTO = interviewTimeService.saveInterviewTime(interviewTimeDTOList.get(i));
+            InterviewTime interviewTime = interviewTimeMapper.dtoToEntity(interviewTimeDTO);
+            Interviewer interviewer = getEntityById(id);
+            if (interviewer.getInterviewTimes().contains(interviewTime)){
+                throw new EntityAlreadyExistsException();
+            }
+            interviewer.getInterviewTimes().add(interviewTime);
+            interviewTimeDTOList.set(i, interviewTimeDTO);
         }
-        interviewer.getInterviewTimes().add(interviewTime);
-        return interviewTimeDTO;
+        return interviewTimeDTOList;
     }
 
     @Transactional

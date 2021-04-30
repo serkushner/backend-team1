@@ -4,7 +4,6 @@ import com.exadel.project.common.exception.EntityNotFoundException;
 import com.exadel.project.internship.service.SubjectService;
 import com.exadel.project.interview.dto.InterviewTimeDTO;
 import com.exadel.project.interviewer.dto.InterviewerDTO;
-import com.exadel.project.interviewer.dto.SubjectDTO;
 import com.exadel.project.interviewer.service.InterviewerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -57,7 +56,7 @@ public class InterviewerController {
     }
 
     @PostMapping(ID + "/time")
-    public ResponseEntity<InterviewTimeDTO> addTimeToInterviewer(@PathVariable Long id, @RequestBody InterviewTimeDTO interviewTimeDTO){
+    public ResponseEntity<List<InterviewTimeDTO>> addTimeToInterviewer(@PathVariable Long id, @RequestBody List<InterviewTimeDTO> interviewTimeDTO){
         return ResponseEntity.ok(interviewerService.addInterviewTimeToInterviewer(interviewTimeDTO, id));
     }
 
