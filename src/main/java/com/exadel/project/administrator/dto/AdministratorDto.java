@@ -19,5 +19,6 @@ public class AdministratorDto {
     private String phone;
     private String skype;
     private Role role;
+    //private RoleDto roleDto;
 
 }
