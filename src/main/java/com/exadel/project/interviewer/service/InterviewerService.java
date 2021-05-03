@@ -62,6 +62,7 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
         interviewer.setSubjects(getSubjectsByNames(interviewerDto.getSubjects()));
         interviewer.setId(getEntityById(id).getId());
         Interviewer savedInterviewer = interviewerRepository.save(interviewer);
+        addInterviewTimeToInterviewer(interviewerDto.getInterviewTimes(), savedInterviewer.getId());
         return interviewerMapper.entityToDto(savedInterviewer);
     }
 

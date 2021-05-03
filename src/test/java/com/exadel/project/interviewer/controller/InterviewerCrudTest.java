@@ -1,22 +1,23 @@
 package com.exadel.project.interviewer.controller;
 
+import com.exadel.project.interviewer.dto.InterviewerDTO;
 import com.exadel.project.interviewer.entity.Interviewer;
 import com.exadel.project.interviewer.entity.InterviewerTestData;
 import com.exadel.project.interviewer.repository.InterviewerRepository;
+import com.exadel.project.subject.entity.Subject;
+import com.exadel.project.subject.repository.SubjectRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -40,6 +41,9 @@ public class InterviewerCrudTest {
     @MockBean
     private InterviewerRepository interviewerRepository;
 
+    @MockBean
+    private SubjectRepository subjectRepository;
+
     @Autowired
     private InterviewerTestData interviewerTestData;
 
@@ -58,6 +62,7 @@ public class InterviewerCrudTest {
         void getInterviewerById() throws Exception {
 
             Interviewer interviewer = interviewerTestData.getTechInterviewer();
+            InterviewerDTO interviewerDTO = interviewerTestData.getTestTechInterviewerDTO();
 
             doReturn(Optional.of(interviewer)).when(interviewerRepository).findById(1L);
 
@@ -67,9 +72,9 @@ public class InterviewerCrudTest {
                     .andReturn();
 
             String content = result.getResponse().getContentAsString();
-            Interviewer returnedInterviewer = objectMapper.readValue(content, Interviewer.class);
+            InterviewerDTO returnedInterviewerDTO = objectMapper.readValue(content, InterviewerDTO.class);
 
-            Assertions.assertEquals(returnedInterviewer, interviewer);
+            Assertions.assertEquals(returnedInterviewerDTO, interviewerDTO);
         }
 
 
@@ -82,7 +87,6 @@ public class InterviewerCrudTest {
             mockMvc.perform(get("/interviewer/{id}", 1358))
                     .andExpect(status().isNotFound());
         }
-
     }
 
 
@@ -96,6 +100,9 @@ public class InterviewerCrudTest {
 
             Interviewer firstInterviewer = interviewerTestData.getTechInterviewer();
             Interviewer secondInterviewer = interviewerTestData.getHrInterviewer();
+            InterviewerDTO techInterviewerDTO = interviewerTestData.getTestTechInterviewerDTO();
+            InterviewerDTO hrInterviewerDTO = interviewerTestData.getTestHrInterviewerDTO();
+
 
             doReturn(Arrays.asList(firstInterviewer, secondInterviewer)).when(interviewerRepository).findAll(Sort.by(Sort.Direction.DESC, "type"));
 
@@ -106,13 +113,12 @@ public class InterviewerCrudTest {
 
             String content = result.getResponse().getContentAsString();
 
-            List<Interviewer> interviewerList = objectMapper.readValue(content, new TypeReference<List<Interviewer>>() {
+            List<InterviewerDTO> interviewerList = objectMapper.readValue(content, new TypeReference<List<InterviewerDTO>>() {
             });
 
-            Assertions.assertEquals(interviewerList.get(0), firstInterviewer);
-            Assertions.assertEquals(interviewerList.get(1), secondInterviewer);
+            Assertions.assertEquals(interviewerList.get(0), techInterviewerDTO);
+            Assertions.assertEquals(interviewerList.get(1), hrInterviewerDTO);
         }
-
     }
 
 
@@ -127,23 +133,26 @@ public class InterviewerCrudTest {
             Interviewer interviewer = interviewerTestData.getTechInterviewer();
             Interviewer savedInterviewer = interviewerTestData.getTechInterviewer();
             savedInterviewer.setId(null);
+            InterviewerDTO responseInterviewerDTO = interviewerTestData.getTestTechInterviewerDTO();
+            InterviewerDTO requestInterviewerDTO = interviewerTestData.getRequestInterviewerDTO();
+            Subject subject = interviewerTestData.getTestSubject();
 
             doReturn(interviewer).when(interviewerRepository).save(savedInterviewer);
+            doReturn(null).when(interviewerRepository).findByEmail(any());
+            doReturn(subject).when(subjectRepository).findSubjectByName("Java");
 
             MvcResult result = mockMvc.perform(post("/interviewer")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(savedInterviewer)))
+                    .content(objectMapper.writeValueAsString(requestInterviewerDTO)))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                     .andReturn();
 
             String content = result.getResponse().getContentAsString();
-            Interviewer returnedInterviewer = objectMapper.readValue(content, Interviewer.class);
+            InterviewerDTO returnedInterviewerDTO = objectMapper.readValue(content, InterviewerDTO.class);
 
-            Assertions.assertEquals(returnedInterviewer, interviewer);
-
+            Assertions.assertEquals(returnedInterviewerDTO, responseInterviewerDTO);
         }
-
     }
 
     @Nested
@@ -171,7 +180,6 @@ public class InterviewerCrudTest {
 
             Assertions.assertEquals(returnedInterviewer,updateInterviewer);
             Assertions.assertNotEquals(returnedInterviewer,interviewer);
-
         }
 
         @Test
@@ -186,9 +194,6 @@ public class InterviewerCrudTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(interviewerToPut)))
                     .andExpect(status().isNotFound());
-
         }
-
     }
-
 }
