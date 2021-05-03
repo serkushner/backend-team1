@@ -1,20 +1,13 @@
 package com.exadel.project.interviewer.dto;
 
-import com.exadel.project.interview.dto.InterviewDTO;
 import com.exadel.project.interview.dto.InterviewTimeRequestDTO;
-import com.exadel.project.interviewer.entity.InterviewerType;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class InterviewerRequestDTO {
-    private String name;
-    private String surname;
-    private String email;
-    private String phone;
-    private InterviewerType type;
-    private String skype;
+public class InterviewerRequestDTO extends InterviewerBaseDTO {
     private List<InterviewTimeRequestDTO> interviewTimes;
-    private List<String> subjects;
 }

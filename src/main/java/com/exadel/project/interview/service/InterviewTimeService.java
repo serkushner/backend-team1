@@ -23,7 +23,7 @@ public class InterviewTimeService extends BaseService<InterviewTime, InterviewTi
         throw new UnsupportedOperationException();
     }
 
-    public InterviewTimeResponseDTO saveInterviewTime(InterviewTimeRequestDTO interviewTimeRequestDTO, long interviewDurationMinutes){
+    public InterviewTimeResponseDTO saveInterviewTime(InterviewTimeRequestDTO interviewTimeRequestDTO, Long interviewDurationMinutes){
         InterviewTime interviewTime = interviewTimeRepository.findByStartDateAndEndDate(interviewTimeRequestDTO.getStartDate(), interviewTimeRequestDTO.getStartDate().plusMinutes(interviewDurationMinutes))
                 .orElseGet(()->{
                     InterviewTime time = interviewTimeMapper.dtoToEntity(interviewTimeRequestDTO);

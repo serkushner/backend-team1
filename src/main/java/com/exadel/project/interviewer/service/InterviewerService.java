@@ -33,15 +33,16 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
         defaultSortingField = "type";
         defaultSortingDirection = "desc";
     }
+    @Value("${interview.tech.duration}")
+    private Long techInterviewDuration;
+    @Value("${interview.hr.duration}")
+    private Long hrInterviewDuration;
+
     private final InterviewerMapper interviewerMapper;
     private final InterviewerRepository interviewerRepository;
     private final InterviewTimeService interviewTimeService;
     private final InterviewTimeMapper interviewTimeMapper;
     private final SubjectService subjectService;
-    @Value("${interview.tech.duration}")
-    private long techInterviewDuration;
-    @Value("${interview.hr.duration}")
-    private long hrInterviewDuration;
 
     public List<InterviewerResponseDTO> getAll(String search, String sortFields) {
         Sort sort = getSort(sortFields);
@@ -81,14 +82,13 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
     @Transactional
     public List<InterviewTimeResponseDTO> addInterviewTimeToInterviewer(List<InterviewTimeRequestDTO> interviewTimeRequestDTOS, Long interviewerId){
         Interviewer interviewer = getEntityById(interviewerId);
-        long duration = interviewer.getType() == InterviewerType.TECH ? techInterviewDuration : hrInterviewDuration;
+        Long duration = interviewer.getType() == InterviewerType.TECH ? techInterviewDuration : hrInterviewDuration;
         List<InterviewTime> interviewTimeList = interviewTimeRequestDTOS.stream()
                 .map(interviewTimeRequestDTO -> interviewTimeService.saveInterviewTime(interviewTimeRequestDTO, duration))
                 .map(interviewTimeMapper::dtoToEntity)
                 .collect(Collectors.toList());
-        List<InterviewTime> newInterviewTime = Stream.concat(interviewTimeList.stream(), interviewer.getInterviewTimes().stream())
-                .collect(Collectors.toList());
-        interviewer.setInterviewTimes(newInterviewTime);
+        interviewTimeList.removeAll(interviewer.getInterviewTimes());
+        interviewer.getInterviewTimes().addAll(interviewTimeList);
         return interviewTimeList.stream().map(interviewTimeMapper::entityToDto).collect(Collectors.toList());
     }
 
