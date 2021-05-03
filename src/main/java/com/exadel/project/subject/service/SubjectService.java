@@ -1,5 +1,6 @@
 package com.exadel.project.subject.service;
 
+import com.exadel.project.common.exception.EntityNotFoundException;
 import com.exadel.project.common.service.BaseService;
 import com.exadel.project.common.service.rsql.RsqlSpecification;
 import com.exadel.project.subject.entity.Subject;
@@ -20,7 +21,7 @@ public class SubjectService extends BaseService<Subject, SubjectRepository> {
     }
 
     public Subject getByName(String name){
-        return subjectRepository.findSubjectByName(name);
+        return subjectRepository.findSubjectByName(name).orElseThrow(EntityNotFoundException::new);
     }
 
     public List<String> getSubjectsNames(){

@@ -5,8 +5,6 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class InterviewTimeDTO {
-    private Long id;
+public class InterviewTimeRequestDTO {
     private LocalDateTime startDate;
-    private LocalDateTime endDate;
 }

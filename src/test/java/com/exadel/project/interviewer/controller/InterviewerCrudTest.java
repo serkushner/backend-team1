@@ -1,6 +1,9 @@
 package com.exadel.project.interviewer.controller;
 
-import com.exadel.project.interviewer.dto.InterviewerDTO;
+import com.exadel.project.interview.entity.InterviewTime;
+import com.exadel.project.interview.repository.InterviewTimeRepository;
+import com.exadel.project.interviewer.dto.InterviewerRequestDTO;
+import com.exadel.project.interviewer.dto.InterviewerResponseDTO;
 import com.exadel.project.interviewer.entity.Interviewer;
 import com.exadel.project.interviewer.entity.InterviewerTestData;
 import com.exadel.project.interviewer.repository.InterviewerRepository;
@@ -21,6 +24,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -44,6 +48,9 @@ public class InterviewerCrudTest {
     @MockBean
     private SubjectRepository subjectRepository;
 
+    @MockBean
+    private InterviewTimeRepository interviewTimeRepository;
+
     @Autowired
     private InterviewerTestData interviewerTestData;
 
@@ -62,9 +69,11 @@ public class InterviewerCrudTest {
         void getInterviewerById() throws Exception {
 
             Interviewer interviewer = interviewerTestData.getTechInterviewer();
-            InterviewerDTO interviewerDTO = interviewerTestData.getTestTechInterviewerDTO();
+            interviewer.setInterviewTimes(List.of(interviewerTestData.getTechInterviewTime()));
+            InterviewerResponseDTO interviewerResponseDTO = interviewerTestData.getTestTechInterviewerDTO();
 
             doReturn(Optional.of(interviewer)).when(interviewerRepository).findById(1L);
+
 
             MvcResult result = mockMvc.perform(get("/interviewer/{id}", 1))
                     .andExpect(status().isOk())
@@ -72,9 +81,9 @@ public class InterviewerCrudTest {
                     .andReturn();
 
             String content = result.getResponse().getContentAsString();
-            InterviewerDTO returnedInterviewerDTO = objectMapper.readValue(content, InterviewerDTO.class);
+            InterviewerResponseDTO returnedInterviewerResponseDTO = objectMapper.readValue(content, InterviewerResponseDTO.class);
 
-            Assertions.assertEquals(returnedInterviewerDTO, interviewerDTO);
+            Assertions.assertEquals(interviewerResponseDTO, returnedInterviewerResponseDTO);
         }
 
 
@@ -99,9 +108,11 @@ public class InterviewerCrudTest {
         void getAllInterviewers() throws Exception {
 
             Interviewer firstInterviewer = interviewerTestData.getTechInterviewer();
+            firstInterviewer.setInterviewTimes(List.of(interviewerTestData.getTechInterviewTime()));
             Interviewer secondInterviewer = interviewerTestData.getHrInterviewer();
-            InterviewerDTO techInterviewerDTO = interviewerTestData.getTestTechInterviewerDTO();
-            InterviewerDTO hrInterviewerDTO = interviewerTestData.getTestHrInterviewerDTO();
+            secondInterviewer.setInterviewTimes(List.of(interviewerTestData.getHrInterviewTime()));
+            InterviewerResponseDTO techInterviewerResponseDTO = interviewerTestData.getTestTechInterviewerDTO();
+            InterviewerResponseDTO hrInterviewerResponseDTO = interviewerTestData.getTestHrInterviewerDTO();
 
 
             doReturn(Arrays.asList(firstInterviewer, secondInterviewer)).when(interviewerRepository).findAll(Sort.by(Sort.Direction.DESC, "type"));
@@ -113,11 +124,11 @@ public class InterviewerCrudTest {
 
             String content = result.getResponse().getContentAsString();
 
-            List<InterviewerDTO> interviewerList = objectMapper.readValue(content, new TypeReference<List<InterviewerDTO>>() {
+            List<InterviewerResponseDTO> interviewerList = objectMapper.readValue(content, new TypeReference<List<InterviewerResponseDTO>>() {
             });
 
-            Assertions.assertEquals(interviewerList.get(0), techInterviewerDTO);
-            Assertions.assertEquals(interviewerList.get(1), hrInterviewerDTO);
+            Assertions.assertEquals(techInterviewerResponseDTO, interviewerList.get(0));
+            Assertions.assertEquals(hrInterviewerResponseDTO, interviewerList.get(1));
         }
     }
 
@@ -133,25 +144,30 @@ public class InterviewerCrudTest {
             Interviewer interviewer = interviewerTestData.getTechInterviewer();
             Interviewer savedInterviewer = interviewerTestData.getTechInterviewer();
             savedInterviewer.setId(null);
-            InterviewerDTO responseInterviewerDTO = interviewerTestData.getTestTechInterviewerDTO();
-            InterviewerDTO requestInterviewerDTO = interviewerTestData.getRequestInterviewerDTO();
+            savedInterviewer.setInterviews(null);
+            InterviewerResponseDTO responseInterviewerResponseDTO = interviewerTestData.getTestTechInterviewerDTO();
+            InterviewerRequestDTO requestInterviewerRequestDTO = interviewerTestData.getRequestInterviewerDTO();
             Subject subject = interviewerTestData.getTestSubject();
+            InterviewTime interviewTime = interviewerTestData.getTechInterviewTime();
 
             doReturn(interviewer).when(interviewerRepository).save(savedInterviewer);
-            doReturn(null).when(interviewerRepository).findByEmail(any());
-            doReturn(subject).when(subjectRepository).findSubjectByName("Java");
+            doReturn(Optional.empty()).when(interviewerRepository).findByEmail(any());
+            doReturn(Optional.of(subject)).when(subjectRepository).findSubjectByName("Java");
+            doReturn(Optional.of(interviewer)).when(interviewerRepository).findById(1L);
+            doReturn(Optional.of(interviewTime)).when(interviewTimeRepository).findByStartDateAndEndDate(LocalDateTime.parse("2021-05-01T10:00"), LocalDateTime.parse("2021-05-01T11:00"));
+
 
             MvcResult result = mockMvc.perform(post("/interviewer")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(requestInterviewerDTO)))
+                    .content(objectMapper.writeValueAsString(requestInterviewerRequestDTO)))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                     .andReturn();
 
             String content = result.getResponse().getContentAsString();
-            InterviewerDTO returnedInterviewerDTO = objectMapper.readValue(content, InterviewerDTO.class);
+            InterviewerResponseDTO returnedInterviewerResponseDTO = objectMapper.readValue(content, InterviewerResponseDTO.class);
 
-            Assertions.assertEquals(returnedInterviewerDTO, responseInterviewerDTO);
+            Assertions.assertEquals(responseInterviewerResponseDTO, returnedInterviewerResponseDTO);
         }
     }
 

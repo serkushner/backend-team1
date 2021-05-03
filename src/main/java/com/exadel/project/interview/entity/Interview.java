@@ -4,7 +4,6 @@ import com.exadel.project.internship.entity.Internship;
 import com.exadel.project.interviewer.entity.Interviewer;
 import com.exadel.project.trainee.entity.Trainee;
 import lombok.Data;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
@@ -38,5 +37,3 @@ public class Interview {
     @JoinColumn(name = "interviewer_id", nullable = false)
     private Interviewer interviewer;
 }
-
-

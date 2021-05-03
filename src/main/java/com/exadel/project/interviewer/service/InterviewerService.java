@@ -4,23 +4,27 @@ import com.exadel.project.common.exception.EntityAlreadyExistsException;
 import com.exadel.project.common.exception.EntityNotFoundException;
 import com.exadel.project.common.service.BaseService;
 import com.exadel.project.common.service.rsql.RsqlSpecification;
+import com.exadel.project.interview.dto.InterviewTimeRequestDTO;
+import com.exadel.project.interview.dto.InterviewTimeResponseDTO;
+import com.exadel.project.interviewer.dto.InterviewerRequestDTO;
+import com.exadel.project.interviewer.dto.InterviewerResponseDTO;
+import com.exadel.project.interviewer.entity.InterviewerType;
 import com.exadel.project.subject.entity.Subject;
-import com.exadel.project.interview.dto.InterviewTimeDTO;
 import com.exadel.project.interview.entity.InterviewTime;
 import com.exadel.project.interview.mapper.InterviewTimeMapper;
 import com.exadel.project.interview.service.InterviewTimeService;
-import com.exadel.project.interviewer.dto.InterviewerDTO;
 import com.exadel.project.interviewer.entity.Interviewer;
 import com.exadel.project.interviewer.mapper.InterviewerMapper;
 import com.exadel.project.interviewer.repository.InterviewerRepository;
 import com.exadel.project.subject.service.SubjectService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -34,8 +38,12 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
     private final InterviewTimeService interviewTimeService;
     private final InterviewTimeMapper interviewTimeMapper;
     private final SubjectService subjectService;
+    @Value("${interview.tech.duration}")
+    private long techInterviewDuration;
+    @Value("${interview.hr.duration}")
+    private long hrInterviewDuration;
 
-    public List<InterviewerDTO> getAll(String search, String sortFields) {
+    public List<InterviewerResponseDTO> getAll(String search, String sortFields) {
         Sort sort = getSort(sortFields);
         return super.findBySpecifications(search, sort)
                 .stream()
@@ -43,26 +51,26 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
                 .collect(Collectors.toList());
     }
 
-    public InterviewerDTO getById(Long id) throws EntityNotFoundException {
+    public InterviewerResponseDTO getById(Long id) throws EntityNotFoundException {
         return interviewerMapper.entityToDto(super.getEntityById(id));
     }
 
     @Transactional
-    public InterviewerDTO addInterviewer(InterviewerDTO interviewerDto) {
-        checkDoubleRegistration(interviewerDto.getEmail());
-        Interviewer interviewer = interviewerMapper.dtoToEntity(interviewerDto);
-        interviewer.setSubjects(getSubjectsByNames(interviewerDto.getSubjects()));
-        Interviewer savedInterviewer = interviewerRepository.save(interviewer);
-        addInterviewTimeToInterviewer(interviewerDto.getInterviewTimes(), savedInterviewer.getId());
-        return interviewerMapper.entityToDto(savedInterviewer);
+    public InterviewerResponseDTO addInterviewer(InterviewerRequestDTO interviewerRequestDTO) {
+        checkDoubleRegistration(interviewerRequestDTO.getEmail());
+        Interviewer interviewer = interviewerMapper.dtoToEntity(interviewerRequestDTO);
+        interviewer.setSubjects(getSubjectsByNames(interviewerRequestDTO.getSubjects()));
+        interviewer = interviewerRepository.save(interviewer);
+        addInterviewTimeToInterviewer(interviewerRequestDTO.getInterviewTimes(), interviewer.getId());
+        return interviewerMapper.entityToDto(interviewer);
     }
 
-    public InterviewerDTO updateInterviewer(Long id, InterviewerDTO interviewerDto) {
-        Interviewer interviewer = interviewerMapper.dtoToEntity(interviewerDto);
-        interviewer.setSubjects(getSubjectsByNames(interviewerDto.getSubjects()));
-        interviewer.setId(getEntityById(id).getId());
+    public InterviewerResponseDTO updateInterviewer(Long interviewerId, InterviewerRequestDTO interviewerRequestDTO) {
+        Interviewer interviewer = interviewerMapper.dtoToEntity(interviewerRequestDTO);
+        interviewer.setSubjects(getSubjectsByNames(interviewerRequestDTO.getSubjects()));
+        interviewer.setId(getEntityById(interviewerId).getId());
         Interviewer savedInterviewer = interviewerRepository.save(interviewer);
-        addInterviewTimeToInterviewer(interviewerDto.getInterviewTimes(), savedInterviewer.getId());
+        addInterviewTimeToInterviewer(interviewerRequestDTO.getInterviewTimes(), savedInterviewer.getId());
         return interviewerMapper.entityToDto(savedInterviewer);
     }
 
@@ -71,25 +79,24 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
     }
 
     @Transactional
-    public List<InterviewTimeDTO> addInterviewTimeToInterviewer(List<InterviewTimeDTO> interviewTimeDTOList, Long id){
-        for (int i = 0; i < interviewTimeDTOList.size(); i++) {
-            InterviewTimeDTO interviewTimeDTO = interviewTimeService.saveInterviewTime(interviewTimeDTOList.get(i));
-            InterviewTime interviewTime = interviewTimeMapper.dtoToEntity(interviewTimeDTO);
-            Interviewer interviewer = getEntityById(id);
-            if (interviewer.getInterviewTimes().contains(interviewTime)){
-                throw new EntityAlreadyExistsException();
-            }
-            interviewer.getInterviewTimes().add(interviewTime);
-            interviewTimeDTOList.set(i, interviewTimeDTO);
-        }
-        return interviewTimeDTOList;
+    public List<InterviewTimeResponseDTO> addInterviewTimeToInterviewer(List<InterviewTimeRequestDTO> interviewTimeRequestDTOS, Long interviewerId){
+        Interviewer interviewer = getEntityById(interviewerId);
+        long duration = interviewer.getType() == InterviewerType.TECH ? techInterviewDuration : hrInterviewDuration;
+        List<InterviewTime> interviewTimeList = interviewTimeRequestDTOS.stream()
+                .map(interviewTimeRequestDTO -> interviewTimeService.saveInterviewTime(interviewTimeRequestDTO, duration))
+                .map(interviewTimeMapper::dtoToEntity)
+                .collect(Collectors.toList());
+        List<InterviewTime> newInterviewTime = Stream.concat(interviewTimeList.stream(), interviewer.getInterviewTimes().stream())
+                .collect(Collectors.toList());
+        interviewer.setInterviewTimes(newInterviewTime);
+        return interviewTimeList.stream().map(interviewTimeMapper::entityToDto).collect(Collectors.toList());
     }
 
     @Transactional
-    public void deleteInterviewTimeFromInterviewer(InterviewTimeDTO interviewTimeDTO, Long id){
-        InterviewTime interviewTime = interviewTimeService.getEntityById(interviewTimeDTO.getId());
-        Interviewer interviewer = getEntityById(id);
-        interviewer.getInterviewTimes().remove(interviewTime);
+    public void deleteInterviewTimeFromInterviewer(List<Long> interviewTimeIds, Long interviewerId){
+        List<InterviewTime> interviewTimeList = interviewTimeService.getInterviewTimesByIds(interviewTimeIds);
+        Interviewer interviewer = getEntityById(interviewerId);
+        interviewer.getInterviewTimes().removeAll(interviewTimeList);
     }
 
     private List<Subject> getSubjectsByNames(List<String> subjectNames){
@@ -102,7 +109,7 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
     }
 
     public void checkDoubleRegistration(String email){
-        if (interviewerRepository.findByEmail(email) != null){
+        if (interviewerRepository.findByEmail(email).isPresent()){
             throw new EntityAlreadyExistsException();
         }
     }

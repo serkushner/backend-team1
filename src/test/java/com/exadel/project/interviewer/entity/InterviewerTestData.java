@@ -1,13 +1,12 @@
 package com.exadel.project.interviewer.entity;
 
-import com.exadel.project.interview.dto.InterviewDTO;
-import com.exadel.project.interview.dto.InterviewTimeDTO;
-import com.exadel.project.interview.entity.Interview;
+import com.exadel.project.interview.dto.InterviewTimeRequestDTO;
+import com.exadel.project.interview.dto.InterviewTimeResponseDTO;
 import com.exadel.project.interview.entity.InterviewTime;
-import com.exadel.project.interviewer.dto.InterviewerDTO;
+import com.exadel.project.interviewer.dto.InterviewerRequestDTO;
+import com.exadel.project.interviewer.dto.InterviewerResponseDTO;
 import com.exadel.project.subject.entity.Subject;
 import org.springframework.stereotype.Component;
-
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -24,62 +23,62 @@ public class InterviewerTestData {
         interviewer.setPhone("80554445588");
         interviewer.setType(InterviewerType.TECH);
         interviewer.setSkype("Vlad_tech");
-
         Subject subject = getTestSubject();
         interviewer.setSubjects(List.of(subject));
-
-        Interview interview = new Interview();
-        InterviewTime interviewTime = new InterviewTime();
-        interviewTime.setEndDate(LocalDateTime.now());
-        interview.setName("java tech interview with Vlad");
-        interview.setInterviewTime(interviewTime);
-        interviewer.setInterviews(List.of(interview));
 
         return interviewer;
     }
 
-    public InterviewerDTO getTestTechInterviewerDTO(){
-        InterviewerDTO interviewerDTO = new InterviewerDTO();
-        interviewerDTO.setId(1L);
-        interviewerDTO.setName("Vladimir");
-        interviewerDTO.setSurname("Mashkov");
-        interviewerDTO.setEmail("vlad.mashkov@gmail.com");
-        interviewerDTO.setPhone("80554445588");
-        interviewerDTO.setType(InterviewerType.TECH);
-        interviewerDTO.setSkype("Vlad_tech");
+    public InterviewerResponseDTO getTestTechInterviewerDTO(){
+        InterviewerResponseDTO interviewerResponseDTO = new InterviewerResponseDTO();
+        interviewerResponseDTO.setId(1L);
+        interviewerResponseDTO.setName("Vladimir");
+        interviewerResponseDTO.setSurname("Mashkov");
+        interviewerResponseDTO.setEmail("vlad.mashkov@gmail.com");
+        interviewerResponseDTO.setPhone("80554445588");
+        interviewerResponseDTO.setType(InterviewerType.TECH);
+        interviewerResponseDTO.setSkype("Vlad_tech");
 
         String subject = "Java";
-        interviewerDTO.setSubjects(List.of(subject));
+        interviewerResponseDTO.setSubjects(List.of(subject));
 
-        InterviewDTO interviewDTO = new InterviewDTO();
-        InterviewTimeDTO interviewTimeDTO = new InterviewTimeDTO();
-        interviewTimeDTO.setEndDate(LocalDateTime.now());
-        interviewDTO.setName("java tech interview with Vlad");
-        interviewDTO.setInterviewTime(interviewTimeDTO);
-        interviewerDTO.setInterviews(List.of(interviewDTO));
-        interviewerDTO.setInterviewTimes(Collections.emptyList());
+        InterviewTimeResponseDTO interviewTimeResponseDTO = new InterviewTimeResponseDTO();
+        interviewTimeResponseDTO.setStartDate(LocalDateTime.parse("2021-05-01T10:00"));
+        interviewTimeResponseDTO.setEndDate(LocalDateTime.parse("2021-05-01T11:00"));
+        interviewTimeResponseDTO.setId(1L);
+        interviewerResponseDTO.setInterviewTimes(List.of(interviewTimeResponseDTO));
 
-        return interviewerDTO;
+        return interviewerResponseDTO;
     }
 
-    public InterviewerDTO getTestHrInterviewerDTO(){
-        InterviewerDTO interviewerDTO = getTestTechInterviewerDTO();
-        interviewerDTO.setId(2L);
-        interviewerDTO.setName("Yulia");
-        interviewerDTO.setSurname("Serebrennikova");
-        interviewerDTO.setEmail("yulia_serebro@gmail.com");
-        interviewerDTO.setPhone("80559995522");
-        interviewerDTO.setType(InterviewerType.HR);
-        interviewerDTO.setSkype("Yulia_hr");
-        interviewerDTO.setSubjects(Collections.emptyList());
-        interviewerDTO.setInterviews(null);
-        return interviewerDTO;
+    public InterviewerResponseDTO getTestHrInterviewerDTO(){
+        InterviewerResponseDTO interviewerResponseDTO = getTestTechInterviewerDTO();
+        interviewerResponseDTO.setId(2L);
+        interviewerResponseDTO.setName("Yulia");
+        interviewerResponseDTO.setSurname("Serebrennikova");
+        interviewerResponseDTO.setEmail("yulia_serebro@gmail.com");
+        interviewerResponseDTO.setPhone("80559995522");
+        interviewerResponseDTO.setType(InterviewerType.HR);
+        interviewerResponseDTO.setSkype("Yulia_hr");
+        interviewerResponseDTO.setSubjects(Collections.emptyList());
+        interviewerResponseDTO.setInterviews(null);
+        return interviewerResponseDTO;
     }
 
-    public InterviewerDTO getRequestInterviewerDTO(){
-        InterviewerDTO interviewerDTO = getTestTechInterviewerDTO();
-        interviewerDTO.setId(null);
-        return interviewerDTO;
+    public InterviewerRequestDTO getRequestInterviewerDTO(){
+        InterviewerRequestDTO interviewerRequestDTO = new InterviewerRequestDTO();
+        InterviewTimeRequestDTO interviewTimeRequestDTO = new InterviewTimeRequestDTO();
+        interviewTimeRequestDTO.setStartDate(LocalDateTime.parse("2021-05-01T10:00"));
+        interviewerRequestDTO.setInterviewTimes(List.of(interviewTimeRequestDTO));
+        interviewerRequestDTO.setEmail("vlad.mashkov@gmail.com");
+        interviewerRequestDTO.setPhone("80554445588");
+        interviewerRequestDTO.setSurname("Mashkov");
+        String subject = "Java";
+        interviewerRequestDTO.setSubjects(List.of(subject));
+        interviewerRequestDTO.setSkype("Vlad_tech");
+        interviewerRequestDTO.setName("Vladimir");
+        interviewerRequestDTO.setType(InterviewerType.TECH);
+        return interviewerRequestDTO;
     }
 
     public Subject getTestSubject(){
@@ -98,7 +97,23 @@ public class InterviewerTestData {
         interviewer.setPhone("80559995522");
         interviewer.setType(InterviewerType.HR);
         interviewer.setSkype("Yulia_hr");
+        interviewer.setInterviewTimes(List.of());
         return interviewer;
     }
 
+    public InterviewTime getTechInterviewTime(){
+        InterviewTime interviewTime = new InterviewTime();
+        interviewTime.setId(1L);
+        interviewTime.setStartDate(LocalDateTime.parse("2021-05-01T10:00"));
+        interviewTime.setEndDate(LocalDateTime.parse("2021-05-01T11:00"));
+        return interviewTime;
+    }
+
+    public InterviewTime getHrInterviewTime(){
+        InterviewTime interviewTime = new InterviewTime();
+        interviewTime.setId(1L);
+        interviewTime.setStartDate(LocalDateTime.parse("2021-05-01T10:00"));
+        interviewTime.setEndDate(LocalDateTime.parse("2021-05-01T11:00"));
+        return interviewTime;
+    }
 }
