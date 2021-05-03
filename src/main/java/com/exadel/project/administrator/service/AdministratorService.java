@@ -10,15 +10,28 @@ import com.exadel.project.common.exception.EntityAlreadyExistsException;
 import com.exadel.project.common.exception.EntityNotFoundException;
 import com.exadel.project.common.service.rsql.RsqlSpecification;
 import com.exadel.project.common.service.BaseService;
+import com.exadel.project.configurations.KeycloakConfigProperties;
 import com.exadel.project.trainee.entity.Trainee;
 import com.exadel.project.trainee.repository.TraineeRepository;
 import com.exadel.project.trainee.service.TraineeService;
 import lombok.RequiredArgsConstructor;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,6 +43,7 @@ public class AdministratorService extends BaseService<Administrator, Administrat
     private final AdministratorRepository administratorRepository;
     private final TraineeRepository traineeRepository;
     private final TraineeService traineeService;
+    private final KeycloakConfigProperties keycloakConfigProperties;
 
     {
         defaultSortingField = "surname";
@@ -47,6 +61,10 @@ public class AdministratorService extends BaseService<Administrator, Administrat
                 .stream()
                 .map(administratorMapper::entityToDto)
                 .collect(Collectors.toList());
+    }
+
+    public AdministratorDto getAdministratorByLogin(String login) throws EntityNotFoundException {
+        return administratorMapper.entityToDto(findAdministratorByLogin(login));
     }
 
     public AdministratorDto getById(Long id) throws EntityNotFoundException {
@@ -87,6 +105,40 @@ public class AdministratorService extends BaseService<Administrator, Administrat
         trainee.setAdministrator(administrator);
         traineeRepository.save(trainee);
         return administratorMapper.entityToDto(administrator);
+    }
+
+    public boolean checkPassword(String login, String password) {
+        if (passwordEncoder.matches(password, findAdministratorByLogin(login).getPassword())) {
+            return true;
+        }
+        return false;
+    }
+
+    public String redirectToKeycloak (String username, String password) throws IOException, IOException {
+
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+
+        String url = keycloakConfigProperties.getAuthServerUrl() + "/realms/" + keycloakConfigProperties.getRealm() + "/protocol/openid-connect/token";
+
+        List nameValuePairs = new ArrayList();
+        nameValuePairs.add(new BasicNameValuePair("client_id", keycloakConfigProperties.getClientId()));
+        nameValuePairs.add(new BasicNameValuePair("username", username));
+        nameValuePairs.add(new BasicNameValuePair("grant_type", keycloakConfigProperties.getGrantType()));
+        nameValuePairs.add(new BasicNameValuePair("password", password));
+        nameValuePairs.add(new BasicNameValuePair("client_secret", keycloakConfigProperties.getClientSecret()));
+        HttpPost httpPost = new HttpPost(url);
+        httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, StandardCharsets.UTF_8));
+        CloseableHttpResponse response = httpClient.execute(httpPost);
+        HttpEntity entity = response.getEntity();
+
+        String result = EntityUtils.toString(entity);
+        httpClient.close();
+        return result;
+    }
+
+    private Administrator findAdministratorByLogin(String login) throws EntityNotFoundException {
+        return Optional.ofNullable(administratorRepository.findAdministratorByLogin(login))
+                .orElseThrow(() -> new EntityNotFoundException());
     }
 
 }

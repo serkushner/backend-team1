@@ -3,8 +3,7 @@ package com.exadel.project.administrator.dto;
 import lombok.Data;
 
 @Data
-public class RoleDto {
+public class ApproveDto {
 
-    private String role;
-
+    private Boolean isApproved;
 }
