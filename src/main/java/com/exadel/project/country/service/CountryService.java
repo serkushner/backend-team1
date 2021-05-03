@@ -7,6 +7,9 @@ import com.exadel.project.country.repository.CountryRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @AllArgsConstructor
 public class CountryService extends BaseService<Country, CountryRepository> {
@@ -19,5 +22,9 @@ public class CountryService extends BaseService<Country, CountryRepository> {
 
     public Country getByName(String name){
         return countryRepository.findCountryByName(name);
+    }
+
+    public List<String> getCountriesNames() {
+        return findBySpecifications(null, getSort("name")).stream().map(Country::getName).collect(Collectors.toList());
     }
 }
