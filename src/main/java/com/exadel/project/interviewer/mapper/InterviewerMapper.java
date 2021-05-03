@@ -8,7 +8,6 @@ import com.exadel.project.interviewer.entity.Interviewer;
 import com.exadel.project.subject.mapper.SubjectMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-
 import java.util.List;
 
 @Mapper(componentModel = "spring", uses = {InterviewMapper.class, SubjectMapper.class})
