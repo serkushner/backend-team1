@@ -126,7 +126,6 @@ public class AdministratorService extends BaseService<Administrator, Administrat
         nameValuePairs.add(new BasicNameValuePair("grant_type", keycloakConfigProperties.getGrantType()));
         nameValuePairs.add(new BasicNameValuePair("password", password));
         nameValuePairs.add(new BasicNameValuePair("client_secret", keycloakConfigProperties.getClientSecret()));
-        nameValuePairs.add(new BasicNameValuePair("scope", keycloakConfigProperties.getScope()));
         HttpPost httpPost = new HttpPost(url);
         httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, StandardCharsets.UTF_8));
         CloseableHttpResponse response = httpClient.execute(httpPost);

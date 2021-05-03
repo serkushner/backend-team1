@@ -18,13 +18,13 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final AdministratorRepository administratorRepository;
-    /*@Override
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
                 .antMatchers("/**")
                 .permitAll();
-    }*/
-    @Override
+    }
+    /*@Override
     protected void configure(HttpSecurity http) throws Exception {
 
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
@@ -42,5 +42,5 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .jwtAuthenticationConverter(jwtAuthenticationConverter);
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-    }
+    }*/
 }

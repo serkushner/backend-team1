@@ -16,6 +16,5 @@ public class KeycloakConfigProperties {
     private String grantType;
     private String realm;
     private String authServerUrl;
-    private String scope;
 
 }
