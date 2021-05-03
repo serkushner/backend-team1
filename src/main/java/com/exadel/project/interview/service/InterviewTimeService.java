@@ -14,7 +14,6 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class InterviewTimeService extends BaseService<InterviewTime, InterviewTimeRepository> {
-    private static final int INTERVIEW_DURATION_MINUTES = 60;
 
     private final InterviewTimeRepository interviewTimeRepository;
     private final InterviewTimeMapper interviewTimeMapper;
