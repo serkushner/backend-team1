@@ -7,9 +7,11 @@ import com.exadel.project.common.service.rsql.RsqlSpecification;
 import com.exadel.project.interview.dto.InterviewTimeRequestDTO;
 import com.exadel.project.interview.dto.InterviewTimeResponseDTO;
 import com.exadel.project.interview.entity.InterviewTime;
+import com.exadel.project.interview.mapper.InterviewTimeAppointmentMapper;
 import com.exadel.project.interview.mapper.InterviewTimeMapper;
+import com.exadel.project.interview.repository.InterviewTimeRepository;
 import com.exadel.project.interview.service.InterviewTimeService;
-import com.exadel.project.interviewer.dto.InterviewerAppointmentDTO;
+import com.exadel.project.interviewer.dto.InterviewTimeDTO;
 import com.exadel.project.interviewer.dto.InterviewerRequestDTO;
 import com.exadel.project.interviewer.dto.InterviewerResponseDTO;
 import com.exadel.project.interviewer.entity.Interviewer;
@@ -40,19 +42,23 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
     private final InterviewerRepository interviewerRepository;
     private final SubjectMapper subjectMapper;
     private final InterviewerAppointmentMapper interviewerAppointmentMapper;
+    private final InterviewTimeService interviewTimeService;
+    private final InterviewTimeMapper interviewTimeMapper;
+    private final InterviewTimeAppointmentMapper interviewTimeAppointmentMapper;
+    private final SubjectService subjectService;
+    private final InterviewTimeRepository interviewTimeRepository;
+
 
     {
         defaultSortingField = "type";
         defaultSortingDirection = "desc";
     }
+
     @Value("${interview.tech.duration}")
     private Long techInterviewDuration;
     @Value("${interview.hr.duration}")
     private Long hrInterviewDuration;
 
-    private final InterviewTimeService interviewTimeService;
-    private final InterviewTimeMapper interviewTimeMapper;
-    private final SubjectService subjectService;
 
     public List<InterviewerResponseDTO> getAll(String search, String sortFields) {
         Sort sort = getSort(sortFields);
@@ -62,21 +68,25 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
                 .collect(Collectors.toList());
     }
 
-    public List<InterviewerAppointmentDTO> getAllAvailable(InterviewerType interviewerType, List<SubjectDTO> subjectDTOS) {
+    public List<InterviewTimeDTO> getAllAvailable(InterviewerType interviewerType, List<SubjectDTO> subjectDTOS) {
         //TODO sorting by dates
 
         if (interviewerType == InterviewerType.TECH) {
             List<Subject> subjects = subjectDTOS.stream()
                     .map(subjectMapper::dtoToEntity)
                     .collect(Collectors.toList());
-            List<Interviewer> interviewers = interviewerRepository.findAllBySubjectsIn(Collections.singleton(subjects));
-            return interviewers.stream()
-                    .map(interviewerAppointmentMapper::entityToDto).filter(interviewerAppointmentDTO -> Optional.ofNullable(interviewerAppointmentDTO.getInterviewerTimes()).isPresent())
+            List<Interviewer> interviewers = interviewerRepository.findAllBySubjectsIn(Collections.singleton(subjects)).stream()
+                    .filter(interviewer -> Optional.ofNullable(interviewer.getInterviewTimes()).isPresent())
+                    .collect(Collectors.toList());
+            return interviewTimeRepository.findAllByInterviewersIn(Collections.singleton(interviewers)).stream()
+                    .map(interviewTimeAppointmentMapper::entityToDto)
                     .collect(Collectors.toList());
         } else {
-            return interviewerRepository.findAll().stream()
-                    .map(interviewerAppointmentMapper::entityToDto)
-                    .filter(interviewerAppointmentDTO -> Optional.ofNullable(interviewerAppointmentDTO.getInterviewerTimes()).isPresent())
+            List<Interviewer> interviewers = interviewerRepository.findAll().stream()
+                    .filter(interviewer -> Optional.ofNullable(interviewer.getInterviewTimes()).isPresent())
+                    .collect(Collectors.toList());
+            return interviewTimeRepository.findAllByInterviewersIn(Collections.singleton(interviewers)).stream()
+                    .map(interviewTimeAppointmentMapper::entityToDto)
                     .collect(Collectors.toList());
         }
     }
@@ -109,7 +119,7 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
     }
 
     @Transactional
-    public List<InterviewTimeResponseDTO> addInterviewTimeToInterviewer(List<InterviewTimeRequestDTO> interviewTimeRequestDTOS, Long interviewerId){
+    public List<InterviewTimeResponseDTO> addInterviewTimeToInterviewer(List<InterviewTimeRequestDTO> interviewTimeRequestDTOS, Long interviewerId) {
         Interviewer interviewer = getEntityById(interviewerId);
         Long duration = interviewer.getType() == InterviewerType.TECH ? techInterviewDuration : hrInterviewDuration;
         List<InterviewTime> interviewTimeList = interviewTimeRequestDTOS.stream()
@@ -122,13 +132,13 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
     }
 
     @Transactional
-    public void deleteInterviewTimeFromInterviewer(List<Long> interviewTimeIds, Long interviewerId){
+    public void deleteInterviewTimeFromInterviewer(List<Long> interviewTimeIds, Long interviewerId) {
         List<InterviewTime> interviewTimeList = interviewTimeService.getInterviewTimesByIds(interviewTimeIds);
         Interviewer interviewer = getEntityById(interviewerId);
         interviewer.getInterviewTimes().removeAll(interviewTimeList);
     }
 
-    private List<Subject> getSubjectsByNames(List<String> subjectNames){
+    private List<Subject> getSubjectsByNames(List<String> subjectNames) {
         return subjectNames.stream().map(subjectService::getByName).collect(Collectors.toList());
     }
 
@@ -137,8 +147,8 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
         throw new UnsupportedOperationException();
     }
 
-    public void checkDoubleRegistration(String email){
-        if (interviewerRepository.findByEmail(email).isPresent()){
+    public void checkDoubleRegistration(String email) {
+        if (interviewerRepository.findByEmail(email).isPresent()) {
             throw new EntityAlreadyExistsException();
         }
     }

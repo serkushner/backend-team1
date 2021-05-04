@@ -46,12 +46,12 @@ public class Interviewer {
     @OneToMany(mappedBy = "interviewer")
     private List<Interview> interviews;
 
-    @ManyToMany
-    @JoinTable(name = "interviewer_time",
-            joinColumns = @JoinColumn(name = "interviewer_id"),
-            inverseJoinColumns = @JoinColumn(name = "time_id")
-    )
-    private List<InterviewerTime> interviewerTimes = new ArrayList<>();
+//    @ManyToMany
+//    @JoinTable(name = "interviewer_time",
+//            joinColumns = @JoinColumn(name = "interviewer_id"),
+//            inverseJoinColumns = @JoinColumn(name = "time_id")
+//    )
+//    private List<InterviewerTime> interviewerTimes = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(name = "interviewer_subject",
@@ -60,7 +60,7 @@ public class Interviewer {
     )
     private List<Subject> subjects = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "interviewer_time",
             joinColumns = @JoinColumn(name = "interviewer_id"),
             inverseJoinColumns = @JoinColumn(name = "time_id"))

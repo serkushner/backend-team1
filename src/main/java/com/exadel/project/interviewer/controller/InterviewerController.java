@@ -3,7 +3,7 @@ package com.exadel.project.interviewer.controller;
 import com.exadel.project.common.exception.EntityNotFoundException;
 import com.exadel.project.interview.dto.InterviewTimeRequestDTO;
 import com.exadel.project.interview.dto.InterviewTimeResponseDTO;
-import com.exadel.project.interviewer.dto.InterviewerAppointmentDTO;
+import com.exadel.project.interviewer.dto.InterviewTimeDTO;
 import com.exadel.project.interviewer.dto.InterviewerRequestDTO;
 import com.exadel.project.interviewer.dto.InterviewerResponseDTO;
 import com.exadel.project.interviewer.entity.InterviewerType;
@@ -39,15 +39,15 @@ public class InterviewerController {
 
     @RequestMapping("/available/hr")
     @GetMapping
-    public ResponseEntity<List<InterviewerAppointmentDTO>> getAllAvailableHrInterviewers() {
-        List<InterviewerAppointmentDTO> dtoList = interviewerService.getAllAvailable(InterviewerType.HR, null);
+    public ResponseEntity<List<InterviewTimeDTO>> getAllAvailableHrInterviewers() {
+        List<InterviewTimeDTO> dtoList = interviewerService.getAllAvailable(InterviewerType.HR, null);
         return ResponseEntity.ok(dtoList);
     }
 
     @RequestMapping("/available/tech")
     @GetMapping
-    public ResponseEntity<List<InterviewerAppointmentDTO>> getAllAvailableTechInterviewers(@RequestBody List<SubjectDTO> subjects) {
-        List<InterviewerAppointmentDTO> dtoList = interviewerService.getAllAvailable(InterviewerType.TECH, null);
+    public ResponseEntity<List<InterviewTimeDTO>> getAllAvailableTechInterviewers(@RequestBody List<SubjectDTO> subjects) {
+        List<InterviewTimeDTO> dtoList = interviewerService.getAllAvailable(InterviewerType.TECH, subjects);
         return ResponseEntity.ok(dtoList);
     }
 

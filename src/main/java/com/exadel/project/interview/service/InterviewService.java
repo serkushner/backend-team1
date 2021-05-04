@@ -28,15 +28,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class InterviewService extends BaseService<Interview, InterviewRepository> {
 
-//traineeService defined in file [backend-team1/target/classes/com/exadel/project/trainee/service/TraineeService.class]
-//↑     ↓
-//|  additionalInfoService defined in file [backend-team1/target/classes/com/exadel/project/trainee/service/AdditionalInfoService.class]
-//↑     ↓
-//|  interviewService defined in file [backend-team1/target/classes/com/exadel/project/interview/service/InterviewService.class]
-//└─────┘
-//
-//
-
     private final InterviewMapper interviewMapper;
     private final  InterviewRepository interviewRepository;
     @Lazy

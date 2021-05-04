@@ -7,8 +7,7 @@ import java.util.List;
 
 @Data
 public class InterviewerAppointmentDTO {
-    private Long id;
+    private Long interviewerId;
     private String name;
     private String surname;
-    private List<InterviewTime> interviewerTimes;
 }
