@@ -1,10 +1,8 @@
 package com.exadel.project.interview.entity;
 
 import lombok.Data;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @Entity
@@ -20,7 +18,4 @@ public class InterviewTime {
 
     @Column(name = "end_date")
     private LocalDateTime endDate;
-
-    @OneToMany(mappedBy = "interviewTime")
-    private List<Interview> interviews;
 }

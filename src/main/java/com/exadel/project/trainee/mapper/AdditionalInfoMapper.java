@@ -61,9 +61,8 @@ public interface AdditionalInfoMapper {
     @Mapping(target = "startDate", expression = "java(additionalInfo.getInternship().getStartDate())")
     @Mapping(target = "endDate", expression = "java(additionalInfo.getInternship().getEndDate())")
     @Mapping(target = "subjects", expression = "java(getSubjectsName(additionalInfo.getInternship().getSubjects()))")
-    @Mapping(target = "techInterview", expression = "java(getInterviewDescription(\"tech\", interviews))")
-    @Mapping(target = "hrInterview", expression = "java(getInterviewDescription(\"hr\", interviews))")
-    TraineeHistoryDTO entityToTraineeHistoryDTO(AdditionalInfo additionalInfo, List<InterviewDTO> interviews);
+    @Mapping(target = "additionalInfoId", source = "id")
+    TraineeHistoryDTO entityToTraineeHistoryDTO(AdditionalInfo additionalInfo);
 
     default TraineeStatus getTraineeStatus(String traineeStatus){
         return traineeStatus == null ? TraineeStatus.REGISTERED : TraineeStatus.valueOf(traineeStatus);
