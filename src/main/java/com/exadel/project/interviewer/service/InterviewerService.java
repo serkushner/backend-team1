@@ -4,37 +4,33 @@ import com.exadel.project.common.exception.EntityAlreadyExistsException;
 import com.exadel.project.common.exception.EntityNotFoundException;
 import com.exadel.project.common.service.BaseService;
 import com.exadel.project.common.service.rsql.RsqlSpecification;
-import com.exadel.project.internship.entity.Subject;
-import com.exadel.project.interviewer.dto.InterviewerAppointmentDTO;
-import com.exadel.project.interviewer.dto.InterviewerDTO;
-import com.exadel.project.interviewer.dto.SubjectDTO;
 import com.exadel.project.interview.dto.InterviewTimeRequestDTO;
 import com.exadel.project.interview.dto.InterviewTimeResponseDTO;
-import com.exadel.project.interviewer.dto.InterviewerRequestDTO;
-import com.exadel.project.interviewer.dto.InterviewerResponseDTO;
-import com.exadel.project.interviewer.entity.InterviewerType;
-import com.exadel.project.subject.entity.Subject;
 import com.exadel.project.interview.entity.InterviewTime;
 import com.exadel.project.interview.mapper.InterviewTimeMapper;
 import com.exadel.project.interview.service.InterviewTimeService;
+import com.exadel.project.interviewer.dto.InterviewerAppointmentDTO;
+import com.exadel.project.interviewer.dto.InterviewerRequestDTO;
+import com.exadel.project.interviewer.dto.InterviewerResponseDTO;
 import com.exadel.project.interviewer.entity.Interviewer;
 import com.exadel.project.interviewer.entity.InterviewerType;
 import com.exadel.project.interviewer.mapper.InterviewerAppointmentMapper;
 import com.exadel.project.interviewer.mapper.InterviewerMapper;
-import com.exadel.project.interviewer.mapper.SubjectMapper;
+import com.exadel.project.subject.entity.Subject;
 import com.exadel.project.interviewer.repository.InterviewerRepository;
+import com.exadel.project.subject.dto.SubjectDTO;
+import com.exadel.project.subject.mapper.SubjectMapper;
 import com.exadel.project.subject.service.SubjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
-import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor

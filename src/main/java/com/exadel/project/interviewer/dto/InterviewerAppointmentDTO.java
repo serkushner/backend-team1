@@ -1,6 +1,6 @@
 package com.exadel.project.interviewer.dto;
 
-import com.exadel.project.interview.dto.InterviewTimeDTO;
+import com.exadel.project.interview.entity.InterviewTime;
 import lombok.Data;
 
 import java.util.List;
@@ -10,5 +10,5 @@ public class InterviewerAppointmentDTO {
     private Long id;
     private String name;
     private String surname;
-    private List<InterviewTimeDTO> interviewerTimes;
+    private List<InterviewTime> interviewerTimes;
 }

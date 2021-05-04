@@ -1,14 +1,15 @@
 package com.exadel.project.interviewer.mapper;
 
 import com.exadel.project.common.utils.MapperUtil;
-import com.exadel.project.interviewer.dto.InterviewerRequestDTO;
-import com.exadel.project.subject.entity.Subject;
 import com.exadel.project.interview.mapper.InterviewMapper;
+import com.exadel.project.interviewer.dto.InterviewerRequestDTO;
 import com.exadel.project.interviewer.dto.InterviewerResponseDTO;
 import com.exadel.project.interviewer.entity.Interviewer;
+import com.exadel.project.subject.entity.Subject;
 import com.exadel.project.subject.mapper.SubjectMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+
 import java.util.List;
 
 @Mapper(componentModel = "spring", uses = {InterviewMapper.class, SubjectMapper.class})

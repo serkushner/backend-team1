@@ -2,7 +2,6 @@ package com.exadel.project.interviewer.dto;
 
 import com.exadel.project.interview.dto.InterviewDTO;
 import com.exadel.project.interview.dto.InterviewTimeResponseDTO;
-import com.exadel.project.interviewer.entity.InterviewerType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

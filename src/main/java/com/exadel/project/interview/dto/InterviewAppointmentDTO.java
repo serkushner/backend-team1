@@ -7,5 +7,5 @@ public class InterviewAppointmentDTO {
     private Long traineeId;
     private Long internshipId;
     private Long interviewerId;
-    private InterviewTimeDTO interviewTime;
+    private InterviewTimeResponseDTO interviewTimeRequestDTO;
 }

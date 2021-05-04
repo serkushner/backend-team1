@@ -1,11 +1,9 @@
 package com.exadel.project.interviewer.entity;
 
-import com.exadel.project.interview.entity.Interview;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @Entity
