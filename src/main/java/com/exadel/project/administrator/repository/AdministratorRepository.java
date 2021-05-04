@@ -8,4 +8,6 @@ public interface AdministratorRepository extends JpaRepository<Administrator, Lo
 
     Administrator findAdministratorByEmail(String email);
 
+    Administrator findAdministratorByLogin(String login);
+
 }

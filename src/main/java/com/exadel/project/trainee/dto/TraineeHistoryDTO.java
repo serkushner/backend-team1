@@ -12,9 +12,5 @@ public class TraineeHistoryDTO {
     private LocalDate startDate;
     private LocalDate endDate;
     private List<String> subjects;
-    private String english;
-    private String cv;
-    private String github;
-    private String techInterview;
-    private String hrInterview;
+    private Long additionalInfoId;
 }

@@ -1,6 +1,10 @@
 package com.exadel.project.interviewer.controller;
 
 import com.exadel.project.common.exception.EntityNotFoundException;
+import com.exadel.project.interview.dto.InterviewTimeRequestDTO;
+import com.exadel.project.interview.dto.InterviewTimeResponseDTO;
+import com.exadel.project.interviewer.dto.InterviewerRequestDTO;
+import com.exadel.project.interviewer.dto.InterviewerResponseDTO;
 import com.exadel.project.internship.entity.Subject;
 import com.exadel.project.interviewer.dto.InterviewerAppointmentDTO;
 import com.exadel.project.interviewer.dto.InterviewerDTO;
@@ -11,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -21,18 +24,17 @@ public class InterviewerController {
 
     private final InterviewerService interviewerService;
 
-    private static final String ID = "/{id}";
+    private static final String ID = "/{interviewerId}";
 
     @GetMapping(value = ID)
-    public ResponseEntity<InterviewerDTO> getInterviewerById(@PathVariable Long id) throws EntityNotFoundException {
-        return ResponseEntity.ok(interviewerService.getById(id));
+    public ResponseEntity<InterviewerResponseDTO> getInterviewerById(@PathVariable Long interviewerId) throws EntityNotFoundException {
+        return ResponseEntity.ok(interviewerService.getById(interviewerId));
     }
 
-
     @GetMapping
-    public ResponseEntity<List<InterviewerDTO>> findBySpecification(@RequestParam(value = "search", required = false) String search,
-                                                                    @RequestParam(value = "sort", required = false) String sort) {
-        List<InterviewerDTO> dtoList = interviewerService.getAll(search, sort);
+    public ResponseEntity<List<InterviewerResponseDTO>> findBySpecification(@RequestParam(value = "search", required = false) String search,
+                                                                            @RequestParam(value = "sort", required = false) String sort) {
+        List<InterviewerResponseDTO> dtoList = interviewerService.getAll(search, sort);
         return ResponseEntity.ok(dtoList);
     }
 
@@ -51,19 +53,28 @@ public class InterviewerController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<InterviewerDTO> createInterviewer(@RequestBody InterviewerDTO dto) {
+    public ResponseEntity<InterviewerResponseDTO> createInterviewer(@RequestBody InterviewerRequestDTO dto) {
         return ResponseEntity.ok(interviewerService.addInterviewer(dto));
     }
 
     @PutMapping(value = ID, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<InterviewerDTO> updateInterviewer(@PathVariable Long id, @RequestBody InterviewerDTO dto) {
-        return ResponseEntity.ok(interviewerService.updateInterviewer(id, dto));
+    public ResponseEntity<InterviewerResponseDTO> updateInterviewer(@PathVariable Long interviewerId, @RequestBody InterviewerRequestDTO dto) {
+        return ResponseEntity.ok(interviewerService.updateInterviewer(interviewerId, dto));
     }
 
-    @DeleteMapping(value = ID + "/delete")
-    public ResponseEntity<Void> deleteInterviewer(@PathVariable Long id) {
-        interviewerService.deleteInterviewer(id);
+    @DeleteMapping(value = ID)
+    public ResponseEntity<Void> deleteInterviewer(@PathVariable Long interviewerId) {
+        interviewerService.deleteInterviewer(interviewerId);
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping(ID + "/time")
+    public ResponseEntity<List<InterviewTimeResponseDTO>> addTimeToInterviewer(@PathVariable Long interviewerId, @RequestBody List<InterviewTimeRequestDTO> interviewTimeRequestDTO) {
+        return ResponseEntity.ok(interviewerService.addInterviewTimeToInterviewer(interviewTimeRequestDTO, interviewerId));
+    }
+
+    @DeleteMapping(ID + "/time")
+    public ResponseEntity<Void> deleteTimeFromInterviewer(@PathVariable Long interviewerId, @RequestBody List<Long> interviewTimeIds) {
+        interviewerService.deleteInterviewTimeFromInterviewer(interviewTimeIds, interviewerId);
+    }
 }

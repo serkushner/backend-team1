@@ -26,6 +26,8 @@ databaseChangeLog:
   - include:
       file: db/changelog/changelog-add-administrators.yaml
   - include:
+      file: db/changelog/changelog-internship-add-format-and-status.yaml
+  - include:
       file: db/changelog/changelog-english-enum-to-trainee.yaml
   - include:
       file: db/changelog/changelog-change-trainee-status.yaml
