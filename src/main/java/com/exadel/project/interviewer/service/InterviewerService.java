@@ -53,11 +53,12 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
                     .collect(Collectors.toList());
             List<Interviewer> interviewers = interviewerRepository.findAllBySubjectsIn(Collections.singleton(subjects));
             return interviewers.stream()
-                    .map(interviewerAppointmentMapper::entityToDto).filter(interviewerAppointmentDTO -> Optional.ofNullable(interviewerAppointmentDTO.getInterviewTime()).isPresent())
+                    .map(interviewerAppointmentMapper::entityToDto).filter(interviewerAppointmentDTO -> Optional.ofNullable(interviewerAppointmentDTO.getInterviewerTimes()).isPresent())
                     .collect(Collectors.toList());
         } else {
             return interviewerRepository.findAll().stream()
-                    .map(interviewerAppointmentMapper::entityToDto).filter(interviewerAppointmentDTO -> Optional.ofNullable(interviewerAppointmentDTO.getInterviewTime()).isPresent())
+                    .map(interviewerAppointmentMapper::entityToDto)
+                    .filter(interviewerAppointmentDTO -> Optional.ofNullable(interviewerAppointmentDTO.getInterviewerTimes()).isPresent())
                     .collect(Collectors.toList());
         }
     }

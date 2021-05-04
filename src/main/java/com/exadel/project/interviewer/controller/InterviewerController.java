@@ -36,10 +36,17 @@ public class InterviewerController {
         return ResponseEntity.ok(dtoList);
     }
 
-    @RequestMapping("/available")
+    @RequestMapping("/available/hr")
     @GetMapping
-    public ResponseEntity<List<InterviewerAppointmentDTO>> getAllAvailableInterviewers(@RequestBody InterviewerType interviewerType, @RequestBody List<SubjectDTO> subjects) {
-        List<InterviewerAppointmentDTO> dtoList = interviewerService.getAllAvailable(interviewerType, subjects);
+    public ResponseEntity<List<InterviewerAppointmentDTO>> getAllAvailableHrInterviewers() {
+        List<InterviewerAppointmentDTO> dtoList = interviewerService.getAllAvailable(InterviewerType.HR, null);
+        return ResponseEntity.ok(dtoList);
+    }
+
+    @RequestMapping("/available/tech")
+    @GetMapping
+    public ResponseEntity<List<InterviewerAppointmentDTO>> getAllAvailableTechInterviewers(@RequestBody List<SubjectDTO> subjects) {
+        List<InterviewerAppointmentDTO> dtoList = interviewerService.getAllAvailable(InterviewerType.TECH, null);
         return ResponseEntity.ok(dtoList);
     }
 
