@@ -1,20 +1,18 @@
 package com.exadel.project.common.mailSender;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
 @Service
-public class EmailServiceImpl implements EmailService {
+public class EmailServiceLoggingMockImpl implements EmailService {
 
     private static final String NOREPLY_ADDRESS = "noreply_exadeltestsender@gmail.com";
-
-    @Autowired
-    private JavaMailSender emailSender;
+    private static final Logger logger = LoggerFactory.getLogger(EmailServiceLoggingMockImpl.class);
 
     private SimpleMailMessage template;
 
@@ -26,11 +24,13 @@ public class EmailServiceImpl implements EmailService {
 
     public void sendSimpleMessage(String to, String subject, String text) throws MailException {
             SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom(NOREPLY_ADDRESS);
-            message.setTo(to);
-            message.setSubject(subject);
-            message.setText(text);
-            emailSender.send(message);
+            StringBuffer stringBuffer = new StringBuffer();
+            String DELIMITER = "; \n";
+            stringBuffer.append("messageFromAddress: ").append(NOREPLY_ADDRESS).append(DELIMITER);
+            stringBuffer.append("messageToAddress: ").append(to).append(DELIMITER);
+            stringBuffer.append("messageTopic: ").append(subject).append(DELIMITER);
+            stringBuffer.append("messageText: ").append(text).append(DELIMITER);
+            logger.info(stringBuffer.toString());
     }
 
     @Override
