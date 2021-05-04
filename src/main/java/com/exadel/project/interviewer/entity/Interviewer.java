@@ -1,6 +1,7 @@
 package com.exadel.project.interviewer.entity;
 
 import com.exadel.project.interview.entity.Interview;
+import com.exadel.project.interview.entity.InterviewTime;
 import com.exadel.project.subject.entity.Subject;
 import lombok.Data;
 
@@ -51,4 +52,10 @@ public class Interviewer {
             inverseJoinColumns = @JoinColumn(name = "subject_id")
     )
     private List<Subject> subjects = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(name = "interviewer_time",
+            joinColumns = @JoinColumn(name = "interviewer_id"),
+            inverseJoinColumns = @JoinColumn(name = "time_id"))
+    private List<InterviewTime> interviewTimes = new ArrayList<>();
 }

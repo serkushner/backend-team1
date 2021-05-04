@@ -64,7 +64,7 @@ public class AdditionalInfoService extends BaseService<AdditionalInfo, Additiona
 
     public List<TraineeHistoryDTO> getTraineeHistory(Long id, String search, String sortFields){
         return additionalInfoRepository.findAllByTraineeId(id).stream()
-                .map(additionalInfo -> additionalInfoMapper.entityToTraineeHistoryDTO(additionalInfo, interviewService.getAllByTraineeAndInternshipId(additionalInfo.getTrainee().getId(), additionalInfo.getInternship().getId())))
+                .map(additionalInfoMapper::entityToTraineeHistoryDTO)
                 .collect(Collectors.toList());
     }
 
