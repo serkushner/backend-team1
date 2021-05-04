@@ -1,7 +1,7 @@
 package com.exadel.project.trainee.entity;
 
 import com.exadel.project.administrator.entity.Administrator;
-import com.exadel.project.internship.entity.Country;
+import com.exadel.project.country.entity.Country;
 import com.exadel.project.interview.entity.Interview;
 import lombok.Data;
 

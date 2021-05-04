@@ -3,7 +3,7 @@ package com.exadel.project.trainee.mapper;
 import com.exadel.project.administrator.entity.Administrator;
 import com.exadel.project.common.utils.MapperUtil;
 import com.exadel.project.internship.entity.Internship;
-import com.exadel.project.internship.entity.Subject;
+import com.exadel.project.subject.entity.Subject;
 import com.exadel.project.interview.dto.InterviewDTO;
 import com.exadel.project.interview.entity.Interview;
 import com.exadel.project.interviewer.entity.InterviewerType;
@@ -61,9 +61,8 @@ public interface AdditionalInfoMapper {
     @Mapping(target = "startDate", expression = "java(additionalInfo.getInternship().getStartDate())")
     @Mapping(target = "endDate", expression = "java(additionalInfo.getInternship().getEndDate())")
     @Mapping(target = "subjects", expression = "java(getSubjectsName(additionalInfo.getInternship().getSubjects()))")
-    @Mapping(target = "techInterview", expression = "java(getInterviewDescription(\"tech\", interviews))")
-    @Mapping(target = "hrInterview", expression = "java(getInterviewDescription(\"hr\", interviews))")
-    TraineeHistoryDTO entityToTraineeHistoryDTO(AdditionalInfo additionalInfo, List<InterviewDTO> interviews);
+    @Mapping(target = "additionalInfoId", source = "id")
+    TraineeHistoryDTO entityToTraineeHistoryDTO(AdditionalInfo additionalInfo);
 
     default TraineeStatus getTraineeStatus(String traineeStatus){
         return traineeStatus == null ? TraineeStatus.REGISTERED : TraineeStatus.valueOf(traineeStatus);

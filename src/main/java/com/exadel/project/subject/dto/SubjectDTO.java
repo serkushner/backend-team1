@@ -1,4 +1,4 @@
-package com.exadel.project.interviewer.dto;
+package com.exadel.project.subject.dto;
 
 import lombok.Data;
 
