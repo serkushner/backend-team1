@@ -41,3 +41,5 @@ databaseChangeLog:
       file: db/changelog/changelog-trainee-cascade-delete.yaml
   - include:
       file: db/changelog/changelog-country-code-can-be-null.yaml
+  - include:
+      file: db/changelog/changelog-delete-country-code-column.yaml
