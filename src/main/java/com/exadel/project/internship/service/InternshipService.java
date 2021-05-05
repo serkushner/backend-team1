@@ -139,7 +139,6 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
     public InternshipDetailsDTO addUnpostedInternship(InternshipDetailsDTO dto) throws EntityAlreadyExistsException {
         checkDoubleRegistration(dto);
         Internship internship = getInternshipFromInternshipDetailsDto(dto);
-        //TODO change on Published.VISIBLE_FOR_INTERNS for fast demo on ready landing
         internship.setPublished(Published.VISIBLE_FOR_ADMINS);
         Internship createdInternship = internshipRepository.save(internship);
         return internshipDetailsMapper.entityToDto(createdInternship);
@@ -163,8 +162,7 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
     }
 
     private void addInternshipTypeToInternship(String internshipTypeName, Internship internship) {
-        InternshipType type = internshipTypeService.getByName(internshipTypeName);
-        internship.setInternshipType(type);
+        internship.setInternshipType(internshipTypeService.getByName(internshipTypeName));
     }
 
     private void addCountriesToInternship(List<String> locations, Internship internship) {

@@ -22,10 +22,16 @@ public class InternshipTypeService extends BaseService<InternshipType, Internshi
     }
 
     public InternshipType getByName(String name) {
-        return internshipTypeRepository.findInternshipTypeByType(name);
+        return internshipTypeRepository.findInternshipTypeByType(name).orElseGet(() -> addByName(name));
     }
 
     public List<String> getAllInternshipTypesForInternshipForm() {
         return findBySpecifications(null, getSort("type")).stream().map(InternshipType::getType).collect(Collectors.toList());
+    }
+
+    public InternshipType addByName(String internshipTypeName) {
+        InternshipType internshipType = new InternshipType();
+        internshipType.setType(internshipTypeName);
+        return internshipTypeRepository.save(internshipType);
     }
 }
