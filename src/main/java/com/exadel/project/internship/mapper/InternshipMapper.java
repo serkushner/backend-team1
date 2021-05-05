@@ -17,6 +17,7 @@ public interface InternshipMapper {
     @Mapping(target = "subjects", expression = "java(getSubjectsNames(entity.getSubjects()))")
     @Mapping(target = "countries", expression = "java(getCountriesNames(entity.getCountries()))")
     @Mapping(target = "internshipType", expression = "java(getInternshipType(entity.getInternshipType()))")
+    @Mapping(source = "published", target = "publishedStatus")
     InternshipDTO entityToDto(Internship entity);
 
     default List<String> getSubjectsNames(List<Subject> subjects) {
