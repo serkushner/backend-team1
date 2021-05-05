@@ -12,6 +12,7 @@ import com.exadel.project.country.entity.Country;
 import com.exadel.project.country.service.CountryService;
 import com.exadel.project.internship.dto.InternshipDTO;
 import com.exadel.project.internship.dto.InternshipDetailsDTO;
+import com.exadel.project.internship.entity.Format;
 import com.exadel.project.internship.entity.Internship;
 import com.exadel.project.internship.entity.Published;
 import com.exadel.project.internship.mapper.InternshipDetailsMapper;
@@ -35,6 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -42,7 +44,7 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
 
     private static final Logger logger = LoggerFactory.getLogger(InternshipService.class);
     @Autowired
-    private final InternshipRepository repository;
+    private final InternshipRepository internshipRepository;
     private final InternshipMapper internshipMapper;
     private final CountryService countryService;
     private final SubjectService subjectService;
@@ -60,7 +62,7 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
         return internshipRsqlSpecification;
     }
 
-    //two public methods for interns and common access
+    //public methods for interns and common access
     public List<InternshipDTO> getAllPosted(String search, String sortFields) {
         String validatedSearch = validateSearchInGetAllPosted(search);
         return getAll(validatedSearch, sortFields);
@@ -99,6 +101,12 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
         return internshipDetailsMapper.entityToDto(getInternshipByIdAndPublished(id, Published.VISIBLE_FOR_INTERNS));
     }
 
+    public List<String> getAllFormatsOfInternships() {
+        return Stream.of(Format.values())
+                    .map(Format::name)
+                    .collect(Collectors.toList());
+    }
+
     //next public methods for admins only
     public InternshipDetailsDTO getById(Long id) throws EntityNotFoundException {
         return internshipDetailsMapper.entityToDto(getInternshipById(id));
@@ -114,17 +122,17 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
         Internship internshipFromDto = getInternshipFromInternshipDetailsDto(internshipDetailsDTO);
         internshipFromDto.setId(internship.getId());
         internshipFromDto.setPublished(Published.VISIBLE_FOR_ADMINS);
-        repository.save(internshipFromDto);
+        internshipRepository.save(internshipFromDto);
         return internshipDetailsMapper.entityToDto(internshipFromDto);
     }
 
     private Internship getInternshipByIdAndPublished(Long id, Published isPublished) {
-        return Optional.ofNullable(repository.findByIdAndPublished(id, isPublished))
+        return Optional.ofNullable(internshipRepository.findByIdAndPublished(id, isPublished))
                 .orElseThrow(EntityNotFoundException::new);
     }
 
     private Internship getInternshipById(Long id) {
-        return repository.findById(id).orElseThrow(EntityNotFoundException::new);
+        return internshipRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
     @Transactional
@@ -133,7 +141,7 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
         Internship internship = getInternshipFromInternshipDetailsDto(dto);
         //TODO change on Published.VISIBLE_FOR_INTERNS for fast demo on ready landing
         internship.setPublished(Published.VISIBLE_FOR_ADMINS);
-        Internship createdInternship = repository.save(internship);
+        Internship createdInternship = internshipRepository.save(internship);
         return internshipDetailsMapper.entityToDto(createdInternship);
     }
 
@@ -184,10 +192,10 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
     }
 
     public void deleteUnpostedInternshipById(Long id) throws EntityNotFoundException {
-        Optional<Internship> internship = repository.findById(id);
+        Optional<Internship> internship = internshipRepository.findById(id);
         internship.orElseThrow(EntityNotFoundException::new);
         if (internship.get().getPublished() == Published.VISIBLE_FOR_ADMINS) {
-            repository.delete(internship.get());
+            internshipRepository.delete(internship.get());
         } else {
             throw new PublishedStatusBadRequestException(
                     "Unavailable to delete the internship with the posted status.");
@@ -203,7 +211,7 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
         if (title == null || startDate == null) {
             throw new IllegalArgumentException();
         }
-        Internship internship = repository.findInternshipByTitleAndStartDate(title, startDate);
+        Internship internship = internshipRepository.findInternshipByTitleAndStartDate(title, startDate);
         if (internship != null){
             logger.debug("DoubleInternshipRegistrationException inside InternshipService");
             throw new DoubleInternshipRegistrationException();
@@ -236,7 +244,7 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
     private InternshipDetailsDTO changePublishedById(Long id, Published published) {
         Internship internship = getInternshipById(id);
         internship.setPublished(published);
-        repository.save(internship);
+        internshipRepository.save(internship);
         return internshipDetailsMapper.entityToDto(internship);
     }
 }
