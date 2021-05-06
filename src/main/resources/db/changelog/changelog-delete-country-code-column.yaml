@@ -1,0 +1,14 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: 20210505.[BE-79]-changelog-delete-country-code-column
+      author: shpaser3@yandex.ru
+      preConditions:
+        - onFail: MARK_RAN
+        - columnExists:
+            tableName: country
+            columnName: code
+      changes:
+        - dropColumn:
+            tableName: country
+            columnName: code
