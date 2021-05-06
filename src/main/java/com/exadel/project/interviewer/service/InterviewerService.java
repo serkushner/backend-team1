@@ -4,6 +4,7 @@ import com.exadel.project.common.exception.EntityAlreadyExistsException;
 import com.exadel.project.common.exception.EntityNotFoundException;
 import com.exadel.project.common.service.BaseService;
 import com.exadel.project.common.service.rsql.RsqlSpecification;
+import com.exadel.project.interview.dto.InterviewTimeAppointmentDTO;
 import com.exadel.project.interview.dto.InterviewTimeRequestDTO;
 import com.exadel.project.interview.dto.InterviewTimeResponseDTO;
 import com.exadel.project.interview.entity.InterviewTime;
@@ -11,7 +12,6 @@ import com.exadel.project.interview.mapper.InterviewTimeAppointmentMapper;
 import com.exadel.project.interview.mapper.InterviewTimeMapper;
 import com.exadel.project.interview.repository.InterviewTimeRepository;
 import com.exadel.project.interview.service.InterviewTimeService;
-import com.exadel.project.interviewer.dto.InterviewTimeDTO;
 import com.exadel.project.interviewer.dto.InterviewerRequestDTO;
 import com.exadel.project.interviewer.dto.InterviewerResponseDTO;
 import com.exadel.project.interviewer.entity.Interviewer;
@@ -68,7 +68,7 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
                 .collect(Collectors.toList());
     }
 
-    public List<InterviewTimeDTO> getAllAvailable(InterviewerType interviewerType, List<SubjectDTO> subjectDTOS) {
+    public List<InterviewTimeAppointmentDTO> getAllAvailable(InterviewerType interviewerType, List<SubjectDTO> subjectDTOS) {
         //TODO sorting by dates
 
         if (interviewerType == InterviewerType.TECH) {
@@ -84,7 +84,11 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
         } else {
             List<Interviewer> interviewers = interviewerRepository.findAll().stream()
                     .filter(interviewer -> Optional.ofNullable(interviewer.getInterviewTimes()).isPresent())
+                    .filter(interviewer -> interviewer.getType() == InterviewerType.HR)
                     .collect(Collectors.toList());
+            List<InterviewTime> allTimes = interviewTimeRepository.findAll();
+            List<InterviewTime> interviewTimes =  interviewTimeRepository.findAllByInterviewersIn(Collections.singleton(interviewers));
+
             return interviewTimeRepository.findAllByInterviewersIn(Collections.singleton(interviewers)).stream()
                     .map(interviewTimeAppointmentMapper::entityToDto)
                     .collect(Collectors.toList());
