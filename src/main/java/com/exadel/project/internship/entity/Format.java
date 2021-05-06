@@ -1,5 +1,5 @@
 package com.exadel.project.internship.entity;
 
 public enum Format {
-    ONLINE,OFFLINE
+    ONLINE, OFFLINE, BLENDED
 }

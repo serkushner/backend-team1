@@ -62,7 +62,6 @@ public class TraineeTestData {
         Country country = new Country();
         country.setId(1L);
         country.setName("Belarus");
-        country.setCode(911);
         return country;
     }
 
