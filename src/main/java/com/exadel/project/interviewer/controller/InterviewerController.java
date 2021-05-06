@@ -1,14 +1,12 @@
 package com.exadel.project.interviewer.controller;
 
 import com.exadel.project.common.exception.EntityNotFoundException;
+import com.exadel.project.interview.dto.InterviewTimeAppointmentDTO;
 import com.exadel.project.interview.dto.InterviewTimeRequestDTO;
 import com.exadel.project.interview.dto.InterviewTimeResponseDTO;
-import com.exadel.project.interview.dto.InterviewTimeAppointmentDTO;
 import com.exadel.project.interviewer.dto.InterviewerRequestDTO;
 import com.exadel.project.interviewer.dto.InterviewerResponseDTO;
-import com.exadel.project.interviewer.entity.InterviewerType;
 import com.exadel.project.interviewer.service.InterviewerService;
-import com.exadel.project.subject.dto.SubjectDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -37,20 +35,12 @@ public class InterviewerController {
         return ResponseEntity.ok(dtoList);
     }
 
-    @RequestMapping("/available/hr")
+    @RequestMapping("/available")
     @GetMapping
-    public ResponseEntity<List<InterviewTimeAppointmentDTO>> getAllAvailableHrInterviewers() {
-        List<InterviewTimeAppointmentDTO> dtoList = interviewerService.getAllAvailable(InterviewerType.HR, null);
+    public ResponseEntity<List<InterviewTimeAppointmentDTO>> getAllAvailableInterviewers(@RequestParam(value = "search") String search) {
+        List<InterviewTimeAppointmentDTO> dtoList = interviewerService.getAllAvailable(search);
         return ResponseEntity.ok(dtoList);
     }
-
-    @RequestMapping("/available/tech")
-    @GetMapping
-    public ResponseEntity<List<InterviewTimeAppointmentDTO>> getAllAvailableTechInterviewers(@RequestBody List<SubjectDTO> subjects) {
-        List<InterviewTimeAppointmentDTO> dtoList = interviewerService.getAllAvailable(InterviewerType.TECH, subjects);
-        return ResponseEntity.ok(dtoList);
-    }
-
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<InterviewerResponseDTO> createInterviewer(@RequestBody InterviewerRequestDTO dto) {
         return ResponseEntity.ok(interviewerService.addInterviewer(dto));

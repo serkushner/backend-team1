@@ -13,6 +13,4 @@ public interface InterviewTimeRepository extends JpaRepository<InterviewTime, Lo
     Optional<InterviewTime> findByStartDateAndEndDate(LocalDateTime startDate, LocalDateTime endDate);
 
     List<InterviewTime> findAllByIdIn(List<Long> ids);
-
-    List<InterviewTime> findAllByInterviewersIn(Collection<List<Interviewer>> interviewers);
 }

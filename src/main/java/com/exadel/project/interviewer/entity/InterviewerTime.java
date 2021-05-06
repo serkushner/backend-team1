@@ -21,7 +21,4 @@ public class InterviewerTime {
 
     @Column(name = "end_date")
     private LocalDateTime endDate;
-//
-//    @ManyToMany(mappedBy = "interviewTimes", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-//    private List<Interviewer> interviewers = new ArrayList<>();
 }

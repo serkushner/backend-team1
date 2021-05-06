@@ -20,7 +20,6 @@ import com.exadel.project.interviewer.mapper.InterviewerAppointmentMapper;
 import com.exadel.project.interviewer.mapper.InterviewerMapper;
 import com.exadel.project.subject.entity.Subject;
 import com.exadel.project.interviewer.repository.InterviewerRepository;
-import com.exadel.project.subject.dto.SubjectDTO;
 import com.exadel.project.subject.mapper.SubjectMapper;
 import com.exadel.project.subject.service.SubjectService;
 import lombok.RequiredArgsConstructor;
@@ -29,9 +28,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -68,31 +65,24 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
                 .collect(Collectors.toList());
     }
 
-    public List<InterviewTimeAppointmentDTO> getAllAvailable(InterviewerType interviewerType, List<SubjectDTO> subjectDTOS) {
-        //TODO sorting by dates
+    public List<InterviewTimeAppointmentDTO> getAllAvailable(String search) {
+        Sort sort = getSort(defaultSortingField);
+        List<Interviewer> interviewers = findBySpecifications(search, sort);
+        Map<InterviewTime, List<Interviewer>> interviewTimes = new TreeMap<>(Comparator.comparing(InterviewTime::getStartDate));
 
-        if (interviewerType == InterviewerType.TECH) {
-            List<Subject> subjects = subjectDTOS.stream()
-                    .map(subjectMapper::dtoToEntity)
-                    .collect(Collectors.toList());
-            List<Interviewer> interviewers = interviewerRepository.findAllBySubjectsIn(Collections.singleton(subjects)).stream()
-                    .filter(interviewer -> Optional.ofNullable(interviewer.getInterviewTimes()).isPresent())
-                    .collect(Collectors.toList());
-            return interviewTimeRepository.findAllByInterviewersIn(Collections.singleton(interviewers)).stream()
-                    .map(interviewTimeAppointmentMapper::entityToDto)
-                    .collect(Collectors.toList());
-        } else {
-            List<Interviewer> interviewers = interviewerRepository.findAll().stream()
-                    .filter(interviewer -> Optional.ofNullable(interviewer.getInterviewTimes()).isPresent())
-                    .filter(interviewer -> interviewer.getType() == InterviewerType.HR)
-                    .collect(Collectors.toList());
-            List<InterviewTime> allTimes = interviewTimeRepository.findAll();
-            List<InterviewTime> interviewTimes =  interviewTimeRepository.findAllByInterviewersIn(Collections.singleton(interviewers));
+        interviewers
+                .forEach(interviewer -> interviewer.getInterviewTimes()
+                        .forEach(interviewTime -> {
+                            if (interviewTimes.containsKey(interviewTime)){
+                                interviewTimes.get(interviewTime).add(interviewer);
+                            }else {
+                                List<Interviewer> list = new ArrayList<>();
+                                list.add(interviewer);
+                                interviewTimes.put(interviewTime, list);
+                            }
+                        }));
 
-            return interviewTimeRepository.findAllByInterviewersIn(Collections.singleton(interviewers)).stream()
-                    .map(interviewTimeAppointmentMapper::entityToDto)
-                    .collect(Collectors.toList());
-        }
+        return interviewTimes.keySet().stream().map(interviewTime -> interviewTimeAppointmentMapper.entityToDto(interviewTime,interviewTimes.get(interviewTime))).collect(Collectors.toList());
     }
 
     public InterviewerResponseDTO getById(Long id) throws EntityNotFoundException {

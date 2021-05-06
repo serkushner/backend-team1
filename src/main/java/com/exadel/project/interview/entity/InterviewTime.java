@@ -1,11 +1,10 @@
 package com.exadel.project.interview.entity;
 
-import com.exadel.project.interviewer.entity.Interviewer;
 import lombok.Data;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+
 
 @Data
 @Entity
@@ -21,17 +20,5 @@ public class InterviewTime {
 
     @Column(name = "end_date")
     private LocalDateTime endDate;
-
-    @ManyToMany(mappedBy = "interviewTimes")
-    private List<Interviewer> interviewers = new ArrayList<>();
-
-    @Override
-    public String toString() {
-        return "InterviewTime{" +
-                "id=" + id +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                '}';
-    }
 }
 
