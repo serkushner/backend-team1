@@ -17,5 +17,6 @@ public class ListenerService {
     @TransactionalEventListener
     public void onInternshipPublished(InternshipPublishedEvent event){
         List<String> emails = traineeService.getTraineesEmailsByHistorySubjects(event.getSubjects());
+        //TODO sent notifications to emails through email-sender
     }
 }
