@@ -87,16 +87,8 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
                 .map(interviewTimeRequestDTO -> interviewTimeService.saveInterviewTime(interviewTimeRequestDTO, duration))
                 .map(interviewTimeMapper::dtoToEntity)
                 .collect(Collectors.toList());
-        interviewTimeList.removeAll(interviewer.getInterviewTimes());
-        interviewer.getInterviewTimes().addAll(interviewTimeList);
+        interviewer.setInterviewTimes(interviewTimeList);
         return interviewTimeList.stream().map(interviewTimeMapper::entityToDto).collect(Collectors.toList());
-    }
-
-    @Transactional
-    public void deleteInterviewTimeFromInterviewer(List<Long> interviewTimeIds, Long interviewerId){
-        List<InterviewTime> interviewTimeList = interviewTimeService.getInterviewTimesByIds(interviewTimeIds);
-        Interviewer interviewer = getEntityById(interviewerId);
-        interviewer.getInterviewTimes().removeAll(interviewTimeList);
     }
 
     private List<Subject> getSubjectsByNames(List<String> subjectNames){
