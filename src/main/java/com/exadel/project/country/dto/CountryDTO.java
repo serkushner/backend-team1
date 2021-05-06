@@ -4,7 +4,5 @@ import lombok.Data;
 
 @Data
 public class CountryDTO {
-    Long id;
     String name;
-    Integer code;
 }

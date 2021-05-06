@@ -1,0 +1,21 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: 20210503.[BE-79]-change-country-code-can-be-null
+      author: shpaser3@yandex.ru
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: "NO"
+            sql: select c.is_nullable from information_schema.columns c
+                  where c.table_schema not in ('mysql', 'sys', 'information_schema', 'performance_schema')
+                        and c.table_schema = 'exadel_internships'
+                        and c.table_name = 'country'
+                        and c.column_name = 'code'
+      changes:
+        - sqlFile:
+            dbms: 'mysql'
+            endDelimiter: "@@"
+            splitStatements: false
+            path: db/sql/change-country-table-code-can-be-null.sql
+            stripComments: false
