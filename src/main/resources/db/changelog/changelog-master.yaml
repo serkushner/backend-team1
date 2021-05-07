@@ -37,6 +37,9 @@ databaseChangeLog:
       file: db/changelog/changelog-interview-traineeid-can-be-null.yaml
   - include:
       file: db/changelog/changelog-add-relation-interview-to-internship.yaml
-
   - include:
       file: db/changelog/changelog-trainee-cascade-delete.yaml
+  - include:
+      file: db/changelog/changelog-country-code-can-be-null.yaml
+  - include:
+      file: db/changelog/changelog-delete-country-code-column.yaml

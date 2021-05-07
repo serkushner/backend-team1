@@ -2,6 +2,7 @@ package com.exadel.project.internship.dto;
 
 
 import com.exadel.project.internship.entity.Format;
+import com.exadel.project.internship.entity.Published;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -18,4 +19,5 @@ public class InternshipDTO {
     private String description;
     private String internshipType;
     private String image;
+    private Published publishedStatus;
 }

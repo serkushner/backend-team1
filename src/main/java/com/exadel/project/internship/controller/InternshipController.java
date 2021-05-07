@@ -37,10 +37,9 @@ public class InternshipController {
         return ResponseEntity.ok(internshipService.getPostedById(id));
     }
 
-    @PatchMapping(value = ADMINS + ID)
-    public ResponseEntity<InternshipDetailsDTO> findAndChangeInternshipPublishedStatusById(
-            @PathVariable ("id") Long id, @RequestParam(value = "published", required = true) String published) throws EntityNotFoundException {
-        return ResponseEntity.ok(internshipService.changeInternshipPublishedStatusById(id, published));
+    @GetMapping(value = "internship-format")
+    public ResponseEntity<List<String>> findAllFormats() {
+        return ResponseEntity.ok(internshipService.getAllFormatsOfInternships());
     }
 
     @GetMapping(ADMINS)
@@ -48,6 +47,12 @@ public class InternshipController {
             @RequestParam(value = "search", required = false) String search,
             @RequestParam(value = "sort", required = false) String sort) {
         return ResponseEntity.ok(internshipService.getAll(search, sort));
+    }
+
+    @PatchMapping(value = ADMINS + ID)
+    public ResponseEntity<InternshipDetailsDTO> findAndChangeInternshipPublishedStatusById(
+            @PathVariable ("id") Long id, @RequestParam(value = "published", required = true) String published) throws EntityNotFoundException {
+        return ResponseEntity.ok(internshipService.changeInternshipPublishedStatusById(id, published));
     }
 
     @GetMapping(value = ADMINS + ID)
