@@ -9,6 +9,7 @@ import com.exadel.project.interview.dto.InterviewTimeResponseDTO;
 import com.exadel.project.interviewer.dto.InterviewerRequestDTO;
 import com.exadel.project.interviewer.dto.InterviewerResponseDTO;
 import com.exadel.project.interviewer.entity.InterviewerType;
+import com.exadel.project.interviewer.service.rsql.InterviewerRsqlSpecification;
 import com.exadel.project.subject.entity.Subject;
 import com.exadel.project.interview.entity.InterviewTime;
 import com.exadel.project.interview.mapper.InterviewTimeMapper;
@@ -43,6 +44,7 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
     private final InterviewTimeService interviewTimeService;
     private final InterviewTimeMapper interviewTimeMapper;
     private final SubjectService subjectService;
+    private final InterviewerRsqlSpecification interviewerRsqlSpecification;
 
     public List<InterviewerResponseDTO> getAll(String search, String sortFields) {
         Sort sort = getSort(sortFields);
@@ -87,16 +89,8 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
                 .map(interviewTimeRequestDTO -> interviewTimeService.saveInterviewTime(interviewTimeRequestDTO, duration))
                 .map(interviewTimeMapper::dtoToEntity)
                 .collect(Collectors.toList());
-        interviewTimeList.removeAll(interviewer.getInterviewTimes());
-        interviewer.getInterviewTimes().addAll(interviewTimeList);
+        interviewer.setInterviewTimes(interviewTimeList);
         return interviewTimeList.stream().map(interviewTimeMapper::entityToDto).collect(Collectors.toList());
-    }
-
-    @Transactional
-    public void deleteInterviewTimeFromInterviewer(List<Long> interviewTimeIds, Long interviewerId){
-        List<InterviewTime> interviewTimeList = interviewTimeService.getInterviewTimesByIds(interviewTimeIds);
-        Interviewer interviewer = getEntityById(interviewerId);
-        interviewer.getInterviewTimes().removeAll(interviewTimeList);
     }
 
     private List<Subject> getSubjectsByNames(List<String> subjectNames){
@@ -105,7 +99,7 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
 
     @Override
     public RsqlSpecification getRsqlSpecification() {
-        throw new UnsupportedOperationException();
+        return interviewerRsqlSpecification;
     }
 
     public void checkDoubleRegistration(String email){
