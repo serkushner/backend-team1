@@ -7,6 +7,11 @@ import com.exadel.project.common.service.rsql.RsqlSpecification;
 import com.exadel.project.interview.dto.InterviewTimeAppointmentDTO;
 import com.exadel.project.interview.dto.InterviewTimeRequestDTO;
 import com.exadel.project.interview.dto.InterviewTimeResponseDTO;
+import com.exadel.project.interviewer.dto.InterviewerRequestDTO;
+import com.exadel.project.interviewer.dto.InterviewerResponseDTO;
+import com.exadel.project.interviewer.entity.InterviewerType;
+import com.exadel.project.interviewer.service.rsql.InterviewerRsqlSpecification;
+import com.exadel.project.subject.entity.Subject;
 import com.exadel.project.interview.entity.InterviewTime;
 import com.exadel.project.interview.mapper.InterviewTimeAppointmentMapper;
 import com.exadel.project.interview.mapper.InterviewTimeMapper;
@@ -30,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -44,6 +50,7 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
     private final InterviewTimeAppointmentMapper interviewTimeAppointmentMapper;
     private final SubjectService subjectService;
     private final InterviewTimeRepository interviewTimeRepository;
+    private final InterviewerRsqlSpecification interviewerRsqlSpecification;
 
 
     {
@@ -113,36 +120,28 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
     }
 
     @Transactional
-    public List<InterviewTimeResponseDTO> addInterviewTimeToInterviewer(List<InterviewTimeRequestDTO> interviewTimeRequestDTOS, Long interviewerId) {
+    public List<InterviewTimeResponseDTO> addInterviewTimeToInterviewer(List<InterviewTimeRequestDTO> interviewTimeRequestDTOS, Long interviewerId){
         Interviewer interviewer = getEntityById(interviewerId);
         Long duration = interviewer.getType() == InterviewerType.TECH ? techInterviewDuration : hrInterviewDuration;
         List<InterviewTime> interviewTimeList = interviewTimeRequestDTOS.stream()
                 .map(interviewTimeRequestDTO -> interviewTimeService.saveInterviewTime(interviewTimeRequestDTO, duration))
                 .map(interviewTimeMapper::dtoToEntity)
                 .collect(Collectors.toList());
-        interviewTimeList.removeAll(interviewer.getInterviewTimes());
-        interviewer.getInterviewTimes().addAll(interviewTimeList);
+        interviewer.setInterviewTimes(interviewTimeList);
         return interviewTimeList.stream().map(interviewTimeMapper::entityToDto).collect(Collectors.toList());
     }
 
-    @Transactional
-    public void deleteInterviewTimeFromInterviewer(List<Long> interviewTimeIds, Long interviewerId) {
-        List<InterviewTime> interviewTimeList = interviewTimeService.getInterviewTimesByIds(interviewTimeIds);
-        Interviewer interviewer = getEntityById(interviewerId);
-        interviewer.getInterviewTimes().removeAll(interviewTimeList);
-    }
-
-    private List<Subject> getSubjectsByNames(List<String> subjectNames) {
+    private List<Subject> getSubjectsByNames(List<String> subjectNames){
         return subjectNames.stream().map(subjectService::getByName).collect(Collectors.toList());
     }
 
     @Override
     public RsqlSpecification getRsqlSpecification() {
-        throw new UnsupportedOperationException();
+        return interviewerRsqlSpecification;
     }
 
-    public void checkDoubleRegistration(String email) {
-        if (interviewerRepository.findByEmail(email).isPresent()) {
+    public void checkDoubleRegistration(String email){
+        if (interviewerRepository.findByEmail(email).isPresent()){
             throw new EntityAlreadyExistsException();
         }
     }

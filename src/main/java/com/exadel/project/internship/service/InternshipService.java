@@ -1,7 +1,7 @@
 package com.exadel.project.internship.service;
 
-import com.exadel.project.InternshipType.entity.InternshipType;
 import com.exadel.project.InternshipType.service.InternshipTypeService;
+import com.exadel.project.internship.event.InternshipPublishedEvent;
 import com.exadel.project.common.exception.DoubleInternshipRegistrationException;
 import com.exadel.project.common.exception.EntityAlreadyExistsException;
 import com.exadel.project.common.exception.EntityNotFoundException;
@@ -27,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,6 +53,7 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
     private final InternshipTypeService internshipTypeService;
     private final InternshipDetailsMapper internshipDetailsMapper;
     private final InternshipRsqlSpecification internshipRsqlSpecification;
+    private final ApplicationEventPublisher applicationEventPublisher;
     {
         defaultSortingField = "startDate";
         defaultSortingDirection = "desc";
@@ -230,17 +232,20 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
         if (!isVisibleForAdmins) {
             isVisibleForInterns = Published.VISIBLE_FOR_INTERNS.toString().equals(published);
         }
+        Internship internship = getInternshipById(id);
         if (isVisibleForAdmins) {
-            return changePublishedById(id, Published.VISIBLE_FOR_ADMINS);
+            return changePublishedById(internship, Published.VISIBLE_FOR_ADMINS);
         } else if (isVisibleForInterns) {
-            return changePublishedById(id, Published.VISIBLE_FOR_INTERNS);
+            InternshipDetailsDTO internshipDetailsDTO = changePublishedById(internship, Published.VISIBLE_FOR_INTERNS);
+            InternshipPublishedEvent internshipPublishedEvent = new InternshipPublishedEvent(this, internship.getSubjects());
+            applicationEventPublisher.publishEvent(internshipPublishedEvent);
+            return internshipDetailsDTO;
         } else {
             throw new IllegalArgumentException();
         }
     }
 
-    private InternshipDetailsDTO changePublishedById(Long id, Published published) {
-        Internship internship = getInternshipById(id);
+    private InternshipDetailsDTO changePublishedById(Internship internship, Published published) {
         internship.setPublished(published);
         internshipRepository.save(internship);
         return internshipDetailsMapper.entityToDto(internship);

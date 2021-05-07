@@ -6,8 +6,8 @@ import com.exadel.project.country.entity.Country;
 import com.exadel.project.country.service.CountryService;
 import com.exadel.project.internship.entity.Internship;
 import com.exadel.project.internship.service.InternshipService;
+import com.exadel.project.subject.entity.Subject;
 import com.exadel.project.trainee.dto.TraineeDTO;
-import com.exadel.project.trainee.dto.TraineeToAdminDTO;
 import com.exadel.project.trainee.entity.*;
 import com.exadel.project.trainee.mapper.TraineeMapper;
 import com.exadel.project.trainee.repository.AdditionalInfoRepository;
@@ -16,10 +16,12 @@ import com.exadel.project.trainee.validator.TraineeValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -93,4 +95,12 @@ public class TraineeService extends BaseService<Trainee, TraineeRepository> {
         return interviewPeriods;
     }
 
+    public List<String> getTraineesEmailsByHistorySubjects(List<Subject> subjects){
+        return additionalInfoRepository.findAllByTrainee_RecipientAndInternship_SubjectsIn(true, subjects)
+                .stream()
+                .map(AdditionalInfo::getTrainee)
+                .map(Trainee::getEmail)
+                .distinct()
+                .collect(Collectors.toList());
+    }
 }

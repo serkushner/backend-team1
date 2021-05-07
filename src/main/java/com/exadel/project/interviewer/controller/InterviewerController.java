@@ -1,6 +1,7 @@
 package com.exadel.project.interviewer.controller;
 
 import com.exadel.project.common.exception.EntityNotFoundException;
+import com.exadel.project.interview.dto.InterviewTimeListRequestDTO;
 import com.exadel.project.interview.dto.InterviewTimeAppointmentDTO;
 import com.exadel.project.interview.dto.InterviewTimeRequestDTO;
 import com.exadel.project.interview.dto.InterviewTimeResponseDTO;
@@ -11,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -58,13 +58,7 @@ public class InterviewerController {
     }
 
     @PostMapping(ID + "/time")
-    public ResponseEntity<List<InterviewTimeResponseDTO>> addTimeToInterviewer(@PathVariable Long interviewerId, @RequestBody List<InterviewTimeRequestDTO> interviewTimeRequestDTO) {
-        return ResponseEntity.ok(interviewerService.addInterviewTimeToInterviewer(interviewTimeRequestDTO, interviewerId));
-    }
-
-    @DeleteMapping(ID + "/time")
-    public ResponseEntity<Void> deleteTimeFromInterviewer(@PathVariable Long interviewerId, @RequestBody List<Long> interviewTimeIds) {
-        interviewerService.deleteInterviewTimeFromInterviewer(interviewTimeIds, interviewerId);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<List<InterviewTimeResponseDTO>> addTimeToInterviewer(@PathVariable Long interviewerId, @RequestBody InterviewTimeListRequestDTO interviewTimeListRequestDTO){
+        return ResponseEntity.ok(interviewerService.addInterviewTimeToInterviewer(interviewTimeListRequestDTO.getInterviewTimes(), interviewerId));
     }
 }
