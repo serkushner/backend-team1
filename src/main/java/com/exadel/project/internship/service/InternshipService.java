@@ -239,6 +239,7 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
         } else if (isVisibleForInterns) {
             InternshipDetailsDTO internshipDetailsDTO = changePublishedById(internship, Published.VISIBLE_FOR_INTERNS);
             InternshipPublishedEvent internshipPublishedEvent = new InternshipPublishedEvent(this, internship.getSubjects());
+            applicationEventPublisher.publishEvent(internshipPublishedEvent);
             return internshipDetailsDTO;
         } else {
             throw new IllegalArgumentException();
