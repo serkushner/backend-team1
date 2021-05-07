@@ -14,9 +14,6 @@ public class Country {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "code", nullable = false)
-    private int code;
-
     @NotBlank(message = "Name of country should not be empty")
     @Column(name = "name")
     private String name;

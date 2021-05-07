@@ -21,6 +21,7 @@ public interface InternshipDetailsMapper {
     @Mapping(target = "countries", expression = "java(getCountriesNames(entity.getCountries()))")
     @Mapping(target = "internshipType", expression = "java(getInternshipType(entity.getInternshipType()))")
     @Mapping(target = "skills", expression = "java(getSkillsNames(entity.getSkills()))")
+    @Mapping(source = "published", target = "publishedStatus")
     InternshipDetailsDTO entityToDto(Internship entity);
 
     @Mapping(target = "countries", ignore = true)
@@ -28,14 +29,15 @@ public interface InternshipDetailsMapper {
     @Mapping(target = "skills", ignore = true)
     @Mapping(target = "internshipType", ignore = true)
     @Mapping(target = "id", ignore = true)
+    @Mapping(source = "publishedStatus", target = "published")
     Internship dtoToEntity(InternshipDetailsDTO dto);
 
     default List<String> getSubjectsNames(List<Subject> subjects) {
         return MapperUtil.getStrings(subjects, Subject::getName);
     }
 
-    default List<String> getCountriesNames(List<Country> subjects) {
-        return MapperUtil.getStrings(subjects, Country::getName);
+    default List<String> getCountriesNames(List<Country> countries) {
+        return MapperUtil.getStrings(countries, Country::getName);
     }
 
     default String getInternshipType(InternshipType internshipType) {
