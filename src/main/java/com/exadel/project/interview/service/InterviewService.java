@@ -4,16 +4,14 @@ import com.exadel.project.common.exception.EntityAlreadyExistsException;
 import com.exadel.project.common.exception.EntityNotFoundException;
 import com.exadel.project.common.service.BaseService;
 import com.exadel.project.common.service.rsql.RsqlSpecification;
-import com.exadel.project.internship.entity.Internship;
 import com.exadel.project.internship.service.InternshipService;
 import com.exadel.project.interview.dto.InterviewAppointmentDTO;
 import com.exadel.project.interview.dto.InterviewDTO;
 import com.exadel.project.interview.entity.Interview;
-import com.exadel.project.interview.mapper.InterviewAppointmentMapper;
 import com.exadel.project.interview.mapper.InterviewMapper;
 import com.exadel.project.interview.repository.InterviewRepository;
+import com.exadel.project.interviewer.entity.Interviewer;
 import com.exadel.project.interviewer.service.InterviewerService;
-import com.exadel.project.trainee.entity.Trainee;
 import com.exadel.project.trainee.service.TraineeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +33,7 @@ public class InterviewService extends BaseService<Interview, InterviewRepository
     private  TraineeService traineeService;
     private final  InternshipService internshipService;
     private final  InterviewerService interviewerService;
+    private final InterviewTimeService interviewTimeService;
 
     @Override
     public RsqlSpecification getRsqlSpecification() {
@@ -46,6 +45,7 @@ public class InterviewService extends BaseService<Interview, InterviewRepository
         interview.setInternship(internshipService.getEntityById(interviewAppointmentDTO.getInternshipId()));
         interview.setTrainee(traineeService.getEntityById(interviewAppointmentDTO.getTraineeId()));
         interview.setInterviewer(interviewerService.getEntityById(interviewAppointmentDTO.getInterviewerId()));
+        interview.setInterviewTime(interviewTimeService.getEntityById(interviewAppointmentDTO.getInterviewTimeId()));
         interviewRepository.save(interview);
         //TODO send emails
         return interviewAppointmentDTO;
