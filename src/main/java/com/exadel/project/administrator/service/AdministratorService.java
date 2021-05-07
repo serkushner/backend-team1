@@ -6,6 +6,7 @@ import com.exadel.project.administrator.entity.Administrator;
 import com.exadel.project.administrator.entity.Role;
 import com.exadel.project.administrator.mapper.AdministratorMapper;
 import com.exadel.project.administrator.repository.AdministratorRepository;
+import com.exadel.project.administrator.validator.AdministratorValidator;
 import com.exadel.project.common.exception.EntityAlreadyExistsException;
 import com.exadel.project.common.exception.EntityNotFoundException;
 import com.exadel.project.common.service.rsql.RsqlSpecification;
@@ -39,6 +40,7 @@ import java.util.stream.Collectors;
 public class AdministratorService extends BaseService<Administrator, AdministratorRepository> {
 
     private final AdministratorMapper administratorMapper;
+    private final AdministratorValidator administratorValidator;
     private final PasswordEncoder passwordEncoder;
     private final AdministratorRepository administratorRepository;
     private final TraineeRepository traineeRepository;
@@ -72,10 +74,7 @@ public class AdministratorService extends BaseService<Administrator, Administrat
     }
 
     public AdministratorDto addAdministrator(AdministratorDto administratorDto) throws EntityAlreadyExistsException {
-        if (administratorRepository.findAdministratorByEmail(administratorDto.getEmail()) != null
-                || administratorRepository.findAdministratorByLogin(administratorDto.getLogin()) != null) {
-            throw new EntityAlreadyExistsException();
-        }
+        administratorValidator.checkAdministratorAlreadyExists(administratorDto);
         Administrator administrator = administratorMapper.dtoToEntity(administratorDto);
         administratorRepository.save(administrator);
         return administratorMapper.entityToDto(administrator);

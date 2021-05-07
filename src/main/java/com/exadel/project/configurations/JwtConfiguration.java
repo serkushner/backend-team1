@@ -15,11 +15,14 @@ public class JwtConfiguration {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtConfiguration.class);
 
-    @Value("$(jwt.secret)")
+    @Value("${jwt.secret}")
     private String jwtSecret;
 
+    @Value("${jwt.url:http://localhost:8081/email/}")
+    private String serverUrl;
+
     public String generateToken(AdditionalInfo additionalInfo) {
-        return Jwts.builder()
+        return serverUrl + Jwts.builder()
                 .setId(additionalInfo.getId().toString())
                 .setSubject(additionalInfo.getTrainee().getEmail())
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
@@ -28,7 +31,9 @@ public class JwtConfiguration {
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
+            Jwts.parser()
+                    .setSigningKey(jwtSecret)
+                    .parseClaimsJws(token);
             return true;
         } catch (UnsupportedJwtException unsEx) {
             logger.warn("Unsupported jwt", unsEx);
@@ -39,12 +44,18 @@ public class JwtConfiguration {
     }
 
     public String getIdFromToken(String token) {
-        Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
+        Claims claims = Jwts.parser()
+                .setSigningKey(jwtSecret)
+                .parseClaimsJws(token)
+                .getBody();
         return claims.getId();
     }
 
     public String getEmailFromToken(String token) {
-        Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
+        Claims claims = Jwts.parser()
+                .setSigningKey(jwtSecret)
+                .parseClaimsJws(token)
+                .getBody();
         return claims.getSubject();
     }
 }

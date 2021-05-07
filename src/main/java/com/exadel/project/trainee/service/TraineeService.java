@@ -1,6 +1,5 @@
 package com.exadel.project.trainee.service;
 
-import com.exadel.project.common.event.OnRegistrationCompleteEvent;
 import com.exadel.project.common.service.BaseService;
 import com.exadel.project.common.service.rsql.RsqlSpecification;
 import com.exadel.project.country.entity.Country;
@@ -10,6 +9,7 @@ import com.exadel.project.internship.service.InternshipService;
 import com.exadel.project.subject.entity.Subject;
 import com.exadel.project.trainee.dto.TraineeDTO;
 import com.exadel.project.trainee.entity.*;
+import com.exadel.project.trainee.event.TraineeRegistrationCompleteEvent;
 import com.exadel.project.trainee.mapper.TraineeMapper;
 import com.exadel.project.trainee.repository.AdditionalInfoRepository;
 import com.exadel.project.trainee.repository.TraineeRepository;
@@ -63,8 +63,8 @@ public class TraineeService extends BaseService<Trainee, TraineeRepository> {
             interviewPeriods = addInterviewPeriodsToTrainee(traineeDTO.getDates(), trainee);
         }
         AdditionalInfo additionalInfo = additionalInfoService.saveAdditionalInfo(traineeDTO, trainee, internship);
-        OnRegistrationCompleteEvent onRegistrationCompleteEvent = new OnRegistrationCompleteEvent(this, additionalInfo);
-        applicationEventPublisher.publishEvent(onRegistrationCompleteEvent);
+        TraineeRegistrationCompleteEvent traineeRegistrationCompleteEvent = new TraineeRegistrationCompleteEvent(this, additionalInfo);
+        applicationEventPublisher.publishEvent(traineeRegistrationCompleteEvent);
         return traineeMapper.entityToDto(trainee, additionalInfo, interviewPeriods);
     }
 
@@ -109,12 +109,4 @@ public class TraineeService extends BaseService<Trainee, TraineeRepository> {
         return interviewPeriods;
     }
 
-    public List<String> getTraineesEmailsByHistorySubjects(List<Subject> subjects){
-        return additionalInfoRepository.findAllByTrainee_RecipientAndInternship_SubjectsIn(true, subjects)
-                .stream()
-                .map(AdditionalInfo::getTrainee)
-                .map(Trainee::getEmail)
-                .distinct()
-                .collect(Collectors.toList());
-    }
 }

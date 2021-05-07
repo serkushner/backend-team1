@@ -6,8 +6,8 @@ databaseChangeLog:
         - onFail: MARK_RAN
         - not:
           - sqlCheck:
-              expectedResult: "10"
-              sql: SELECT count(DISTINCT status_trainee) FROM additional_info
+              expectedResult: "1"
+              sql: SELECT EXISTS ( SELECT 1 FROM additional_info WHERE status_trainee = 'EMAIL_NOT_CONFIRM')
       changes:
         - sqlFile:
             dbms: 'mysql'
