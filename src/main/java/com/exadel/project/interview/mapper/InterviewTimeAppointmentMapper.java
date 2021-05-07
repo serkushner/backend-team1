@@ -15,6 +15,7 @@ public interface InterviewTimeAppointmentMapper {
 
     InterviewerTime dtoToEntity(InterviewTimeAppointmentDTO dto);
 
+    @Mapping(source = "entity.id",target = "interviewTimeId")
     @Mapping(source = "interviewersList", target = "interviewers")
     InterviewTimeAppointmentDTO entityToDto(InterviewTime entity, List<Interviewer> interviewersList);
 }
