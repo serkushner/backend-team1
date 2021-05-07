@@ -40,3 +40,5 @@ databaseChangeLog:
 
   - include:
       file: db/changelog/changelog-trainee-cascade-delete.yaml
+  - include:
+      file: db/changelog/changelog-additional-info-add-email-not-confirm-trainee-status.yaml

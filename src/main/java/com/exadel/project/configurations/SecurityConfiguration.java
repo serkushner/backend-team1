@@ -30,7 +30,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(new RoleConverter(administratorRepository));
 
-        http.csrf().disable().authorizeRequests().antMatchers("/verify/**", "/signin/**")
+        http.csrf().disable().authorizeRequests().antMatchers("/verify/**", "/signin/**", "/email/**")
                 .permitAll()
                 .and()
                 .authorizeRequests()

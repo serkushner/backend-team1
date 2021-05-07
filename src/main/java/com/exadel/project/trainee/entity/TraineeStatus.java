@@ -1,6 +1,7 @@
 package com.exadel.project.trainee.entity;
 
 public enum TraineeStatus {
+    EMAIL_NOT_CONFIRM,
     REGISTERED,
     RECRUITER_INTERVIEW_PENDING,
     RECRUITER_INTERVIEW_REJECTED,

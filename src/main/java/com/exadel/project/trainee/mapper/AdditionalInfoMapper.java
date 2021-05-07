@@ -65,7 +65,7 @@ public interface AdditionalInfoMapper {
     TraineeHistoryDTO entityToTraineeHistoryDTO(AdditionalInfo additionalInfo);
 
     default TraineeStatus getTraineeStatus(String traineeStatus){
-        return traineeStatus == null ? TraineeStatus.REGISTERED : TraineeStatus.valueOf(traineeStatus);
+        return traineeStatus == null ? TraineeStatus.EMAIL_NOT_CONFIRM : TraineeStatus.valueOf(traineeStatus);
     }
 
     default List<String> getSubjectsName(List<Subject> subjects){
