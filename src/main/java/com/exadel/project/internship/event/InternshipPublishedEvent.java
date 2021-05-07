@@ -1,4 +1,4 @@
-package com.exadel.project.common.event;
+package com.exadel.project.internship.event;
 
 import com.exadel.project.subject.entity.Subject;
 import lombok.Getter;

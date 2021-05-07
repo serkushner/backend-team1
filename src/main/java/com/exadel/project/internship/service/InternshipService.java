@@ -1,8 +1,7 @@
 package com.exadel.project.internship.service;
 
-import com.exadel.project.InternshipType.entity.InternshipType;
 import com.exadel.project.InternshipType.service.InternshipTypeService;
-import com.exadel.project.common.event.InternshipPublishedEvent;
+import com.exadel.project.internship.event.InternshipPublishedEvent;
 import com.exadel.project.common.exception.DoubleInternshipRegistrationException;
 import com.exadel.project.common.exception.EntityAlreadyExistsException;
 import com.exadel.project.common.exception.EntityNotFoundException;
