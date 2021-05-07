@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -108,4 +109,12 @@ public class TraineeService extends BaseService<Trainee, TraineeRepository> {
         return interviewPeriods;
     }
 
+    public List<String> getTraineesEmailsByHistorySubjects(List<Subject> subjects){
+        return additionalInfoRepository.findAllByTrainee_RecipientAndInternship_SubjectsIn(true, subjects)
+                .stream()
+                .map(AdditionalInfo::getTrainee)
+                .map(Trainee::getEmail)
+                .distinct()
+                .collect(Collectors.toList());
+    }
 }
