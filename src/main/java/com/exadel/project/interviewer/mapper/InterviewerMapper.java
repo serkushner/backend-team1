@@ -2,6 +2,7 @@ package com.exadel.project.interviewer.mapper;
 
 import com.exadel.project.common.utils.MapperUtil;
 import com.exadel.project.interview.mapper.InterviewMapper;
+import com.exadel.project.interview.mapper.InterviewToInterviewerMapper;
 import com.exadel.project.interviewer.dto.InterviewerRequestDTO;
 import com.exadel.project.interviewer.dto.InterviewerResponseDTO;
 import com.exadel.project.interviewer.entity.Interviewer;
@@ -12,7 +13,7 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {InterviewMapper.class, SubjectMapper.class})
+@Mapper(componentModel = "spring", uses = {InterviewMapper.class, SubjectMapper.class, InterviewToInterviewerMapper.class})
 public interface InterviewerMapper {
 
     @Mapping(target = "subjects", expression = "java(getSubjectsName(entity.getSubjects()))")
