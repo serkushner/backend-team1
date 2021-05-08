@@ -27,12 +27,12 @@ import java.util.stream.Collectors;
 public class InterviewService extends BaseService<Interview, InterviewRepository> {
 
     private final InterviewMapper interviewMapper;
-    private final  InterviewRepository interviewRepository;
+    private final InterviewRepository interviewRepository;
     @Lazy
     @Autowired
-    private  TraineeService traineeService;
-    private final  InternshipService internshipService;
-    private final  InterviewerService interviewerService;
+    private TraineeService traineeService;
+    private final InternshipService internshipService;
+    private final InterviewerService interviewerService;
     private final InterviewTimeService interviewTimeService;
 
     @Override
@@ -44,8 +44,12 @@ public class InterviewService extends BaseService<Interview, InterviewRepository
         Interview interview = new Interview();
         interview.setInternship(internshipService.getEntityById(interviewAppointmentDTO.getInternshipId()));
         interview.setTrainee(traineeService.getEntityById(interviewAppointmentDTO.getTraineeId()));
-        interview.setInterviewer(interviewerService.getEntityById(interviewAppointmentDTO.getInterviewerId()));
         interview.setInterviewTime(interviewTimeService.getEntityById(interviewAppointmentDTO.getInterviewTimeId()));
+
+        Interviewer interviewer = interviewerService.getEntityById(interviewAppointmentDTO.getInterviewerId());
+        interviewerService.deleteInterview(interviewer, interviewTimeService.getEntityById(interviewAppointmentDTO.getInterviewTimeId()));
+        interview.setInterviewer(interviewer);
+
         interviewRepository.save(interview);
         //TODO send emails
         return interviewAppointmentDTO;

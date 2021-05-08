@@ -7,6 +7,7 @@ import com.exadel.project.common.service.rsql.RsqlSpecification;
 import com.exadel.project.interview.dto.InterviewTimeAppointmentDTO;
 import com.exadel.project.interview.dto.InterviewTimeRequestDTO;
 import com.exadel.project.interview.dto.InterviewTimeResponseDTO;
+import com.exadel.project.interview.entity.Interview;
 import com.exadel.project.interviewer.dto.InterviewerRequestDTO;
 import com.exadel.project.interviewer.dto.InterviewerResponseDTO;
 import com.exadel.project.interviewer.entity.InterviewerType;
@@ -133,6 +134,11 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
 
     private List<Subject> getSubjectsByNames(List<String> subjectNames){
         return subjectNames.stream().map(subjectService::getByName).collect(Collectors.toList());
+    }
+
+    public Interviewer deleteInterview(Interviewer interviewer, InterviewTime interviewTime){
+        interviewer.getInterviewTimes().remove(interviewTime);
+        return interviewer;
     }
 
     @Override
