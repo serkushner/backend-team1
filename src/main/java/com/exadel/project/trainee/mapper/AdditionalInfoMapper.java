@@ -54,6 +54,7 @@ public interface AdditionalInfoMapper {
     @Mapping(target = "internshipTitle", expression = "java(additionalInfo.getInternship().getTitle())")
     @Mapping(target = "techInterview", expression = "java(getInterviewDescription(\"tech\", interviews))")
     @Mapping(target = "hrInterview", expression = "java(getInterviewDescription(\"hr\", interviews))")
+    @Mapping(target = "subjects", expression = "java(getSubjectsName(additionalInfo.getInternship().getSubjects()))")
     TraineeToAdminDetailsDTO entityToDto(AdditionalInfo additionalInfo, List<InterviewDTO> interviews);
 
     @Mapping(target = "internshipId", expression = "java(additionalInfo.getInternship().getId())")
