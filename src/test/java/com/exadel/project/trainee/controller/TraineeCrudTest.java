@@ -92,7 +92,7 @@ public class TraineeCrudTest {
             doReturn(null).when(traineeRepository).findTraineeByEmail(responseTraineeDTO.getEmail());
             doReturn(internship).when(internshipService).getEntityById(1L);
             doReturn(null).when(additionalInfoRepository).findAdditionalInfoByInternshipAndTrainee(null, null);
-            doReturn(belarus).when(countryRepository).findCountryByName("Belarus");
+            doReturn(Optional.ofNullable(belarus)).when(countryRepository).findCountryByName("Belarus");
             doReturn(responseTrainee).when(traineeRepository).save(requestTrainee);
             doReturn(responseInterviewPeriod).when(interviewPeriodRepository).save(requestInterviewPeriod);
             doReturn(additionalInfo).when(additionalInfoRepository).save(any());
