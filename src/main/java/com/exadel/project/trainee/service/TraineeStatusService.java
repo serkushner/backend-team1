@@ -1,6 +1,7 @@
 package com.exadel.project.trainee.service;
 
 import com.exadel.project.common.exception.EntityNotFoundException;
+import com.exadel.project.common.exception.TraineeStatusIsNotAvailableForChangesException;
 import com.exadel.project.trainee.dto.TraineeToAdminDTO;
 import com.exadel.project.trainee.entity.AdditionalInfo;
 import com.exadel.project.trainee.entity.TraineeStatus;
@@ -14,27 +15,58 @@ import org.springframework.stereotype.Service;
 public class TraineeStatusService {
 
     private final AdditionalInfoRepository additionalInfoRepository;
-    private final AdditionalInfoMapper additionalInfoMapper;
 
-    public TraineeToAdminDTO changeTraineeStatusToRejected(Long id) {
-        AdditionalInfo additionalInfo = additionalInfoRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    public void changeTraineeStatusToRejected(AdditionalInfo additionalInfo) {
         additionalInfo.setTraineeStatus(TraineeStatus.REJECTED);
         additionalInfoRepository.save(additionalInfo);
-        return additionalInfoMapper.entityToDto(additionalInfo);
     }
 
-    public TraineeToAdminDTO changeTraineeStatus(Long id) {
+    public void changeTraineeStatus(AdditionalInfo additionalInfo) {
+        TraineeStatus status = additionalInfo.getTraineeStatus();
+        switch (status) {
+            case EMAIL_NOT_CONFIRM:
+                additionalInfo.setTraineeStatus(TraineeStatus.REGISTERED);
+                break;
+            case REGISTERED:
+                additionalInfo.setTraineeStatus(TraineeStatus.RECRUITER_INTERVIEW_PENDING);
+                break;
+            case RECRUITER_INTERVIEW_ACCEPTED:
+            case RECRUITER_INTERVIEW_REJECTED:
+                additionalInfo.setTraineeStatus(TraineeStatus.RECRUITER_INTERVIEW_PASSED);
+                break;
+            case RECRUITER_INTERVIEW_PASSED:
+                additionalInfo.setTraineeStatus(TraineeStatus.TECHNICAL_INTERVIEW_PENDING);
+                break;
+            case TECHNICAL_INTERVIEW_ACCEPTED:
+            case TECHNICAL_INTERVIEW_REJECTED:
+                additionalInfo.setTraineeStatus(TraineeStatus.ACCEPTED);
+                break;
+            default: throw new TraineeStatusIsNotAvailableForChangesException();
+        }
+        additionalInfoRepository.save(additionalInfo);
+    }
+
+    public void changeTraineeStatusAfterInterview(Long id, boolean isApproved) {
         AdditionalInfo additionalInfo = additionalInfoRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         TraineeStatus status = additionalInfo.getTraineeStatus();
         switch (status) {
-            case
+            case RECRUITER_INTERVIEW_PENDING:
+                if (isApproved) {
+                    additionalInfo.setTraineeStatus(TraineeStatus.RECRUITER_INTERVIEW_ACCEPTED);
+                } else {
+                    additionalInfo.setTraineeStatus(TraineeStatus.RECRUITER_INTERVIEW_REJECTED);
+                }
+                break;
+            case TECHNICAL_INTERVIEW_PENDING:
+                if (isApproved) {
+                    additionalInfo.setTraineeStatus(TraineeStatus.TECHNICAL_INTERVIEW_ACCEPTED);
+                } else {
+                    additionalInfo.setTraineeStatus(TraineeStatus.TECHNICAL_INTERVIEW_REJECTED);
+                }
+                break;
+            default:
+                throw new TraineeStatusIsNotAvailableForChangesException();
         }
-
-
-
-
-        additionalInfo.setTraineeStatus(TraineeStatus.REJECTED);
         additionalInfoRepository.save(additionalInfo);
-        return additionalInfoMapper.entityToDto(additionalInfo);
     }
 }

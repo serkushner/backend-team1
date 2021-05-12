@@ -21,8 +21,9 @@ public class SuperadministratorController {
 
     @Secured("ROLE_SUPERADMIN")
     @PostMapping(value ="trainee/ai" + ID)
-    public ResponseEntity<TraineeToAdminDTO> changeTraineeStatus(@PathVariable Long id, @RequestBody ApproveDto approveDto) {
-        return ResponseEntity.ok(superadministratorService.changeTraineeStatus(id, approveDto.getIsApproved()));
+    public ResponseEntity<Void> approveTraineeStatus(@PathVariable Long id, @RequestBody ApproveDto approveDto) {
+        superadministratorService.approveTraineeStatusBySuperadmin(id, approveDto.getIsApproved());
+        return ResponseEntity.noContent().build();
     }
 
 }

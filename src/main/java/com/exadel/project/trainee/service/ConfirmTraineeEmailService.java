@@ -17,15 +17,14 @@ public class ConfirmTraineeEmailService {
 
     private final JwtConfiguration jwtConfiguration;
     private final AdditionalInfoRepository additionalInfoRepository;
+    private final TraineeStatusService traineeStatusService;
 
     public void confirmTraineeEmail(String token) {
         if (jwtConfiguration.validateToken(token)) {
             AdditionalInfo additionalInfo = additionalInfoRepository.findById(Long.parseLong(jwtConfiguration.getIdFromToken(token))).orElseThrow(EntityNotFoundException::new);
             if (additionalInfo.getTraineeStatus() == TraineeStatus.EMAIL_NOT_CONFIRM) {
-                additionalInfo.setTraineeStatus(TraineeStatus.REGISTERED);
-                additionalInfoRepository.save(additionalInfo);
+                traineeStatusService.changeTraineeStatus(additionalInfo);
             } else throw new TraineeAlreadyConfirmEmailException();
-
         } else
             throw new TokenIsNotValidException();
     }
