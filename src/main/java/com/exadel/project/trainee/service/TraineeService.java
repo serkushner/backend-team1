@@ -9,11 +9,13 @@ import com.exadel.project.internship.service.InternshipService;
 import com.exadel.project.subject.entity.Subject;
 import com.exadel.project.trainee.dto.TraineeDTO;
 import com.exadel.project.trainee.entity.*;
+import com.exadel.project.trainee.event.TraineeRegistrationCompleteEvent;
 import com.exadel.project.trainee.mapper.TraineeMapper;
 import com.exadel.project.trainee.repository.AdditionalInfoRepository;
 import com.exadel.project.trainee.repository.TraineeRepository;
 import com.exadel.project.trainee.validator.TraineeValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +37,7 @@ public class TraineeService extends BaseService<Trainee, TraineeRepository> {
     private final InterviewPeriodService interviewPeriodService;
     private final TraineeValidator traineeValidator;
     private final AdditionalInfoRepository additionalInfoRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Override
     public RsqlSpecification getRsqlSpecification() {
@@ -60,6 +63,8 @@ public class TraineeService extends BaseService<Trainee, TraineeRepository> {
             interviewPeriods = addInterviewPeriodsToTrainee(traineeDTO.getDates(), trainee);
         }
         AdditionalInfo additionalInfo = additionalInfoService.saveAdditionalInfo(traineeDTO, trainee, internship);
+        TraineeRegistrationCompleteEvent traineeRegistrationCompleteEvent = new TraineeRegistrationCompleteEvent(this, additionalInfo);
+        applicationEventPublisher.publishEvent(traineeRegistrationCompleteEvent);
         return traineeMapper.entityToDto(trainee, additionalInfo, interviewPeriods);
     }
 
@@ -83,6 +88,15 @@ public class TraineeService extends BaseService<Trainee, TraineeRepository> {
         return traineeMapper.entityToDto(trainee, additionalInfo, interviewPeriods);
     }
 
+    public List<String> getTraineesEmailsByHistorySubjects(List<Subject> subjects){
+        return additionalInfoRepository.findAllByTrainee_RecipientAndInternship_SubjectsIn(true, subjects)
+                .stream()
+                .map(AdditionalInfo::getTrainee)
+                .map(Trainee::getEmail)
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
     private void addCountryToTrainee(String location, Trainee trainee){
         Country country = countryService.getByName(location);
         trainee.setCountry(country);
@@ -95,12 +109,4 @@ public class TraineeService extends BaseService<Trainee, TraineeRepository> {
         return interviewPeriods;
     }
 
-    public List<String> getTraineesEmailsByHistorySubjects(List<Subject> subjects){
-        return additionalInfoRepository.findAllByTrainee_RecipientAndInternship_SubjectsIn(true, subjects)
-                .stream()
-                .map(AdditionalInfo::getTrainee)
-                .map(Trainee::getEmail)
-                .distinct()
-                .collect(Collectors.toList());
-    }
 }
