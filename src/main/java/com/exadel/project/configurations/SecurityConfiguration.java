@@ -18,29 +18,31 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final AdministratorRepository administratorRepository;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
                 .antMatchers("/**")
                 .permitAll();
     }
-    /*@Override
-    protected void configure(HttpSecurity http) throws Exception {
 
-        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
-        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(new RoleConverter(administratorRepository));
-
-        http.csrf().disable().authorizeRequests().antMatchers("/verify/**", "/signin/**", "/email/**")
-                .permitAll()
-                .and()
-                .authorizeRequests()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .oauth2ResourceServer()
-                .jwt()
-                .jwtAuthenticationConverter(jwtAuthenticationConverter);
-
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-    }*/
+//    @Override
+//    protected void configure(HttpSecurity http) throws Exception {
+//
+//        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+//        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(new RoleConverter(administratorRepository));
+//
+//        http.csrf().disable().authorizeRequests().antMatchers("/verify/**", "/signin/**")
+//                .permitAll()
+//                .and()
+//                .authorizeRequests()
+//                .anyRequest()
+//                .authenticated()
+//                .and()
+//                .oauth2ResourceServer()
+//                .jwt()
+//                .jwtAuthenticationConverter(jwtAuthenticationConverter);
+//
+//        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//    }
 }
