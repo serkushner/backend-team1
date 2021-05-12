@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20210505.[BE-82]-add-email-not-confirm
+      author: nidaff.s@gmail.com
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+          - sqlCheck:
+              expectedResult: "1"
+              sql: SELECT EXISTS ( SELECT 1 FROM additional_info WHERE status_trainee = 'EMAIL_NOT_CONFIRM')
+      changes:
+        - sqlFile:
+            dbms: 'mysql'
+            endDelimiter: "@@"
+            splitStatements: false
+            path: db/sql/additional_info_add_email_not_confirm_status.sql
+            stripComments: false
