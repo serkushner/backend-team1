@@ -2,7 +2,8 @@ package com.exadel.project.administrator.controller;
 
 import com.exadel.project.administrator.dto.ApproveDto;
 import com.exadel.project.administrator.service.SuperadministratorService;
-import com.exadel.project.trainee.dto.TraineeToAdminDTO;
+import com.exadel.project.trainee.repository.AdditionalInfoRepository;
+import com.exadel.project.trainee.service.TraineeStatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -19,7 +20,7 @@ public class SuperadministratorController {
 
     private static final String ID = "/{id}";
 
-    @Secured("ROLE_SUPERADMIN")
+    //@Secured("ROLE_SUPERADMIN")
     @PostMapping(value ="trainee/ai" + ID)
     public ResponseEntity<Void> approveTraineeStatus(@PathVariable Long id, @RequestBody ApproveDto approveDto) {
         superadministratorService.approveTraineeStatusBySuperadmin(id, approveDto.getIsApproved());

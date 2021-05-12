@@ -2,10 +2,8 @@ package com.exadel.project.trainee.service;
 
 import com.exadel.project.common.exception.EntityNotFoundException;
 import com.exadel.project.common.exception.TraineeStatusIsNotAvailableForChangesException;
-import com.exadel.project.trainee.dto.TraineeToAdminDTO;
 import com.exadel.project.trainee.entity.AdditionalInfo;
 import com.exadel.project.trainee.entity.TraineeStatus;
-import com.exadel.project.trainee.mapper.AdditionalInfoMapper;
 import com.exadel.project.trainee.repository.AdditionalInfoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -46,8 +44,7 @@ public class TraineeStatusService {
         additionalInfoRepository.save(additionalInfo);
     }
 
-    public void changeTraineeStatusAfterInterview(Long id, boolean isApproved) {
-        AdditionalInfo additionalInfo = additionalInfoRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    public void changeTraineeStatusAfterInterview(AdditionalInfo additionalInfo, boolean isApproved) {
         TraineeStatus status = additionalInfo.getTraineeStatus();
         switch (status) {
             case RECRUITER_INTERVIEW_PENDING:

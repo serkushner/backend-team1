@@ -12,7 +12,10 @@ import com.exadel.project.interview.mapper.InterviewMapper;
 import com.exadel.project.interview.repository.InterviewRepository;
 import com.exadel.project.interviewer.entity.Interviewer;
 import com.exadel.project.interviewer.service.InterviewerService;
+import com.exadel.project.trainee.entity.AdditionalInfo;
+import com.exadel.project.trainee.repository.AdditionalInfoRepository;
 import com.exadel.project.trainee.service.TraineeService;
+import com.exadel.project.trainee.service.TraineeStatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -28,6 +31,8 @@ public class InterviewService extends BaseService<Interview, InterviewRepository
 
     private final InterviewMapper interviewMapper;
     private final InterviewRepository interviewRepository;
+    private final AdditionalInfoRepository additionalInfoRepository;
+    private final TraineeStatusService traineeStatusService;
     @Lazy
     @Autowired
     private TraineeService traineeService;
@@ -52,6 +57,8 @@ public class InterviewService extends BaseService<Interview, InterviewRepository
 
         interviewRepository.save(interview);
         //TODO send emails
+        AdditionalInfo additionalInfo = additionalInfoRepository.findAdditionalInfoByInternshipAndTrainee(internshipService.getEntityById(interviewAppointmentDTO.getInternshipId()), traineeService.getEntityById(interviewAppointmentDTO.getTraineeId()));
+        traineeStatusService.changeTraineeStatus(additionalInfo);
         return interviewAppointmentDTO;
     }
 

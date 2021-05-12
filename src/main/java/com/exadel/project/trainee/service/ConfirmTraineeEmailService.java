@@ -7,7 +7,6 @@ import com.exadel.project.configurations.JwtConfiguration;
 import com.exadel.project.trainee.entity.AdditionalInfo;
 import com.exadel.project.trainee.entity.TraineeStatus;
 import com.exadel.project.trainee.repository.AdditionalInfoRepository;
-import com.exadel.project.trainee.repository.TraineeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
