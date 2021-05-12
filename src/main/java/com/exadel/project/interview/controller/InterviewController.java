@@ -3,6 +3,7 @@ package com.exadel.project.interview.controller;
 import com.exadel.project.common.exception.EntityNotFoundException;
 import com.exadel.project.interview.dto.InterviewAppointmentDTO;
 import com.exadel.project.interview.dto.InterviewDTO;
+import com.exadel.project.interview.dto.InterviewFormDTO;
 import com.exadel.project.interview.service.InterviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -30,5 +31,15 @@ public class InterviewController {
     @PutMapping(value = ID, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<InterviewDTO> updateInterview(@PathVariable Long id, @RequestBody InterviewDTO dto) {
         return ResponseEntity.ok(interviewService.updateInterviewById(id, dto));
+    }
+
+    @GetMapping(value ="{token}")
+    public ResponseEntity<InterviewFormDTO> getInterviewFormByToken(@PathVariable String token){
+        return ResponseEntity.ok(interviewService.getInterviewFormInfoByToken(token));
+    }
+
+    @PutMapping(value = ID + "/form")
+    public ResponseEntity<InterviewFormDTO> updateInterviewForm(@RequestBody InterviewFormDTO dto){
+        return ResponseEntity.ok(interviewService.updateInterviewForm(dto));
     }
 }
