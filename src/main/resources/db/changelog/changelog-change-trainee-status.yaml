@@ -8,7 +8,7 @@ databaseChangeLog:
         - onError: MARK_RAN
         - not:
           - sqlCheck:
-              expectedResult: "10"
+              expectedResult: "2"
               sql: SELECT count(DISTINCT format) FROM internship
       changes:
         - sqlFile:
