@@ -27,4 +27,5 @@ public class TraineeToAdminDetailsDTO {
     private String internshipTitle;
     private String techInterview;
     private String hrInterview;
+    private List<String> subjects;
 }

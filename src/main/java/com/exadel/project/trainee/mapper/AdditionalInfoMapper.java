@@ -20,6 +20,7 @@ import org.mapstruct.Mapping;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 
 @Mapper(componentModel = "spring")
 public interface AdditionalInfoMapper {
@@ -53,6 +54,7 @@ public interface AdditionalInfoMapper {
     @Mapping(target = "internshipTitle", expression = "java(additionalInfo.getInternship().getTitle())")
     @Mapping(target = "techInterview", expression = "java(getInterviewDescription(\"tech\", interviews))")
     @Mapping(target = "hrInterview", expression = "java(getInterviewDescription(\"hr\", interviews))")
+    @Mapping(target = "subjects", expression = "java(getSubjectsName(additionalInfo.getInternship().getSubjects()))")
     TraineeToAdminDetailsDTO entityToDto(AdditionalInfo additionalInfo, List<InterviewDTO> interviews);
 
     @Mapping(target = "internshipId", expression = "java(additionalInfo.getInternship().getId())")
@@ -87,6 +89,7 @@ public interface AdditionalInfoMapper {
         InterviewerType interviewerType = InterviewerType.valueOf(type.toUpperCase());
         return interviews.stream()
                 .filter(dto->dto.getInterviewer().getType() == interviewerType).map(InterviewDTO::getName)
-                .findFirst().orElse(null);
+                .map(Optional::ofNullable).findFirst().flatMap(Function.identity())
+                .orElse(null);
     }
 }
