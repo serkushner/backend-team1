@@ -22,7 +22,7 @@ public class SuperadministratorService {
 
     public TraineeToAdminDTO changeTraineeStatus(Long id, Boolean isApproved) {
         AdditionalInfo additionalInfo = additionalInfoRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        additionalInfo.setTraineeStatus(TraineeStatus.RECRUITER_INTERVIEW_REJECTED);
+        //additionalInfo.setTraineeStatus(TraineeStatus.RECRUITER_INTERVIEW_REJECTED);
         if (!isApproved) {
             additionalInfo.setTraineeStatus(TraineeStatus.REJECTED);
         } else {
