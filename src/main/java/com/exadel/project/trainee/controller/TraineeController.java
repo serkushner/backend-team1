@@ -1,11 +1,11 @@
 package com.exadel.project.trainee.controller;
 
 import com.exadel.project.common.service.S3Service;
+import com.exadel.project.configurations.JwtConfiguration;
 import com.exadel.project.trainee.dto.TraineeDTO;
 import com.exadel.project.trainee.dto.TraineeHistoryDTO;
 import com.exadel.project.trainee.dto.TraineeToAdminDTO;
 import com.exadel.project.trainee.dto.TraineeToAdminDetailsDTO;
-import com.exadel.project.trainee.entity.Trainee;
 import com.exadel.project.trainee.service.AdditionalInfoService;
 import com.exadel.project.trainee.service.TraineeService;
 import lombok.RequiredArgsConstructor;
