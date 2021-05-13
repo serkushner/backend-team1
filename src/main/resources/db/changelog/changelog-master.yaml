@@ -43,3 +43,5 @@ databaseChangeLog:
       file: db/changelog/changelog-country-code-can-be-null.yaml
   - include:
       file: db/changelog/changelog-delete-country-code-column.yaml
+  - include:
+      file: db/changelog/changelog-additional-info-add-email-not-confirm-trainee-status.yaml

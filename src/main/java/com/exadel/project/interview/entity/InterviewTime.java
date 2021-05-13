@@ -1,8 +1,10 @@
 package com.exadel.project.interview.entity;
 
 import lombok.Data;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
+
 
 @Data
 @Entity
@@ -19,3 +21,4 @@ public class InterviewTime {
     @Column(name = "end_date")
     private LocalDateTime endDate;
 }
+

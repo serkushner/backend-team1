@@ -82,6 +82,30 @@ public class CustomExceptionHandler {
         return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(TraineeAlreadyConfirmEmailException.class)
+    public ResponseEntity<ExceptionResponse> handlerTraineeAlreadyConfirmEmailException(Exception e){
+        String exMessage = exceptionLoadMessage(e, "trainee already confirmed email");
+        String message = String.format("%s %s", LocalDateTime.now(), exMessage);
+        ExceptionResponse exceptionResponse = new ExceptionResponse(message);
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(TokenIsNotValidException.class)
+    public ResponseEntity<ExceptionResponse> handlerTokenIsNotValidException(Exception e){
+        String exMessage = exceptionLoadMessage(e, "token is not valid");
+        String message = String.format("%s %s", LocalDateTime.now(), exMessage);
+        ExceptionResponse exceptionResponse = new ExceptionResponse(message);
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(TraineeStatusIsNotAvailableForChangesException.class)
+    public ResponseEntity<ExceptionResponse> handlerTraineeStatusIsNotAvailableForChangesException(Exception e){
+        String exMessage = exceptionLoadMessage(e, "Trainee status is not available for changes. Please check trainee status ");
+        String message = String.format("%s %s", LocalDateTime.now(), exMessage);
+        ExceptionResponse exceptionResponse = new ExceptionResponse(message);
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.CONFLICT);
+    }
+
     private String exceptionLoadMessage(Exception e, String defaultMessage) {
         String exMessage;
         if (e.getMessage() != null) {

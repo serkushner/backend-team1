@@ -46,7 +46,7 @@ public class InterviewCrudTest {
 
             doReturn(Optional.ofNullable(interview)).when(interviewRepository).findById(1L);
 
-            Interview returnedInterview = interviewService.getInterviewById(1L);
+            Interview returnedInterview = interviewMapper.dtoToEntity(interviewService.getInterviewById(1L));
 
             Assertions.assertEquals(returnedInterview, interview);
         }
@@ -74,7 +74,7 @@ public class InterviewCrudTest {
 
             interviewService.updateInterviewById(1L, interviewMapper.entityToDto(updatedInterview));
 
-            Assertions.assertEquals(interviewService.getInterviewById(1L), updatedInterview);
+            Assertions.assertEquals(interviewService.getInterviewById(1L), interviewMapper.entityToDto(updatedInterview));
         }
 
         @Test

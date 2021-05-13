@@ -1,6 +1,8 @@
 package com.exadel.project.interviewer.controller;
 
 import com.exadel.project.common.exception.EntityNotFoundException;
+import com.exadel.project.interview.dto.InterviewTimeListRequestDTO;
+import com.exadel.project.interview.dto.InterviewTimeAppointmentDTO;
 import com.exadel.project.interview.dto.InterviewTimeRequestDTO;
 import com.exadel.project.interview.dto.InterviewTimeResponseDTO;
 import com.exadel.project.interviewer.dto.InterviewerRequestDTO;
@@ -33,6 +35,12 @@ public class InterviewerController {
         return ResponseEntity.ok(dtoList);
     }
 
+    @RequestMapping("/available")
+    @GetMapping
+    public ResponseEntity<List<InterviewTimeAppointmentDTO>> getAllAvailableInterviewers(@RequestParam(value = "search") String search) {
+        List<InterviewTimeAppointmentDTO> dtoList = interviewerService.getAllAvailable(search);
+        return ResponseEntity.ok(dtoList);
+    }
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<InterviewerResponseDTO> createInterviewer(@RequestBody InterviewerRequestDTO dto) {
         return ResponseEntity.ok(interviewerService.addInterviewer(dto));
@@ -50,13 +58,7 @@ public class InterviewerController {
     }
 
     @PostMapping(ID + "/time")
-    public ResponseEntity<List<InterviewTimeResponseDTO>> addTimeToInterviewer(@PathVariable Long interviewerId, @RequestBody List<InterviewTimeRequestDTO> interviewTimeRequestDTO){
-        return ResponseEntity.ok(interviewerService.addInterviewTimeToInterviewer(interviewTimeRequestDTO, interviewerId));
-    }
-
-    @DeleteMapping(ID + "/time")
-    public ResponseEntity<Void> deleteTimeFromInterviewer(@PathVariable Long interviewerId, @RequestBody List<Long> interviewTimeIds){
-        interviewerService.deleteInterviewTimeFromInterviewer(interviewTimeIds, interviewerId);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<List<InterviewTimeResponseDTO>> addTimeToInterviewer(@PathVariable Long interviewerId, @RequestBody InterviewTimeListRequestDTO interviewTimeListRequestDTO){
+        return ResponseEntity.ok(interviewerService.addInterviewTimeToInterviewer(interviewTimeListRequestDTO.getInterviewTimes(), interviewerId));
     }
 }

@@ -17,7 +17,7 @@ public class Interview {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Description of interview should not be blank")
+//    @NotBlank(message = "Description of interview should not be blank")
     @Column(name = "additional_info")
     private String name;
 
