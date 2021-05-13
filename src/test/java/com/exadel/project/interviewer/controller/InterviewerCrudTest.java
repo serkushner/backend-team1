@@ -138,7 +138,7 @@ public class InterviewerCrudTest {
     class testCreateInterviewerMethod {
 
         @Test
-        @DisplayName("When Interviewer doesn't exist in database Then save and return him ")
+        @DisplayName("When Interviewer doesn't exist in database Then save and return him")
         void testCreateInterviewer() throws Exception {
 
             Interviewer interviewer = interviewerTestData.getTechInterviewer();
