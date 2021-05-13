@@ -1,15 +1,16 @@
-package com.exadel.project.interview.entity;
+package com.exadel.project.interviewer.entity;
 
 import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
 @Table(name = "interview_time")
-public class InterviewTime {
+public class InterviewerTime {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,4 +22,3 @@ public class InterviewTime {
     @Column(name = "end_date")
     private LocalDateTime endDate;
 }
-

@@ -4,47 +4,66 @@ import com.exadel.project.common.exception.EntityAlreadyExistsException;
 import com.exadel.project.common.exception.EntityNotFoundException;
 import com.exadel.project.common.service.BaseService;
 import com.exadel.project.common.service.rsql.RsqlSpecification;
+import com.exadel.project.interview.dto.InterviewTimeAppointmentDTO;
 import com.exadel.project.interview.dto.InterviewTimeRequestDTO;
 import com.exadel.project.interview.dto.InterviewTimeResponseDTO;
+import com.exadel.project.interview.entity.Interview;
 import com.exadel.project.interviewer.dto.InterviewerRequestDTO;
 import com.exadel.project.interviewer.dto.InterviewerResponseDTO;
 import com.exadel.project.interviewer.entity.InterviewerType;
 import com.exadel.project.interviewer.service.rsql.InterviewerRsqlSpecification;
 import com.exadel.project.subject.entity.Subject;
 import com.exadel.project.interview.entity.InterviewTime;
+import com.exadel.project.interview.mapper.InterviewTimeAppointmentMapper;
 import com.exadel.project.interview.mapper.InterviewTimeMapper;
+import com.exadel.project.interview.repository.InterviewTimeRepository;
 import com.exadel.project.interview.service.InterviewTimeService;
+import com.exadel.project.interviewer.dto.InterviewerRequestDTO;
+import com.exadel.project.interviewer.dto.InterviewerResponseDTO;
 import com.exadel.project.interviewer.entity.Interviewer;
+import com.exadel.project.interviewer.entity.InterviewerType;
+import com.exadel.project.interviewer.mapper.InterviewerAppointmentMapper;
 import com.exadel.project.interviewer.mapper.InterviewerMapper;
+import com.exadel.project.subject.entity.Subject;
 import com.exadel.project.interviewer.repository.InterviewerRepository;
+import com.exadel.project.subject.mapper.SubjectMapper;
 import com.exadel.project.subject.service.SubjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
+
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
 public class InterviewerService extends BaseService<Interviewer, InterviewerRepository> {
+
+    private final InterviewerMapper interviewerMapper;
+    private final InterviewerRepository interviewerRepository;
+    private final SubjectMapper subjectMapper;
+    private final InterviewerAppointmentMapper interviewerAppointmentMapper;
+    private final InterviewTimeService interviewTimeService;
+    private final InterviewTimeMapper interviewTimeMapper;
+    private final InterviewTimeAppointmentMapper interviewTimeAppointmentMapper;
+    private final SubjectService subjectService;
+    private final InterviewTimeRepository interviewTimeRepository;
+    private final InterviewerRsqlSpecification interviewerRsqlSpecification;
+
+
     {
         defaultSortingField = "type";
         defaultSortingDirection = "desc";
     }
+
     @Value("${interview.tech.duration}")
     private Long techInterviewDuration;
     @Value("${interview.hr.duration}")
     private Long hrInterviewDuration;
 
-    private final InterviewerMapper interviewerMapper;
-    private final InterviewerRepository interviewerRepository;
-    private final InterviewTimeService interviewTimeService;
-    private final InterviewTimeMapper interviewTimeMapper;
-    private final SubjectService subjectService;
-    private final InterviewerRsqlSpecification interviewerRsqlSpecification;
 
     public List<InterviewerResponseDTO> getAll(String search, String sortFields) {
         Sort sort = getSort(sortFields);
@@ -52,6 +71,26 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
                 .stream()
                 .map(interviewerMapper::entityToDto)
                 .collect(Collectors.toList());
+    }
+
+    public List<InterviewTimeAppointmentDTO> getAllAvailable(String search) {
+        Sort sort = getSort(defaultSortingField);
+        List<Interviewer> interviewers = findBySpecifications(search, sort);
+        Map<InterviewTime, List<Interviewer>> interviewTimes = new TreeMap<>(Comparator.comparing(InterviewTime::getStartDate));
+
+        interviewers
+                .forEach(interviewer -> interviewer.getInterviewTimes()
+                        .forEach(interviewTime -> {
+                            if (interviewTimes.containsKey(interviewTime)){
+                                interviewTimes.get(interviewTime).add(interviewer);
+                            }else {
+                                List<Interviewer> list = new ArrayList<>();
+                                list.add(interviewer);
+                                interviewTimes.put(interviewTime, list);
+                            }
+                        }));
+
+        return interviewTimes.keySet().stream().map(interviewTime -> interviewTimeAppointmentMapper.entityToDto(interviewTime,interviewTimes.get(interviewTime))).collect(Collectors.toList());
     }
 
     public InterviewerResponseDTO getById(Long id) throws EntityNotFoundException {
@@ -95,6 +134,11 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
 
     private List<Subject> getSubjectsByNames(List<String> subjectNames){
         return subjectNames.stream().map(subjectService::getByName).collect(Collectors.toList());
+    }
+
+    public Interviewer deleteInterview(Interviewer interviewer, InterviewTime interviewTime){
+        interviewer.getInterviewTimes().remove(interviewTime);
+        return interviewer;
     }
 
     @Override

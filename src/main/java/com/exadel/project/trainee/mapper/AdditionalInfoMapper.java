@@ -5,7 +5,6 @@ import com.exadel.project.common.utils.MapperUtil;
 import com.exadel.project.internship.entity.Internship;
 import com.exadel.project.subject.entity.Subject;
 import com.exadel.project.interview.dto.InterviewDTO;
-import com.exadel.project.interview.entity.Interview;
 import com.exadel.project.interviewer.entity.InterviewerType;
 import com.exadel.project.trainee.dto.TraineeDTO;
 import com.exadel.project.trainee.dto.TraineeHistoryDTO;
@@ -21,6 +20,7 @@ import org.mapstruct.Mapping;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 
 @Mapper(componentModel = "spring")
 public interface AdditionalInfoMapper {
@@ -54,6 +54,7 @@ public interface AdditionalInfoMapper {
     @Mapping(target = "internshipTitle", expression = "java(additionalInfo.getInternship().getTitle())")
     @Mapping(target = "techInterview", expression = "java(getInterviewDescription(\"tech\", interviews))")
     @Mapping(target = "hrInterview", expression = "java(getInterviewDescription(\"hr\", interviews))")
+    @Mapping(target = "subjects", expression = "java(getSubjectsName(additionalInfo.getInternship().getSubjects()))")
     TraineeToAdminDetailsDTO entityToDto(AdditionalInfo additionalInfo, List<InterviewDTO> interviews);
 
     @Mapping(target = "internshipId", expression = "java(additionalInfo.getInternship().getId())")
@@ -65,7 +66,7 @@ public interface AdditionalInfoMapper {
     TraineeHistoryDTO entityToTraineeHistoryDTO(AdditionalInfo additionalInfo);
 
     default TraineeStatus getTraineeStatus(String traineeStatus){
-        return traineeStatus == null ? TraineeStatus.REGISTERED : TraineeStatus.valueOf(traineeStatus);
+        return traineeStatus == null ? TraineeStatus.EMAIL_NOT_CONFIRM : TraineeStatus.valueOf(traineeStatus);
     }
 
     default List<String> getSubjectsName(List<Subject> subjects){
@@ -88,6 +89,7 @@ public interface AdditionalInfoMapper {
         InterviewerType interviewerType = InterviewerType.valueOf(type.toUpperCase());
         return interviews.stream()
                 .filter(dto->dto.getInterviewer().getType() == interviewerType).map(InterviewDTO::getName)
-                .findFirst().orElse(null);
+                .map(Optional::ofNullable).findFirst().flatMap(Function.identity())
+                .orElse(null);
     }
 }

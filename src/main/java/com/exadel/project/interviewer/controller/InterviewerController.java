@@ -2,6 +2,8 @@ package com.exadel.project.interviewer.controller;
 
 import com.exadel.project.common.exception.EntityNotFoundException;
 import com.exadel.project.interview.dto.InterviewTimeListRequestDTO;
+import com.exadel.project.interview.dto.InterviewTimeAppointmentDTO;
+import com.exadel.project.interview.dto.InterviewTimeRequestDTO;
 import com.exadel.project.interview.dto.InterviewTimeResponseDTO;
 import com.exadel.project.interviewer.dto.InterviewerRequestDTO;
 import com.exadel.project.interviewer.dto.InterviewerResponseDTO;
@@ -10,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -34,6 +35,12 @@ public class InterviewerController {
         return ResponseEntity.ok(dtoList);
     }
 
+    @RequestMapping("/available")
+    @GetMapping
+    public ResponseEntity<List<InterviewTimeAppointmentDTO>> getAllAvailableInterviewers(@RequestParam(value = "search") String search) {
+        List<InterviewTimeAppointmentDTO> dtoList = interviewerService.getAllAvailable(search);
+        return ResponseEntity.ok(dtoList);
+    }
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<InterviewerResponseDTO> createInterviewer(@RequestBody InterviewerRequestDTO dto) {
         return ResponseEntity.ok(interviewerService.addInterviewer(dto));
