@@ -14,13 +14,11 @@ import com.exadel.project.interview.mapper.InterviewFormMapper;
 import com.exadel.project.interview.mapper.InterviewMapper;
 import com.exadel.project.interview.repository.InterviewRepository;
 import com.exadel.project.interviewer.entity.Interviewer;
-import com.exadel.project.interviewer.entity.InterviewerType;
 import com.exadel.project.interviewer.service.InterviewerService;
 import com.exadel.project.trainee.entity.AdditionalInfo;
 import com.exadel.project.trainee.entity.EnglishLevel;
 import com.exadel.project.trainee.entity.TraineeStatus;
 import com.exadel.project.trainee.repository.AdditionalInfoRepository;
-import com.exadel.project.trainee.service.AdditionalInfoService;
 import com.exadel.project.trainee.service.TraineeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,7 +118,6 @@ public class InterviewService extends BaseService<Interview, InterviewRepository
     public InterviewFormDTO getInterviewFormInfoByToken(String token){
         jwtInterviewService.validateToken(token);
         Long interviewId = Long.valueOf(jwtInterviewService.getIdFromToken(token));
-        System.out.println(interviewId);
         Interview interview = interviewRepository.findById(interviewId).orElseThrow(EntityNotFoundException::new);
         AdditionalInfo additionalInfo = additionalInfoRepository.findAdditionalInfoByInternshipAndTrainee(interview.getInternship(), interview.getTrainee());
         return interviewFormMapper.entityToDto(interview, additionalInfo);
