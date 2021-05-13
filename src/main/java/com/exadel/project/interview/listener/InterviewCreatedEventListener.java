@@ -18,6 +18,7 @@ public class InterviewCreatedEventListener {
     @TransactionalEventListener
     public void onInterviewCreated(InterviewCreatedEvent event){
         String interviewUrl = jwtInterviewService.generateToken(event.getInterview());
+        System.out.println(interviewUrl);
         String interviewerEmail = event.getInterview().getInterviewer().getEmail();
         String traineeEmail = event.getInterview().getTrainee().getEmail();
         //TODO send notification to trainee and interviewer

@@ -16,5 +16,6 @@ public interface InterviewFormMapper {
     @Mapping(target = "interviewerName", expression = "java(interview.getInterviewer().getName())")
     @Mapping(target = "interviewerSurname", expression = "java(interview.getInterviewer().getSurname())")
     @Mapping(target = "id", expression = "java(interview.getId())")
+    @Mapping(target = "interviewType",expression = "java(interview.getInterviewer().getType().toString())")
     InterviewFormDTO entityToDto(Interview interview, AdditionalInfo additionalInfo);
 }

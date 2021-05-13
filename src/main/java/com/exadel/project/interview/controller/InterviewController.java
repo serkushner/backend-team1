@@ -33,7 +33,7 @@ public class InterviewController {
         return ResponseEntity.ok(interviewService.updateInterviewById(id, dto));
     }
 
-    @GetMapping(value ="{token}")
+    @GetMapping(value ="/token/{token}")
     public ResponseEntity<InterviewFormDTO> getInterviewFormByToken(@PathVariable String token){
         return ResponseEntity.ok(interviewService.getInterviewFormInfoByToken(token));
     }

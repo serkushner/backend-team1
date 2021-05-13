@@ -14,9 +14,11 @@ import com.exadel.project.interview.mapper.InterviewFormMapper;
 import com.exadel.project.interview.mapper.InterviewMapper;
 import com.exadel.project.interview.repository.InterviewRepository;
 import com.exadel.project.interviewer.entity.Interviewer;
+import com.exadel.project.interviewer.entity.InterviewerType;
 import com.exadel.project.interviewer.service.InterviewerService;
 import com.exadel.project.trainee.entity.AdditionalInfo;
 import com.exadel.project.trainee.entity.EnglishLevel;
+import com.exadel.project.trainee.entity.TraineeStatus;
 import com.exadel.project.trainee.repository.AdditionalInfoRepository;
 import com.exadel.project.trainee.service.AdditionalInfoService;
 import com.exadel.project.trainee.service.TraineeService;
@@ -59,15 +61,22 @@ public class InterviewService extends BaseService<Interview, InterviewRepository
         interview.setInternship(internshipService.getEntityById(interviewAppointmentDTO.getInternshipId()));
         interview.setTrainee(traineeService.getEntityById(interviewAppointmentDTO.getTraineeId()));
         interview.setInterviewTime(interviewTimeService.getEntityById(interviewAppointmentDTO.getInterviewTimeId()));
-
         Interviewer interviewer = interviewerService.getEntityById(interviewAppointmentDTO.getInterviewerId());
         interviewerService.deleteInterview(interviewer, interviewTimeService.getEntityById(interviewAppointmentDTO.getInterviewTimeId()));
         interview.setInterviewer(interviewer);
-
         interviewRepository.save(interview);
+        changeTraineeStatusAfterAddInterview(interview);
         InterviewCreatedEvent interviewCreatedEvent = new InterviewCreatedEvent(this, interview);
         applicationEventPublisher.publishEvent(interviewCreatedEvent);
         return interviewAppointmentDTO;
+    }
+
+    @Transactional
+    public void changeTraineeStatusAfterAddInterview(Interview interview){
+        AdditionalInfo additionalInfo = additionalInfoRepository.findAdditionalInfoByInternshipAndTrainee(interview.getInternship(), interview.getTrainee());
+        TraineeStatus traineeStatus = TraineeStatus.getNextStatus(additionalInfo.getTraineeStatus(), true);
+        additionalInfo.setTraineeStatus(traineeStatus);
+        additionalInfoRepository.save(additionalInfo);
     }
 
     public InterviewDTO getInterviewById(Long id) throws EntityNotFoundException {
@@ -111,6 +120,7 @@ public class InterviewService extends BaseService<Interview, InterviewRepository
     public InterviewFormDTO getInterviewFormInfoByToken(String token){
         jwtInterviewService.validateToken(token);
         Long interviewId = Long.valueOf(jwtInterviewService.getIdFromToken(token));
+        System.out.println(interviewId);
         Interview interview = interviewRepository.findById(interviewId).orElseThrow(EntityNotFoundException::new);
         AdditionalInfo additionalInfo = additionalInfoRepository.findAdditionalInfoByInternshipAndTrainee(interview.getInternship(), interview.getTrainee());
         return interviewFormMapper.entityToDto(interview, additionalInfo);
@@ -121,6 +131,8 @@ public class InterviewService extends BaseService<Interview, InterviewRepository
         Interview interview = interviewRepository.findById(dto.getId()).orElseThrow(EntityNotFoundException::new);
         AdditionalInfo additionalInfo = additionalInfoRepository.findAdditionalInfoByInternshipAndTrainee(interview.getInternship(), interview.getTrainee());
         additionalInfo.setEnglish(EnglishLevel.valueOf(dto.getEnglish().toUpperCase()));
+        TraineeStatus status = TraineeStatus.getNextStatus(additionalInfo.getTraineeStatus(), dto.getInterviewerDecision());
+        additionalInfo.setTraineeStatus(status);
         additionalInfoRepository.save(additionalInfo);
         interview.setName(dto.getSubscription());
         interviewRepository.save(interview);

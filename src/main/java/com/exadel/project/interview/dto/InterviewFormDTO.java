@@ -14,5 +14,6 @@ public class InterviewFormDTO {
     private LocalDateTime interviewTime;
     private String interviewerName;
     private String interviewerSurname;
-    private String interviewerDecision;
+    private Boolean interviewerDecision;
+    private String interviewType;
 }
