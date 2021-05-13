@@ -151,6 +151,8 @@ public class TraineeTestData {
         traineeToAdminDetailsDTO.setRecipient(true);
         traineeToAdminDetailsDTO.setSkype("skype.com");
         traineeToAdminDetailsDTO.setSurname("Kalinouski");
+        List<String> emptySubjectsList = Collections.emptyList();
+        traineeToAdminDetailsDTO.setSubjects(emptySubjectsList);
         return traineeToAdminDetailsDTO;
     }
 }
