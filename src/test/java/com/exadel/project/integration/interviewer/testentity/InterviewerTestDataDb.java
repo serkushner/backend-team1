@@ -1,13 +1,11 @@
 package com.exadel.project.integration.interviewer.testentity;
 
-import com.exadel.project.interview.dto.InterviewDTO;
+import com.exadel.project.interview.dto.InterviewTimeRequestDTO;
 import com.exadel.project.interview.dto.InterviewTimeResponseDTO;
-import com.exadel.project.interview.entity.Interview;
+import com.exadel.project.interview.dto.InterviewToInterviewerDTO;
+import com.exadel.project.interviewer.dto.InterviewerRequestDTO;
 import com.exadel.project.interviewer.dto.InterviewerResponseDTO;
-import com.exadel.project.interviewer.entity.Interviewer;
 import com.exadel.project.interviewer.entity.InterviewerType;
-import com.exadel.project.subject.dto.SubjectDTO;
-import com.exadel.project.subject.entity.Subject;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
@@ -26,7 +24,7 @@ public class InterviewerTestDataDb {
         responseDTO.setType(InterviewerType.HR);
         responseDTO.setSkype("Vik25");
         List<String> emptyList = Collections.emptyList();
-        List<InterviewDTO> emptyListOfInterview = Collections.emptyList();
+        List<InterviewToInterviewerDTO> emptyListOfInterview = Collections.emptyList();
         List<InterviewTimeResponseDTO> emptyListOfInterviewTimeResponseDTO = Collections.emptyList();
         responseDTO.setSubjects(emptyList);
         responseDTO.setInterviews(emptyListOfInterview);
@@ -43,7 +41,7 @@ public class InterviewerTestDataDb {
         responseDTO.setPhone("80566357485");
         responseDTO.setType(InterviewerType.TECH);
         responseDTO.setSkype("Angel_teh");
-        List<InterviewDTO> emptyListOfInterview = Collections.emptyList();
+        List<InterviewToInterviewerDTO> emptyListOfInterview = Collections.emptyList();
         List<InterviewTimeResponseDTO> emptyListOfInterviewTimeResponseDTO = Collections.emptyList();
         responseDTO.setSubjects(List.of("DevOps"));
         responseDTO.setInterviews(emptyListOfInterview);
@@ -51,9 +49,45 @@ public class InterviewerTestDataDb {
         return responseDTO;
     }
 
-    private SubjectDTO getDevOpsSubject() {
-        SubjectDTO subjectDTO = new SubjectDTO();
-        subjectDTO.setName("DevOps");
-        return subjectDTO;
+    public InterviewerRequestDTO getTechInterviewerToSaveInDb() {
+        InterviewerRequestDTO requestDTO = new InterviewerRequestDTO();
+        requestDTO.setName("Sergei");
+        requestDTO.setSurname("Vorobei");
+        requestDTO.setEmail("serega@gmail.com");
+        requestDTO.setPhone("80551257485");
+        requestDTO.setType(InterviewerType.TECH);
+        requestDTO.setSkype("Serg87");
+        requestDTO.setSubjects(List.of("Java"));
+        List<InterviewTimeRequestDTO> emptyListOfInterviewerTimeRequestDTO = Collections.emptyList();
+        requestDTO.setInterviewTimes(emptyListOfInterviewerTimeRequestDTO);
+        return requestDTO;
+    }
+
+    public InterviewerRequestDTO getDuplicateInterviewerToSaveInDb() {
+        InterviewerRequestDTO requestDTO = new InterviewerRequestDTO();
+        requestDTO.setName("Angelina");
+        requestDTO.setSurname("Kvok");
+        requestDTO.setEmail("kvoka@mail.ru");
+        requestDTO.setPhone("80566357485");
+        requestDTO.setType(InterviewerType.TECH);
+        requestDTO.setSkype("Angel_teh");
+        requestDTO.setSubjects(List.of("Java"));
+        List<InterviewTimeRequestDTO> emptyListOfInterviewerTimeRequestDTO = Collections.emptyList();
+        requestDTO.setInterviewTimes(emptyListOfInterviewerTimeRequestDTO);
+        return requestDTO;
+    }
+
+    public InterviewerRequestDTO getInterviewerToUpdateInDb() {
+        InterviewerRequestDTO requestDTO = new InterviewerRequestDTO();
+        requestDTO.setName("Marina");
+        requestDTO.setSurname("Orlova");
+        requestDTO.setEmail("mary.orlova@yandex.by");
+        requestDTO.setPhone("80543658974");
+        requestDTO.setType(InterviewerType.TECH);
+        requestDTO.setSkype("Masha95");
+        requestDTO.setSubjects(List.of("Java"));
+        List<InterviewTimeRequestDTO> emptyListOfInterviewerTimeRequestDTO = Collections.emptyList();
+        requestDTO.setInterviewTimes(emptyListOfInterviewerTimeRequestDTO);
+        return requestDTO;
     }
 }

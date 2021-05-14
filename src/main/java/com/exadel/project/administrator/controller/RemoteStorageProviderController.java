@@ -18,7 +18,7 @@ public class RemoteStorageProviderController {
         return ResponseEntity.ok(administratorService.getAdministratorByLogin(username));
     }
 
-    @PostMapping("/{username}")
+    @PostMapping("/{username}/password")
     public ResponseEntity<Boolean> verifyAdministratorPassword(@PathVariable("username") String username, @RequestBody String password) {
         return ResponseEntity.ok(administratorService.checkPassword(username, password));
     }

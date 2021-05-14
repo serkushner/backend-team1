@@ -17,7 +17,7 @@ services:
       - "3307:3306"
 
   spring-backend:
-    image: backend-keycloak:2.0
+    image: backend-keycloak:3.0
     ports:
       - "8090:8090"
     environment:
@@ -33,6 +33,7 @@ services:
 
   keycloak:
     image: jboss/keycloak:12.0.4
+    command: -b 0.0.0.0 -Dkeycloak.profile.feature.upload_scripts=enabled -Dkeycloak.profile.feature.admin_fine_grained_authz=enabled -Dkeycloak.profile.feature.token_exchange=enabled
     environment:
       DB_VENDOR: MYSQL
       DB_ADDR: mysql
@@ -44,6 +45,6 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./keycloak/providers/username-sp2-8090.jar:/opt/jboss/keycloak/standalone/deployments/username-sp2-8090.jar:z
+      - ./keycloak/providers/username-90.jar:/opt/jboss/keycloak/standalone/deployments/username-90.jar:z
     depends_on:
       - mysql

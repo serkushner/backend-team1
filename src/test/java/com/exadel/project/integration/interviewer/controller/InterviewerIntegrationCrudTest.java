@@ -2,13 +2,10 @@ package com.exadel.project.integration.interviewer.controller;
 
 import com.exadel.project.integration.CommonITContext;
 import com.exadel.project.integration.interviewer.testentity.InterviewerTestDataDb;
+import com.exadel.project.interviewer.dto.InterviewerRequestDTO;
 import com.exadel.project.interviewer.dto.InterviewerResponseDTO;
-import com.exadel.project.interviewer.entity.Interviewer;
-import com.exadel.project.subject.entity.Subject;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -18,12 +15,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.util.JSONPObject;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -76,7 +72,6 @@ public class InterviewerIntegrationCrudTest extends CommonITContext {
 
             Assertions.assertEquals(interviewer, interviewerFromDb);
 
-
         }
 
         @Test
@@ -120,11 +115,39 @@ public class InterviewerIntegrationCrudTest extends CommonITContext {
     class testCreateRequest {
 
         @Test
+        @Transactional
         @DisplayName("When Interviewer doesn't exist in database Then save and return him")
-        void createInterviewer(){
+        void createInterviewer() throws Exception {
+
+            InterviewerRequestDTO requestDTO = testDataDb.getTechInterviewerToSaveInDb();
+
+            MvcResult result = mockMvc.perform(post("/interviewer")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestDTO)))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andReturn();
+
+            String content = result.getResponse().getContentAsString();
+            InterviewerResponseDTO interviewerFromDb = objectMapper.readValue(content, InterviewerResponseDTO.class);
+
+            Assertions.assertNotNull(interviewerFromDb);
+            Assertions.assertEquals(11L, interviewerFromDb.getId());
 
         }
 
+        @Test
+        @DisplayName("When Interviewer exist in database Then database return 409 error ")
+        void createInterviewerWithConflict() throws Exception {
+
+            InterviewerRequestDTO requestDTO = testDataDb.getDuplicateInterviewerToSaveInDb();
+
+            mockMvc.perform(post("/interviewer")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestDTO)))
+                    .andExpect(status().isConflict());
+
+        }
 
     }
 
@@ -133,15 +156,38 @@ public class InterviewerIntegrationCrudTest extends CommonITContext {
     class testUpdateRequest {
 
         @Test
+        @Transactional
         @DisplayName("When Interviewer exist Then save Interviewer with updates and return him")
-        void updateInterviewer(){
+        void updateInterviewer() throws Exception {
+
+            InterviewerRequestDTO requestDTO = testDataDb.getInterviewerToUpdateInDb();
+
+            MvcResult result = mockMvc.perform(put("/interviewer/{id}", 8)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestDTO)))
+                    .andExpect(status().isOk())
+                    .andReturn();
+
+            String content = result.getResponse().getContentAsString();
+            InterviewerResponseDTO interviewerFromDb = objectMapper.readValue(content, InterviewerResponseDTO.class);
+
+            Assertions.assertNotNull(interviewerFromDb);
+            Assertions.assertEquals(List.of("Java"), interviewerFromDb.getSubjects());
+        }
+
+        @Test
+        @DisplayName("When updated Interviewer doesn't exist Then return entity not found error - 404")
+        void updateInterviewerWithEntityNotFound() throws Exception {
+
+            InterviewerRequestDTO requestDTO = testDataDb.getInterviewerToUpdateInDb();
+
+            mockMvc.perform(put("/interviewer/{id}", 1000)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestDTO)))
+                    .andExpect(status().isNotFound());
 
         }
 
-
     }
-
-
-
 
 }
