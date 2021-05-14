@@ -35,8 +35,10 @@ public class JwtInterviewService {
                     .parseClaimsJws(token);
         } catch (UnsupportedJwtException unsEx) {
             logger.warn("Unsupported jwt", unsEx);
+            throw unsEx;
         } catch (Exception e) {
             logger.warn("invalid token", e);
+            throw e;
         }
     }
 
