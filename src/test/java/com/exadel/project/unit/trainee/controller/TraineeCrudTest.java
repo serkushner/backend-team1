@@ -1,4 +1,4 @@
-package com.exadel.project.trainee.controller;
+package com.exadel.project.unit.trainee.controller;
 
 import com.exadel.project.country.entity.Country;
 import com.exadel.project.internship.entity.Internship;
@@ -10,7 +10,7 @@ import com.exadel.project.trainee.dto.TraineeToAdminDetailsDTO;
 import com.exadel.project.trainee.entity.AdditionalInfo;
 import com.exadel.project.trainee.entity.InterviewPeriod;
 import com.exadel.project.trainee.entity.Trainee;
-import com.exadel.project.trainee.entity.TraineeTestData;
+import com.exadel.project.unit.trainee.entity.TraineeTestData;
 import com.exadel.project.trainee.repository.AdditionalInfoRepository;
 import com.exadel.project.trainee.repository.InterviewPeriodRepository;
 import com.exadel.project.trainee.repository.TraineeRepository;

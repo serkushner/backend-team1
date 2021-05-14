@@ -1,5 +1,6 @@
-package com.exadel.project.interview.entity;
+package com.exadel.project.unit.interview.entity;
 
+import com.exadel.project.interview.entity.Interview;
 import org.springframework.stereotype.Component;
 
 @Component

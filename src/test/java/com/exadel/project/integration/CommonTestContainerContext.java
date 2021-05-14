@@ -14,9 +14,9 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ContextConfiguration(initializers = CommonITContext.DockerMySQLDataSourceInitializer.class)
+@ContextConfiguration(initializers = CommonTestContainerContext.DockerMySQLDataSourceInitializer.class)
 @Testcontainers
-public abstract class CommonITContext {
+public abstract class CommonTestContainerContext {
 
     @Container
     public static MySQLContainer<?> mySQLDBContainer = new MySQLContainer<>("mysql:8.0.22")

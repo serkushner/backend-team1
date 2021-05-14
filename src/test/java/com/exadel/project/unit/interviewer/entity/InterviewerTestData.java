@@ -1,10 +1,12 @@
-package com.exadel.project.interviewer.entity;
+package com.exadel.project.unit.interviewer.entity;
 
 import com.exadel.project.interview.dto.InterviewTimeRequestDTO;
 import com.exadel.project.interview.dto.InterviewTimeResponseDTO;
 import com.exadel.project.interview.entity.InterviewTime;
 import com.exadel.project.interviewer.dto.InterviewerRequestDTO;
 import com.exadel.project.interviewer.dto.InterviewerResponseDTO;
+import com.exadel.project.interviewer.entity.Interviewer;
+import com.exadel.project.interviewer.entity.InterviewerType;
 import com.exadel.project.subject.entity.Subject;
 import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;

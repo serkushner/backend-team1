@@ -1,11 +1,11 @@
-package com.exadel.project.interviewer.controller;
+package com.exadel.project.unit.interviewer.controller;
 
 import com.exadel.project.interview.entity.InterviewTime;
 import com.exadel.project.interview.repository.InterviewTimeRepository;
 import com.exadel.project.interviewer.dto.InterviewerRequestDTO;
 import com.exadel.project.interviewer.dto.InterviewerResponseDTO;
 import com.exadel.project.interviewer.entity.Interviewer;
-import com.exadel.project.interviewer.entity.InterviewerTestData;
+import com.exadel.project.unit.interviewer.entity.InterviewerTestData;
 import com.exadel.project.interviewer.repository.InterviewerRepository;
 import com.exadel.project.subject.entity.Subject;
 import com.exadel.project.subject.repository.SubjectRepository;

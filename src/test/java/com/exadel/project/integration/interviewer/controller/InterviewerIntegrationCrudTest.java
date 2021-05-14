@@ -1,6 +1,6 @@
 package com.exadel.project.integration.interviewer.controller;
 
-import com.exadel.project.integration.CommonITContext;
+import com.exadel.project.integration.CommonTestContainerContext;
 import com.exadel.project.integration.interviewer.testentity.InterviewerTestDataDb;
 import com.exadel.project.interviewer.dto.InterviewerRequestDTO;
 import com.exadel.project.interviewer.dto.InterviewerResponseDTO;
@@ -23,9 +23,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 @DisplayName("Integration CRUD tests with MySQL test container")
-public class InterviewerIntegrationCrudTest extends CommonITContext {
+public class InterviewerIntegrationCrudTest extends CommonTestContainerContext {
 
     @Autowired
     private MockMvc mockMvc;
