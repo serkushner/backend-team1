@@ -115,9 +115,9 @@ public class InterviewService extends BaseService<Interview, InterviewRepository
     }
 
     @Transactional
-    public InterviewFormDTO getInterviewFormInfoByToken(String token){
-        jwtInterviewService.validateToken(token);
-        Long interviewId = Long.valueOf(jwtInterviewService.getIdFromToken(token));
+    public InterviewFormDTO getInterviewFormInfoByToken(String encryptedInterviewId){
+        jwtInterviewService.validateToken(encryptedInterviewId);
+        Long interviewId = Long.valueOf(jwtInterviewService.getIdFromToken(encryptedInterviewId));
         Interview interview = interviewRepository.findById(interviewId).orElseThrow(EntityNotFoundException::new);
         AdditionalInfo additionalInfo = additionalInfoRepository.findAdditionalInfoByInternshipAndTrainee(interview.getInternship(), interview.getTrainee());
         return interviewFormMapper.entityToDto(interview, additionalInfo);
@@ -125,7 +125,8 @@ public class InterviewService extends BaseService<Interview, InterviewRepository
 
     @Transactional
     public InterviewFormDTO updateInterviewForm(InterviewFormDTO dto){
-        Interview interview = interviewRepository.findById(dto.getId()).orElseThrow(EntityNotFoundException::new);
+        Interview interview = interviewRepository.findById(dto.getId())
+                .orElseThrow(EntityNotFoundException::new);
         AdditionalInfo additionalInfo = additionalInfoRepository.findAdditionalInfoByInternshipAndTrainee(interview.getInternship(), interview.getTrainee());
         additionalInfo.setEnglish(EnglishLevel.valueOf(dto.getEnglish().toUpperCase()));
         TraineeStatus status = TraineeStatus.getNextStatus(additionalInfo.getTraineeStatus(), dto.getInterviewerDecision());

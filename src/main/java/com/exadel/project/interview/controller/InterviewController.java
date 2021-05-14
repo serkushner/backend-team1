@@ -33,9 +33,9 @@ public class InterviewController {
         return ResponseEntity.ok(interviewService.updateInterviewById(id, dto));
     }
 
-    @GetMapping(value ="/token/{token}")
-    public ResponseEntity<InterviewFormDTO> getInterviewFormByToken(@PathVariable String token){
-        return ResponseEntity.ok(interviewService.getInterviewFormInfoByToken(token));
+    @GetMapping(value = "/token/{encryptedInterviewId}")
+    public ResponseEntity<InterviewFormDTO> getInterviewFormByToken(@PathVariable String encryptedInterviewId){
+        return ResponseEntity.ok(interviewService.getInterviewFormInfoByToken(encryptedInterviewId));
     }
 
     @PutMapping(value = ID + "/form")

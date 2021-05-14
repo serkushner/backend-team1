@@ -5,15 +5,13 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class JwtInterviewService {
-
-    private static final Logger logger = LoggerFactory.getLogger(JwtInterviewService.class);
 
     @Value("${jwt.secret.interview}")
     private String jwtSecret;
@@ -34,10 +32,10 @@ public class JwtInterviewService {
                     .setSigningKey(jwtSecret)
                     .parseClaimsJws(token);
         } catch (UnsupportedJwtException unsEx) {
-            logger.warn("Unsupported jwt", unsEx);
+            log.warn("Unsupported jwt", unsEx);
             throw unsEx;
         } catch (Exception e) {
-            logger.warn("invalid token", e);
+            log.warn("invalid token", e);
             throw e;
         }
     }

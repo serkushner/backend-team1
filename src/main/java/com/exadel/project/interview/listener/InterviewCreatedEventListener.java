@@ -3,16 +3,15 @@ package com.exadel.project.interview.listener;
 import com.exadel.project.interview.event.InterviewCreatedEvent;
 import com.exadel.project.interview.service.JwtInterviewService;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class InterviewCreatedEventListener {
 
-    private static final Logger logger = LoggerFactory.getLogger(InterviewCreatedEventListener.class);
     private final JwtInterviewService jwtInterviewService;
 
     @TransactionalEventListener
