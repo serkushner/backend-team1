@@ -45,3 +45,19 @@ databaseChangeLog:
       file: db/changelog/changelog-delete-country-code-column.yaml
   - include:
       file: db/changelog/changelog-additional-info-add-email-not-confirm-trainee-status.yaml
+  - include:
+      file: db/changelog/changelog-delete-administrator-role-column.yaml
+  - include:
+      file: db/changelog/changelog-add-role-table.yaml
+  - include:
+      file: db/changelog/changelog-fill-role-table.yaml
+  - include:
+      file: db/changelog/changelog-add-administrator-has-role.yaml
+  - include:
+      file: db/changelog/changelog-fill-administrator-has-role.yaml
+  - include:
+      file: db/changelog/changelog-update-admin-passwords.yaml
+
+
+
+

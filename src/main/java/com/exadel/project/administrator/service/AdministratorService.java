@@ -1,11 +1,11 @@
 package com.exadel.project.administrator.service;
 
 import com.exadel.project.administrator.dto.AdministratorDto;
-import com.exadel.project.administrator.dto.RoleDto;
+import com.exadel.project.administrator.dto.ChangeRoleDto;
 import com.exadel.project.administrator.entity.Administrator;
-import com.exadel.project.administrator.entity.Role;
 import com.exadel.project.administrator.mapper.AdministratorMapper;
 import com.exadel.project.administrator.repository.AdministratorRepository;
+import com.exadel.project.administrator.repository.RoleRepository;
 import com.exadel.project.administrator.validator.AdministratorValidator;
 import com.exadel.project.common.exception.EntityAlreadyExistsException;
 import com.exadel.project.common.exception.EntityNotFoundException;
@@ -16,21 +16,10 @@ import com.exadel.project.trainee.entity.Trainee;
 import com.exadel.project.trainee.repository.TraineeRepository;
 import com.exadel.project.trainee.service.TraineeService;
 import lombok.RequiredArgsConstructor;
-import org.apache.http.HttpEntity;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -44,8 +33,8 @@ public class AdministratorService extends BaseService<Administrator, Administrat
     private final PasswordEncoder passwordEncoder;
     private final AdministratorRepository administratorRepository;
     private final TraineeRepository traineeRepository;
+    private final RoleRepository roleRepository;
     private final TraineeService traineeService;
-    private final KeycloakConfigProperties keycloakConfigProperties;
 
     {
         defaultSortingField = "surname";
@@ -76,6 +65,7 @@ public class AdministratorService extends BaseService<Administrator, Administrat
     public AdministratorDto addAdministrator(AdministratorDto administratorDto) throws EntityAlreadyExistsException {
         administratorValidator.checkAdministratorAlreadyExists(administratorDto);
         Administrator administrator = administratorMapper.dtoToEntity(administratorDto);
+        administrator.getRoles().add(roleRepository.findByRoleName("ROLE_ADMIN"));
         administratorRepository.save(administrator);
         return administratorMapper.entityToDto(administrator);
     }
@@ -87,9 +77,9 @@ public class AdministratorService extends BaseService<Administrator, Administrat
         return administratorMapper.entityToDto(administrator);
     }
 
-    public AdministratorDto changeAdministratorRole(Long id, RoleDto role) throws EntityNotFoundException {
+    public AdministratorDto changeAdministratorRole(Long id, ChangeRoleDto role) throws EntityNotFoundException {
         Administrator existingAdministrator = getEntityById(id);
-        existingAdministrator.setRole(Role.valueOf(role.getRole().toUpperCase()));
+        existingAdministrator.getRoles().add(roleRepository.findByRoleName(role.getRole().toUpperCase()));
         administratorRepository.save(existingAdministrator);
         return administratorMapper.entityToDto(existingAdministrator);
     }
@@ -106,33 +96,11 @@ public class AdministratorService extends BaseService<Administrator, Administrat
         return administratorMapper.entityToDto(administrator);
     }
 
-    public boolean checkPassword(String login, String password) {
-        if (passwordEncoder.matches(password, findAdministratorByLogin(login).getPassword())) {
+    public boolean checkPassword(String username, String password) {
+        if (passwordEncoder.matches(password, findAdministratorByLogin(username).getPassword())) {
             return true;
         }
         return false;
-    }
-
-    public String redirectToKeycloak (String username, String password) throws IOException, IOException {
-
-        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-
-        String url = keycloakConfigProperties.getAuthServerUrl() + "/realms/" + keycloakConfigProperties.getRealm() + "/protocol/openid-connect/token";
-
-        List nameValuePairs = new ArrayList();
-        nameValuePairs.add(new BasicNameValuePair("client_id", keycloakConfigProperties.getClientId()));
-        nameValuePairs.add(new BasicNameValuePair("username", username));
-        nameValuePairs.add(new BasicNameValuePair("grant_type", keycloakConfigProperties.getGrantType()));
-        nameValuePairs.add(new BasicNameValuePair("password", password));
-        nameValuePairs.add(new BasicNameValuePair("client_secret", keycloakConfigProperties.getClientSecret()));
-        HttpPost httpPost = new HttpPost(url);
-        httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, StandardCharsets.UTF_8));
-        CloseableHttpResponse response = httpClient.execute(httpPost);
-        HttpEntity entity = response.getEntity();
-
-        String result = EntityUtils.toString(entity);
-        httpClient.close();
-        return result;
     }
 
     private Administrator findAdministratorByLogin(String login) throws EntityNotFoundException {

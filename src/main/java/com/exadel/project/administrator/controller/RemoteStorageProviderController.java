@@ -13,14 +13,14 @@ public class RemoteStorageProviderController {
 
     private final AdministratorService administratorService;
 
-    @GetMapping("/{login}")
-    public ResponseEntity<AdministratorDto> getAdmin(@PathVariable String login) {
-        return ResponseEntity.ok(administratorService.getAdministratorByLogin(login));
+    @GetMapping("/{username}")
+    public ResponseEntity<AdministratorDto> getAdmin(@PathVariable String username) {
+        return ResponseEntity.ok(administratorService.getAdministratorByLogin(username));
     }
 
-    @PostMapping("/{login}")
-    public ResponseEntity<Boolean> verifyAdministratorPassword(@PathVariable String login, @RequestBody String password) {
-        return ResponseEntity.ok(administratorService.checkPassword(login, password));
+    @PostMapping("/{username}/password")
+    public ResponseEntity<Boolean> verifyAdministratorPassword(@PathVariable String username, @RequestBody String password) {
+        return ResponseEntity.ok(administratorService.checkPassword(username, password));
     }
 
 }

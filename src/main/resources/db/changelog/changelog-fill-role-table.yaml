@@ -1,0 +1,19 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: 20210514.[BE-17]-addition_to_role
+      author: nidaff.s@gmail.com
+      comment: "Insertion of initial data to role table"
+      preConditions:
+        - onFail: MARK_RAN
+        - onError: MARK_RAN
+        - sqlCheck:
+            expectedResult: "0"
+            sql: SELECT COUNT(*) FROM role
+      changes:
+        - sqlFile:
+            dbms: 'mysql'
+            endDelimiter: "@@"
+            splitStatements: false
+            path: db/sql/init_role.sql
+            stripComments: false

@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20210514.[BE-17]-add-administrator-has-role
+      author: nidaff.s@gmail.com
+      comment: "Create administrator-has-role table"
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: administrator-has-role
+      changes:
+        - createTable:
+            tableName: administrator_has_role
+            columns:
+              - column:
+                  name: administrator_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: administrator_fk
+                    references: administrator(id)
+                    nullable: false
+              - column:
+                  name: role_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: role_fk
+                    references: role(id)
+                    nullable: false

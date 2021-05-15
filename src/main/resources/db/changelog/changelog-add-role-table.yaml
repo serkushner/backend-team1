@@ -1,0 +1,25 @@
+databaseChangeLog:
+  -  changeSet:
+       id: 20210514.[BE-17]-create-role-table
+       author: nidaff.s@gmail.com
+       preConditions:
+         - onFail: MARK_RAN
+         - not:
+             - tableExists:
+                 tableName: role
+       changes:
+         -  createTable:
+              tableName: role
+              columns:
+                -  column:
+                     name: id
+                     type: bigint
+                     autoIncrement: true
+                     constraints:
+                       primaryKey:  true
+                       nullable:  false
+                -  column:
+                     name: role_name
+                     type: varchar(55)
+                     constraints:
+                       nullable:  false
