@@ -1,10 +1,11 @@
-package com.exadel.project.interview.service;
+package com.exadel.project.unit.interview.service;
 
 import com.exadel.project.common.exception.EntityNotFoundException;
 import com.exadel.project.interview.entity.Interview;
-import com.exadel.project.interview.entity.InterviewTestData;
+import com.exadel.project.unit.interview.entity.InterviewTestData;
 import com.exadel.project.interview.mapper.InterviewMapper;
 import com.exadel.project.interview.repository.InterviewRepository;
+import com.exadel.project.interview.service.InterviewService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

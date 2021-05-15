@@ -17,7 +17,7 @@ services:
       - "3307:3306"
 
   spring-backend:
-    image: backend-keycloak:1.0
+    image: backend-keycloak:3.0
     ports:
       - "8090:8090"
     environment:
@@ -44,6 +44,6 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./keycloak/providers/remote-storage-provider-8090.jar:/opt/jboss/keycloak/standalone/deployments/remote-storage-provider-8090.jar:z
+      - ./keycloak/providers/username-90.jar:/opt/jboss/keycloak/standalone/deployments/username-90.jar:z
     depends_on:
       - mysql
