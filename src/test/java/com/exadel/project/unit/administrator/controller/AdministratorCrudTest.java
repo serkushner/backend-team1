@@ -1,11 +1,11 @@
-package com.exadel.project.administrator.controller;
+package com.exadel.project.unit.administrator.controller;
 
 import com.exadel.project.administrator.dto.AdministratorDto;
 import com.exadel.project.administrator.entity.Administrator;
 import com.exadel.project.administrator.mapper.AdministratorMapper;
 import com.exadel.project.administrator.repository.AdministratorRepository;
-import com.exadel.project.administrator.testentity.AdministratorTestData;
-import com.exadel.project.administrator.testentity.AdministratorTestDataDto;
+import com.exadel.project.unit.administrator.testentity.AdministratorTestData;
+import com.exadel.project.unit.administrator.testentity.AdministratorTestDataDto;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
@@ -13,9 +13,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Sort;

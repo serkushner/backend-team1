@@ -1,10 +1,11 @@
-package com.exadel.project.trainee.entity;
+package com.exadel.project.unit.trainee.entity;
 
 import com.exadel.project.country.entity.Country;
 import com.exadel.project.internship.entity.Internship;
 import com.exadel.project.trainee.dto.TraineeDTO;
 import com.exadel.project.trainee.dto.TraineeToAdminDTO;
 import com.exadel.project.trainee.dto.TraineeToAdminDetailsDTO;
+import com.exadel.project.trainee.entity.*;
 import org.springframework.stereotype.Component;
 
 import java.time.DayOfWeek;
@@ -151,6 +152,8 @@ public class TraineeTestData {
         traineeToAdminDetailsDTO.setRecipient(true);
         traineeToAdminDetailsDTO.setSkype("skype.com");
         traineeToAdminDetailsDTO.setSurname("Kalinouski");
+        List<String> emptySubjectsList = Collections.emptyList();
+        traineeToAdminDetailsDTO.setSubjects(emptySubjectsList);
         return traineeToAdminDetailsDTO;
     }
 }
