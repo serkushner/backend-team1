@@ -6,6 +6,7 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import java.util.Objects;
 
 @Service
@@ -33,11 +34,15 @@ public class EmailServiceLoggingMockImpl implements EmailService {
             logger.info(stringBuffer.toString());
     }
 
-    @Override
     public void sendSimpleMessageUsingTemplate(String to,
                                                String subject,
                                                String[] dataToTemplate) {
         String text = String.format(Objects.requireNonNull(template.getText()), dataToTemplate);
         sendSimpleMessage(to, subject, text);
+    }
+
+    @Override
+    public void sendHTMLMail() throws MessagingException {
+        logger.info("attempt to send email with html template");
     }
 }
