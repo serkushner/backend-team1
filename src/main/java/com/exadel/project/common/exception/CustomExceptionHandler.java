@@ -106,6 +106,14 @@ public class CustomExceptionHandler {
         return new ResponseEntity<>(exceptionResponse, HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(EmailTextException.class)
+    public void handlerEmailTextException(Exception e){
+        String exMessage = exceptionLoadMessage(e,
+                "See setting of a text in email messages with html templates.");
+        String message = String.format("%s %s", LocalDateTime.now(), exMessage);
+        logger.debug(message);
+    }
+
     private String exceptionLoadMessage(Exception e, String defaultMessage) {
         String exMessage;
         if (e.getMessage() != null) {

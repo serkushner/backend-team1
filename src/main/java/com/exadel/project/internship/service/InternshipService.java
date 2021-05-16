@@ -237,7 +237,7 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
             return changePublishedById(internship, Published.VISIBLE_FOR_ADMINS);
         } else if (isVisibleForInterns) {
             InternshipDetailsDTO internshipDetailsDTO = changePublishedById(internship, Published.VISIBLE_FOR_INTERNS);
-            InternshipPublishedEvent internshipPublishedEvent = new InternshipPublishedEvent(this, internship.getSubjects());
+            InternshipPublishedEvent internshipPublishedEvent = new InternshipPublishedEvent(this, internship.getSubjects(), internship);
             applicationEventPublisher.publishEvent(internshipPublishedEvent);
             return internshipDetailsDTO;
         } else {

@@ -1,5 +1,8 @@
 package com.exadel.project.common.mailSender;
 
+import com.exadel.project.common.exception.EmailTextException;
+import com.exadel.project.internship.entity.Internship;
+import com.exadel.project.trainee.entity.Trainee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
@@ -74,6 +77,31 @@ public class EmailServiceImpl implements EmailService {
 //        helper.setTo(user.getEmail());
 //        javaMailSender.send(mimeMessage);
 //    }
+
+    public void sendHTMLBasedConfirmEmail(Internship internship,
+                                          Trainee trainee,
+                                          String approveUrl){
+        Context context = new Context();
+        context.setVariable("internship", internship);
+        context.setVariable("trainee", trainee);
+        context.setVariable("approveUrl", approveUrl);
+
+        String process = templateEngine.process("welcome.html", context);
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
+        try {
+            helper.setSubject("Exadel internship email confirmation");
+            helper.setText(process, true);
+            helper.setTo(trainee.getEmail());
+            helper.setFrom(NOREPLY_ADDRESS);
+        } catch (MessagingException exception) {
+            throw new EmailTextException(exception);
+        }
+        javaMailSender.send(mimeMessage);
+    }
+
+
+
 
     @Override
     public void sendHTMLMail() throws MessagingException {
