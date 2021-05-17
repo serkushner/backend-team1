@@ -1,5 +1,7 @@
 package com.exadel.project.common.mailSender;
 
+import com.exadel.project.internship.entity.Internship;
+import com.exadel.project.trainee.entity.Trainee;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mail.MailException;
@@ -9,7 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import java.util.Objects;
 
-@Service
+
 public class EmailServiceLoggingMockImpl implements EmailService {
 
     private static final String NOREPLY_ADDRESS = "noreply_exadeltestsender@gmail.com";
@@ -42,7 +44,12 @@ public class EmailServiceLoggingMockImpl implements EmailService {
     }
 
     @Override
-    public void sendHTMLMail() throws MessagingException {
+    public void sendHTMLMail() {
         logger.info("attempt to send email with html template");
+    }
+
+    @Override
+    public void sendHTMLBasedConfirmEmail(Internship internship, Trainee trainee, String approveUrl) {
+        logger.info("An attempt to send email with a html template after user registration for an email confirmation.");
     }
 }

@@ -14,13 +14,16 @@ import java.util.Arrays;
 
 @Controller
 @RequestMapping("/mailHealthCheck")
-@RequiredArgsConstructor
 public class MailHealthCheckController {
 
-    @Qualifier("emailNotification")
-    @Autowired
+
     private EmailService emailService;
     private final String OK_RESPONSE_MESSAGE = "email was sent";
+
+    @Autowired
+    public MailHealthCheckController(/*@Qualifier("emailNotificationSender")*/ EmailService emailService) {
+        this.emailService = emailService;
+    }
 
     @GetMapping(value = "/sendTo")
     public ResponseEntity<String> sendEmail(

@@ -3,6 +3,7 @@ package com.exadel.project.common.mailSender;
 import com.exadel.project.common.exception.EmailTextException;
 import com.exadel.project.internship.entity.Internship;
 import com.exadel.project.trainee.entity.Trainee;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
@@ -16,14 +17,13 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.util.Objects;
 
-@Service
+
+@RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
 
     private static final String NOREPLY_ADDRESS = "noreply_exadeltestsender@gmail.com";
 
-    @Autowired
     private JavaMailSender javaMailSender;
-    @Autowired
     private TemplateEngine templateEngine;
 
     private SimpleMailMessage simpleTemplate;
