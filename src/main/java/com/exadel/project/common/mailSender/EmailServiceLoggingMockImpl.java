@@ -6,9 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.stereotype.Service;
 
-import javax.mail.MessagingException;
 import java.util.Objects;
 
 
@@ -44,12 +42,22 @@ public class EmailServiceLoggingMockImpl implements EmailService {
     }
 
     @Override
-    public void sendHTMLMail() {
-        logger.info("attempt to send email with html template");
+    public void sendHTMLMail(String address) {
+        logger.info("attempt to send email with welcome.html template to next email {}", address);
     }
 
     @Override
     public void sendHTMLBasedConfirmEmail(Internship internship, Trainee trainee, String approveUrl) {
         logger.info("An attempt to send email with a html template after user registration for an email confirmation.");
+    }
+
+    @Override
+    public void sendHTMLInternshipAnnouncementEmail(Internship internship, Trainee trainee, String internshipUrl) {
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("An attempt to send emails with a html internship announcement template after internship publication.")
+                .append("\nInternship ID: ").append(internship.getId())
+                .append("\nInternship URL: ").append(internshipUrl)
+                .append("\nTrainee email: ").append(trainee.getEmail());
+        logger.info(stringBuffer.toString());
     }
 }

@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Email confirmation</title>
+    </head>
+    <body>
+        <div>Hello, <b th:text="${trainee.surname} + ' ' + ${trainee.name}"></b>.</div>
+        <div>   Exadel team invite you to visit an announcement of a new <span th:text="${internship.internshipType.getType()}"></span>
+            "<span th:text="${internship.title}"></span>" with some subjects like your last or current one.</div>
+        <div>It was published and will start soon. Additional details are on the link below.</div>
+        <a th:href="@{${internshipUrl}}">Link to the announced <span th:text="${internship.internshipType.getType()}"></span></a>
+    </body>
+</html>

@@ -21,7 +21,7 @@ public class MailHealthCheckController {
     private final String OK_RESPONSE_MESSAGE = "email was sent";
 
     @Autowired
-    public MailHealthCheckController(/*@Qualifier("emailNotificationSender")*/ EmailService emailService) {
+    public MailHealthCheckController(@Qualifier("emailNotificationSender") EmailService emailService) {
         this.emailService = emailService;
     }
 
@@ -45,12 +45,9 @@ public class MailHealthCheckController {
     }
 
     @GetMapping(value = "/sendMessageWithHTMLTemplate")
-    public ResponseEntity<String> sendEmailWithHTMLTemplate() {
-        try {
-            emailService.sendHTMLMail();
-        } catch (MessagingException exception) {
-            System.out.println(Arrays.toString(exception.getStackTrace()));
-        }
+    public ResponseEntity<String> sendEmailWithHTMLTemplate(
+            @RequestParam(value = "email") String address) {
+        emailService.sendHTMLMail(address);
         return ResponseEntity.ok("email was sent");
     }
 }

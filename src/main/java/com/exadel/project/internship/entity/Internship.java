@@ -4,7 +4,6 @@ import com.exadel.project.InternshipType.entity.InternshipType;
 import com.exadel.project.country.entity.Country;
 import com.exadel.project.skill.entity.Skill;
 import com.exadel.project.subject.entity.Subject;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.ToString;
 

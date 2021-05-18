@@ -12,7 +12,9 @@ public interface EmailService {
     void sendSimpleMessageUsingTemplate(String to, String subject,
                                         String ...templateModel);
 
-    void sendHTMLMail() throws MessagingException;
+    void sendHTMLMail(String toEmail);
 
     void sendHTMLBasedConfirmEmail(Internship internship, Trainee trainee, String approveUrl);
+
+    void sendHTMLInternshipAnnouncementEmail(Internship internship, Trainee trainee, String internshipUrl);
 }

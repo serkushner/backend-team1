@@ -18,7 +18,7 @@ public class JwtConfiguration {
     @Value("${jwt.secret}")
     private String jwtSecret;
 
-    @Value("${jwt.url:http://localhost:8081/email/}")
+    @Value("${jwt.url}")
     private String serverUrl;
 
     public String generateToken(AdditionalInfo additionalInfo) {
