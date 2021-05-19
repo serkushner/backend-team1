@@ -1,6 +1,7 @@
 package com.exadel.project.common.mailSender;
 
 import com.exadel.project.internship.entity.Internship;
+import com.exadel.project.interview.entity.Interview;
 import com.exadel.project.trainee.entity.Trainee;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,6 +59,26 @@ public class EmailServiceLoggingMockImpl implements EmailService {
                 .append("\nInternship ID: ").append(internship.getId())
                 .append("\nInternship URL: ").append(internshipUrl)
                 .append("\nTrainee email: ").append(trainee.getEmail());
+        logger.info(stringBuffer.toString());
+    }
+
+    @Override
+    public void sendHTMLInterviewReminderEmail(Interview interview) {
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("An attempt to send email with a html template reminder about interview to a trainee.")
+                .append("\nInterview ID: ").append(interview.getId())
+                .append("\nInternship ID: ").append(interview.getInternship().getId())
+                .append("\nTrainee email: ").append(interview.getTrainee().getEmail());
+        logger.info(stringBuffer.toString());
+    }
+
+    @Override
+    public void sendHTMLInterviewReminderEmailWithFeedback(Interview interview, String interviewFeedbackUrl) {
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("An attempt to send email with a html template reminder about interview to an interviewer.")
+                .append("\nInterview ID: ").append(interview.getId())
+                .append("\nInternship ID: ").append(interview.getInternship().getId())
+                .append("\nInterviewer email: ").append(interview.getInterviewer().getEmail());
         logger.info(stringBuffer.toString());
     }
 }
