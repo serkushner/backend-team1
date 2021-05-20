@@ -1,9 +1,9 @@
 package com.exadel.project.unit.administrator.testentity;
 
 import com.exadel.project.administrator.dto.AdministratorDto;
-import com.exadel.project.administrator.entity.Administrator;
-import com.exadel.project.administrator.entity.Role;
 import org.springframework.stereotype.Component;
+
+import java.util.Collections;
 
 @Component
 public class AdministratorTestDataDto {
@@ -16,7 +16,7 @@ public class AdministratorTestDataDto {
         administratorDto.setSurname("Reeves");
         administratorDto.setEmail("neo.forever@gmail.com");
         administratorDto.setPhone("1213675456");
-        administratorDto.setRole(Role.ADMIN);
+        administratorDto.setRoles(Collections.emptySet());
         administratorDto.setPassword("111");
         administratorDto.setSkype("neo_the_best");
         return administratorDto;

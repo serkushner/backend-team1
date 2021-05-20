@@ -3,9 +3,8 @@ package com.exadel.project.administrator.dto;
 import lombok.Data;
 
 @Data
-public class RoleDto {
+public class ChangeRoleDto {
 
-    private Long id;
-    private String roleName;
+    private String role;
 
 }

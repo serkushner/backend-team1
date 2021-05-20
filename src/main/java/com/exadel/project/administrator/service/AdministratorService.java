@@ -1,11 +1,11 @@
 package com.exadel.project.administrator.service;
 
 import com.exadel.project.administrator.dto.AdministratorDto;
-import com.exadel.project.administrator.dto.RoleDto;
+import com.exadel.project.administrator.dto.ChangeRoleDto;
 import com.exadel.project.administrator.entity.Administrator;
-import com.exadel.project.administrator.entity.Role;
 import com.exadel.project.administrator.mapper.AdministratorMapper;
 import com.exadel.project.administrator.repository.AdministratorRepository;
+import com.exadel.project.administrator.repository.RoleRepository;
 import com.exadel.project.administrator.validator.AdministratorValidator;
 import com.exadel.project.common.exception.EntityAlreadyExistsException;
 import com.exadel.project.common.exception.EntityNotFoundException;
@@ -46,6 +46,7 @@ public class AdministratorService extends BaseService<Administrator, Administrat
     private final TraineeRepository traineeRepository;
     private final TraineeService traineeService;
     private final KeycloakConfigProperties keycloakConfigProperties;
+    private final RoleRepository roleRepository;
 
     {
         defaultSortingField = "surname";
@@ -76,6 +77,7 @@ public class AdministratorService extends BaseService<Administrator, Administrat
     public AdministratorDto addAdministrator(AdministratorDto administratorDto) throws EntityAlreadyExistsException {
         administratorValidator.checkAdministratorAlreadyExists(administratorDto);
         Administrator administrator = administratorMapper.dtoToEntity(administratorDto);
+        administrator.getRoles().add(roleRepository.findByRoleName("ROLE_ADMIN"));
         administratorRepository.save(administrator);
         return administratorMapper.entityToDto(administrator);
     }
@@ -87,9 +89,9 @@ public class AdministratorService extends BaseService<Administrator, Administrat
         return administratorMapper.entityToDto(administrator);
     }
 
-    public AdministratorDto changeAdministratorRole(Long id, RoleDto role) throws EntityNotFoundException {
+    public AdministratorDto changeAdministratorRole(Long id, ChangeRoleDto role) throws EntityNotFoundException {
         Administrator existingAdministrator = getEntityById(id);
-        existingAdministrator.setRole(Role.valueOf(role.getRole().toUpperCase()));
+        existingAdministrator.getRoles().add(roleRepository.findByRoleName(role.getRole().toUpperCase()));
         administratorRepository.save(existingAdministrator);
         return administratorMapper.entityToDto(existingAdministrator);
     }

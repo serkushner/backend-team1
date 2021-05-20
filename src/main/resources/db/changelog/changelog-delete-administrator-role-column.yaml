@@ -1,0 +1,14 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: 20210514.[BE-17]-changelog-delete-administrator-role-column
+      author: nidaff.s@gmail.com
+      preConditions:
+        - onFail: MARK_RAN
+        - columnExists:
+            tableName: administrator
+            columnName: role
+      changes:
+        - dropColumn:
+            tableName: administrator
+            columnName: role

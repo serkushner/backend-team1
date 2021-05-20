@@ -7,7 +7,9 @@ import lombok.ToString;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @ToString(exclude = {"password"})
@@ -47,9 +49,9 @@ public class Administrator {
     @Column(name = "skype")
     private String skype;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role", columnDefinition="ENUM('ADMIN','SUPERADMIN')")
-    private Role role;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "administrator_has_role", joinColumns = @JoinColumn(name = "administrator_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private Set<Role> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "administrator")
     private List<Trainee> trainees = new ArrayList<>();
