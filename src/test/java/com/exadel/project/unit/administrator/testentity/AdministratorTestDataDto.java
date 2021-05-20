@@ -1,4 +1,4 @@
-package com.exadel.project.administrator.testentity;
+package com.exadel.project.unit.administrator.testentity;
 
 import com.exadel.project.administrator.dto.AdministratorDto;
 import com.exadel.project.administrator.entity.Administrator;
