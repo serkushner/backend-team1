@@ -19,12 +19,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final AdministratorRepository administratorRepository;
 
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http.csrf().disable().authorizeRequests()
-//                .antMatchers("/**")
-//                .permitAll();
-//    }
+    /*@Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable().authorizeRequests()
+                .antMatchers("/**")
+                .permitAll();
+    }*/
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

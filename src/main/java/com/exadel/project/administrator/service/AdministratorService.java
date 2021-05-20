@@ -106,7 +106,7 @@ public class AdministratorService extends BaseService<Administrator, Administrat
         return administratorMapper.entityToDto(administrator);
     }
 
-    public boolean checkPassword(String login, String password) {
+    public boolean verifyAdministratorPassword(String login, String password) {
         if (passwordEncoder.matches(password, findAdministratorByLogin(login).getPassword())) {
             return true;
         }
