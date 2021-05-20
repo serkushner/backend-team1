@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -73,6 +74,14 @@ public class CustomExceptionHandler {
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(MailException.class)
+    public ResponseEntity<ExceptionResponse> handlerMailException(Exception e){
+        String exMessage = exceptionLoadMessage(e, "error during email sending");
+        String message = String.format("%s %s", LocalDateTime.now(), exMessage);
+        ExceptionResponse exceptionResponse = new ExceptionResponse(message);
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @ExceptionHandler(TraineeAlreadyConfirmEmailException.class)
     public ResponseEntity<ExceptionResponse> handlerTraineeAlreadyConfirmEmailException(Exception e){
         String exMessage = exceptionLoadMessage(e, "trainee already confirmed email");
@@ -95,6 +104,14 @@ public class CustomExceptionHandler {
         String message = String.format("%s %s", LocalDateTime.now(), exMessage);
         ExceptionResponse exceptionResponse = new ExceptionResponse(message);
         return new ResponseEntity<>(exceptionResponse, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(EmailTextException.class)
+    public void handlerEmailTextException(Exception e){
+        String exMessage = exceptionLoadMessage(e,
+                "See setting of a text in email messages with html templates.");
+        String message = String.format("%s %s", LocalDateTime.now(), exMessage);
+        logger.debug(message);
     }
 
     private String exceptionLoadMessage(Exception e, String defaultMessage) {
