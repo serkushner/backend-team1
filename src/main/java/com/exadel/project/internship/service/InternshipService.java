@@ -1,7 +1,6 @@
 package com.exadel.project.internship.service;
 
 import com.exadel.project.InternshipType.service.InternshipTypeService;
-import com.exadel.project.internship.event.InternshipPublishedEvent;
 import com.exadel.project.common.exception.DoubleInternshipRegistrationException;
 import com.exadel.project.common.exception.EntityAlreadyExistsException;
 import com.exadel.project.common.exception.EntityNotFoundException;
@@ -15,6 +14,7 @@ import com.exadel.project.internship.dto.InternshipDetailsDTO;
 import com.exadel.project.internship.entity.Format;
 import com.exadel.project.internship.entity.Internship;
 import com.exadel.project.internship.entity.Published;
+import com.exadel.project.internship.event.InternshipPublishedEvent;
 import com.exadel.project.internship.mapper.InternshipDetailsMapper;
 import com.exadel.project.internship.mapper.InternshipMapper;
 import com.exadel.project.internship.repository.InternshipRepository;
@@ -26,7 +26,6 @@ import com.exadel.project.subject.service.SubjectService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -44,7 +43,7 @@ import java.util.stream.Stream;
 public class InternshipService extends BaseService<Internship, InternshipRepository> {
 
     private static final Logger logger = LoggerFactory.getLogger(InternshipService.class);
-    @Autowired
+
     private final InternshipRepository internshipRepository;
     private final InternshipMapper internshipMapper;
     private final CountryService countryService;
@@ -225,6 +224,7 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public InternshipDetailsDTO changeInternshipPublishedStatusById(Long id, String published) {
         boolean isVisibleForAdmins = false;
         boolean isVisibleForInterns = false;
@@ -237,7 +237,7 @@ public class InternshipService extends BaseService<Internship, InternshipReposit
             return changePublishedById(internship, Published.VISIBLE_FOR_ADMINS);
         } else if (isVisibleForInterns) {
             InternshipDetailsDTO internshipDetailsDTO = changePublishedById(internship, Published.VISIBLE_FOR_INTERNS);
-            InternshipPublishedEvent internshipPublishedEvent = new InternshipPublishedEvent(this, internship.getSubjects());
+            InternshipPublishedEvent internshipPublishedEvent = new InternshipPublishedEvent(this, internship);
             applicationEventPublisher.publishEvent(internshipPublishedEvent);
             return internshipDetailsDTO;
         } else {
