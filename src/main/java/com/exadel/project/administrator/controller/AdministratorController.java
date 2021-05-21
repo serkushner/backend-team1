@@ -32,7 +32,6 @@ public class AdministratorController {
         return ResponseEntity.ok(administratorService.getById(id));
     }
 
-    //@Secured("ROLE_SUPERADMIN")
     @DeleteMapping(value = ID)
     public ResponseEntity<Void> deleteAdmin(@PathVariable Long id) {
         administratorService.deleteAdministratorById(id);
@@ -49,7 +48,7 @@ public class AdministratorController {
         return ResponseEntity.ok(administratorService.updateAdministrator(id, dto));
     }
 
-    //@Secured("ROLE_SUPERADMIN")
+    @Secured("ROLE_SUPERADMIN")
     @PutMapping(value ="/role" + ID)
     public ResponseEntity<AdministratorDto> changeAdministratorRole(@PathVariable Long id, @RequestBody ChangeRoleDto role) {
         return ResponseEntity.ok(administratorService.changeAdministratorRole(id, role));

@@ -30,13 +30,13 @@ public class RoleConverter implements Converter<Jwt, Collection<GrantedAuthority
         if (realmAccess == null || realmAccess.isEmpty()) {
             List<Role> roleList = new ArrayList<>(administratorRepository.findAdministratorByEmail(jwt.getClaims().get("email").toString()).getRoles());
             returnValue =  roleList
-                    .stream().map(role -> role.toString())
+                    .stream().map(roleName -> "ROLE_" + roleName)
                     .map(SimpleGrantedAuthority::new)
                     .collect(Collectors.toList());
 
         } else {
             returnValue = ((List<String>) realmAccess.get("roles"))
-                    .stream().map(roleName -> roleName.toString())
+                    .stream().map(roleName -> "ROLE_" + roleName)
                     .map(SimpleGrantedAuthority::new)
                     .collect(Collectors.toList());
         }
