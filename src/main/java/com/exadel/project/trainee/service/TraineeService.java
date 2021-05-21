@@ -1,5 +1,6 @@
 package com.exadel.project.trainee.service;
 
+import com.exadel.project.common.exception.EntityNotFoundException;
 import com.exadel.project.common.service.BaseService;
 import com.exadel.project.common.service.rsql.RsqlSpecification;
 import com.exadel.project.country.entity.Country;
@@ -95,6 +96,14 @@ public class TraineeService extends BaseService<Trainee, TraineeRepository> {
                 .map(Trainee::getEmail)
                 .distinct()
                 .collect(Collectors.toList());
+    }
+
+    public Trainee findTraineeByEmail(String email) {
+        Trainee trainee = traineeRepository.findTraineeByEmail(email);
+        if (trainee == null) {
+            throw new EntityNotFoundException("No trainee with next email: " + email);
+        }
+        return trainee;
     }
 
     private void addCountryToTrainee(String location, Trainee trainee){
