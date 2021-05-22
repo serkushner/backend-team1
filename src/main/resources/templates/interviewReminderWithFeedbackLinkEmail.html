@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>New internship announcement</title>
+    </head>
+    <body>
+        <div>Hello, <b th:text="${interview.getInterviewer().getSurname()} + ' ' + ${interview.getInterviewer().getName()}"></b>.</div>
+        <div>We invite you to the interview with a trainee. Interview is going to be at <span
+                th:text="${#temporals.format(interview.getInterviewTime().getStartDate())}"></span>.
+            Interview will be on Skype - that is why we highly recommend you to be online for 5 minutes ahead the event.</div>
+        <div>Follow next link to fill feedback form after interview registration or ignore this email if it was not you.</div>
+        <div><a th:href="@{${feedbackUrl}}">Feedback form</a></div>
+    </body>
+</html>

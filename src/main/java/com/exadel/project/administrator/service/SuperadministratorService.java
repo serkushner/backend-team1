@@ -19,16 +19,8 @@ public class SuperadministratorService {
 
     public TraineeToAdminDTO changeTraineeStatus(Long id, Boolean isApproved) {
         AdditionalInfo additionalInfo = additionalInfoRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        if (!isApproved) {
-            additionalInfo.setTraineeStatus(TraineeStatus.REJECTED);
-        } else {
-            TraineeStatus status = additionalInfo.getTraineeStatus();
-            if (status == TraineeStatus.RECRUITER_INTERVIEW_ACCEPTED || status == TraineeStatus.RECRUITER_INTERVIEW_REJECTED) {
-                additionalInfo.setTraineeStatus(TraineeStatus.RECRUITER_INTERVIEW_PASSED);
-            } else if (status == TraineeStatus.TECHNICAL_INTERVIEW_ACCEPTED || status == TraineeStatus.TECHNICAL_INTERVIEW_REJECTED) {
-                additionalInfo.setTraineeStatus(TraineeStatus.ACCEPTED);
-            } else throw new TraineeStatusIsNotAvailableForChangesException();
-        }
+        TraineeStatus traineeStatus = TraineeStatus.getNextStatus(additionalInfo.getTraineeStatus(), isApproved);
+        additionalInfo.setTraineeStatus(traineeStatus);
         additionalInfoRepository.save(additionalInfo);
         return additionalInfoMapper.entityToDto(additionalInfo);
     }

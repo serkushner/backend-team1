@@ -65,7 +65,7 @@ public class AdministratorService extends BaseService<Administrator, Administrat
     public AdministratorDto addAdministrator(AdministratorDto administratorDto) throws EntityAlreadyExistsException {
         administratorValidator.checkAdministratorAlreadyExists(administratorDto);
         Administrator administrator = administratorMapper.dtoToEntity(administratorDto);
-        administrator.getRoles().add(roleRepository.findByRoleName("ROLE_ADMIN"));
+        administrator.getRoles().add(roleRepository.findByRoleName("ADMIN"));
         administratorRepository.save(administrator);
         return administratorMapper.entityToDto(administrator);
     }
