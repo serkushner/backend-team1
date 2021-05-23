@@ -19,7 +19,7 @@ public class SuperadministratorController {
 
     private static final String ID = "/{id}";
 
-//    @Secured("ROLE_SUPERADMIN")
+    @Secured("ROLE_SUPERADMIN")
     @PostMapping(value ="trainee/ai" + ID)
     public ResponseEntity<TraineeToAdminDTO> changeTraineeStatus(@PathVariable Long id, @RequestBody ApproveDto approveDto) {
         return ResponseEntity.ok(superadministratorService.changeTraineeStatus(id, approveDto.getIsApproved()));
