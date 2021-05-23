@@ -1,11 +1,7 @@
 package com.exadel.project.trainee.controller;
 
 import com.exadel.project.common.service.S3Service;
-import com.exadel.project.configurations.JwtConfiguration;
-import com.exadel.project.trainee.dto.TraineeDTO;
-import com.exadel.project.trainee.dto.TraineeHistoryDTO;
-import com.exadel.project.trainee.dto.TraineeToAdminDTO;
-import com.exadel.project.trainee.dto.TraineeToAdminDetailsDTO;
+import com.exadel.project.trainee.dto.*;
 import com.exadel.project.trainee.service.AdditionalInfoService;
 import com.exadel.project.trainee.service.TraineeService;
 import lombok.RequiredArgsConstructor;
@@ -67,5 +63,16 @@ public class TraineeController {
     public ResponseEntity<Void> deleteAdditionalInfo(@PathVariable Long id){
         additionalInfoService.deleteAdditionalInfo(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("unsubscribe/{encryptedId}")
+    public ResponseEntity<String> unsubscribeTrainee(@PathVariable String encryptedId){
+        traineeService.unsubscribeTrainee(encryptedId);
+        return ResponseEntity.ok("thanks for being with us");
+    }
+
+    @PostMapping("notify")
+    public ResponseEntity<NotifyTraineesDTO> notifyTrainees(@RequestBody NotifyTraineesDTO dto){
+        return ResponseEntity.ok(additionalInfoService.notifyTrainees(dto));
     }
 }

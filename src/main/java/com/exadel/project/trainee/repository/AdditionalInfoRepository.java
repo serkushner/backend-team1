@@ -15,4 +15,5 @@ public interface AdditionalInfoRepository extends JpaRepository<AdditionalInfo, 
     List<AdditionalInfo> findAllByInternship_EndDateAfter(LocalDate localDate);
     List<AdditionalInfo> findAllByTraineeId(Long id);
     List<AdditionalInfo> findAllByTrainee_RecipientAndInternship_SubjectsIn(Boolean recipient, List<Subject> subjects);
+    List<AdditionalInfo> findAllByIdIn(List<Long> id);
 }
