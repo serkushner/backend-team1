@@ -15,6 +15,14 @@ public class MapperUtil {
                 .collect(Collectors.toList());
     }
 
+    public static <T> Set<String> getRoles(Set<T> sourceSet, Function<T, String> function) {
+        return Optional.ofNullable(sourceSet)
+                .stream()
+                .flatMap(Collection::stream)
+                .map(function)
+                .collect(Collectors.toSet());
+    }
+
     public static List<Map<String, String>> getMapDates(List<InterviewPeriod> interviewPeriods) {
         List<Map<String, String>> dates = new ArrayList<>();
         for (InterviewPeriod interviewPeriod : interviewPeriods) {

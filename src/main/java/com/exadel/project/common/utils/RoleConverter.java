@@ -1,5 +1,6 @@
 package com.exadel.project.common.utils;
 
+import com.exadel.project.administrator.entity.Role;
 import com.exadel.project.administrator.repository.AdministratorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.converter.Converter;
@@ -27,8 +28,12 @@ public class RoleConverter implements Converter<Jwt, Collection<GrantedAuthority
 
         Collection<GrantedAuthority> returnValue = new ArrayList<>();
         if (realmAccess == null || realmAccess.isEmpty()) {
-            SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority("ROLE_" + administratorRepository.findAdministratorByEmail(jwt.getClaims().get("email").toString()).getRole().toString());
-            returnValue.add(simpleGrantedAuthority);
+            List<Role> roleList = new ArrayList<>(administratorRepository.findAdministratorByEmail(jwt.getClaims().get("email").toString()).getRoles());
+            returnValue =  roleList
+                    .stream().map(roleName -> "ROLE_" + roleName)
+                    .map(SimpleGrantedAuthority::new)
+                    .collect(Collectors.toList());
+
         } else {
             returnValue = ((List<String>) realmAccess.get("roles"))
                     .stream().map(roleName -> "ROLE_" + roleName)

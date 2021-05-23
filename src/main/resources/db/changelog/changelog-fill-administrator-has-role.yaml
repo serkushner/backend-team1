@@ -1,0 +1,19 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: 20210514.[BE-17]-addition_to_administrator-has-role
+      author: nidaff.s@gmail.com
+      comment: "Insertion of initial data to administrator-has-role table"
+      preConditions:
+        - onFail: MARK_RAN
+        - onError: MARK_RAN
+        - sqlCheck:
+            expectedResult: "0"
+            sql: SELECT COUNT(*) FROM administrator_has_role
+      changes:
+        - sqlFile:
+            dbms: 'mysql'
+            endDelimiter: "@@"
+            splitStatements: false
+            path: db/sql/init_administrator_has_role.sql
+            stripComments: false

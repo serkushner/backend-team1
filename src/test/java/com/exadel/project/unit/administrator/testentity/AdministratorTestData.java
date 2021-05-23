@@ -1,7 +1,6 @@
 package com.exadel.project.unit.administrator.testentity;
 
 import com.exadel.project.administrator.entity.Administrator;
-import com.exadel.project.administrator.entity.Role;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,7 +14,6 @@ public class AdministratorTestData {
         administrator.setSurname("Reeves");
         administrator.setEmail("neo.forever@gmail.com");
         administrator.setPhone("1213675456");
-        administrator.setRole(Role.ADMIN);
         administrator.setPassword("111");
         administrator.setSkype("neo_the_best");
         return administrator;

@@ -1,6 +1,7 @@
 package com.exadel.project.administrator.controller;
 
 import com.exadel.project.administrator.dto.AdministratorDto;
+import com.exadel.project.administrator.dto.ChangeRoleDto;
 import com.exadel.project.administrator.dto.RoleDto;
 import com.exadel.project.administrator.service.AdministratorService;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,6 @@ public class AdministratorController {
         return ResponseEntity.ok(administratorService.getById(id));
     }
 
-    //@Secured("ROLE_SUPERADMIN")
     @DeleteMapping(value = ID)
     public ResponseEntity<Void> deleteAdmin(@PathVariable Long id) {
         administratorService.deleteAdministratorById(id);
@@ -48,8 +48,9 @@ public class AdministratorController {
         return ResponseEntity.ok(administratorService.updateAdministrator(id, dto));
     }
 
+    @Secured("ROLE_SUPERADMIN")
     @PutMapping(value ="/role" + ID)
-    public ResponseEntity<AdministratorDto> changeAdministratorRole(@PathVariable Long id, @RequestBody RoleDto role) {
+    public ResponseEntity<AdministratorDto> changeAdministratorRole(@PathVariable Long id, @RequestBody ChangeRoleDto role) {
         return ResponseEntity.ok(administratorService.changeAdministratorRole(id, role));
     }
 
