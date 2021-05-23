@@ -14,9 +14,8 @@ public class ConfirmTraineeEmailController {
     private final ConfirmTraineeEmailService confirmTraineeEmailService;
 
     @PostMapping("email/{token}")
-    public ResponseEntity<Void> confirmTraineeEmailByToken(@PathVariable String token) {
+    public ResponseEntity<String> confirmTraineeEmailByToken(@PathVariable String token) {
         confirmTraineeEmailService.confirmTraineeEmail(token);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("Your email has confirmed");
     }
-
 }
