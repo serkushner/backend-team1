@@ -53,7 +53,7 @@ public class EmailServiceLoggingMockImpl implements EmailService {
     }
 
     @Override
-    public void sendHTMLInternshipAnnouncementEmail(Internship internship, Trainee trainee, String internshipUrl) {
+    public void sendHTMLInternshipAnnouncementEmail(Internship internship, Trainee trainee, String internshipUrl, String traineeUrl) {
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append("An attempt to send emails with a html internship announcement template after internship publication.")
                 .append("\nInternship ID: ").append(internship.getId())

@@ -3,6 +3,8 @@ package com.exadel.project.trainee.mapper;
 import com.exadel.project.administrator.entity.Administrator;
 import com.exadel.project.common.utils.MapperUtil;
 import com.exadel.project.internship.entity.Internship;
+import com.exadel.project.interview.dto.InterviewTimeResponseDTO;
+import com.exadel.project.interviewer.dto.InterviewerResponseDTO;
 import com.exadel.project.subject.entity.Subject;
 import com.exadel.project.interview.dto.InterviewDTO;
 import com.exadel.project.interviewer.entity.InterviewerType;
@@ -17,6 +19,7 @@ import com.exadel.project.trainee.entity.TraineeStatus;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -47,14 +50,18 @@ public interface AdditionalInfoMapper {
     @Mapping(target = "location", expression = "java(additionalInfo.getTrainee().getCountry().getName())")
     @Mapping(target = "recipient", expression = "java(additionalInfo.getTrainee().getRecipient())")
     @Mapping(target = "email", expression = "java(additionalInfo.getTrainee().getEmail())")
-    @Mapping(target = "adminName", expression = "java(getAdminName(additionalInfo.getTrainee().getAdministrator()))")
-    @Mapping(target = "adminSurname", expression = "java(getAdminSurname(additionalInfo.getTrainee().getAdministrator()))")
     @Mapping(target = "dates", expression = "java(getMapDates(additionalInfo.getTrainee().getInterviewPeriods()))")
     @Mapping(target = "internshipId", expression = "java(additionalInfo.getInternship().getId())")
     @Mapping(target = "internshipTitle", expression = "java(additionalInfo.getInternship().getTitle())")
     @Mapping(target = "techInterview", expression = "java(getInterviewDescription(\"tech\", interviews))")
     @Mapping(target = "hrInterview", expression = "java(getInterviewDescription(\"hr\", interviews))")
     @Mapping(target = "subjects", expression = "java(getSubjectsName(additionalInfo.getInternship().getSubjects()))")
+    @Mapping(target = "hrInterviewTime", expression = "java(getInterviewTime(\"hr\", interviews))")
+    @Mapping(target = "techInterviewTime", expression = "java(getInterviewTime(\"tech\", interviews))")
+    @Mapping(target = "hrName", expression = "java(getInterviewerName(\"hr\", interviews))")
+    @Mapping(target = "hrSurname", expression = "java(getInterviewerSurname(\"hr\", interviews))")
+    @Mapping(target = "techName", expression = "java(getInterviewerName(\"tech\", interviews))")
+    @Mapping(target = "techSurname", expression = "java(getInterviewerSurname(\"tech\", interviews))")
     TraineeToAdminDetailsDTO entityToDto(AdditionalInfo additionalInfo, List<InterviewDTO> interviews);
 
     @Mapping(target = "internshipId", expression = "java(additionalInfo.getInternship().getId())")
@@ -88,8 +95,39 @@ public interface AdditionalInfoMapper {
     default String getInterviewDescription(String type, List<InterviewDTO> interviews){
         InterviewerType interviewerType = InterviewerType.valueOf(type.toUpperCase());
         return interviews.stream()
-                .filter(dto->dto.getInterviewer().getType() == interviewerType).map(InterviewDTO::getName)
+                .filter(dto->dto.getInterviewer().getType() == interviewerType)
+                .map(InterviewDTO::getName)
                 .map(Optional::ofNullable).findFirst().flatMap(Function.identity())
+                .orElse(null);
+    }
+
+    default LocalDateTime getInterviewTime(String type, List<InterviewDTO> interviews){
+        InterviewerType interviewerType = InterviewerType.valueOf(type.toUpperCase());
+        return interviews.stream()
+                .filter(dto->dto.getInterviewer().getType() == interviewerType)
+                .map(InterviewDTO::getInterviewTime)
+                .map(InterviewTimeResponseDTO::getStartDate)
+                .map(Optional::ofNullable).findFirst().flatMap(Function.identity())
+                .orElse(null);
+    }
+
+    default String getInterviewerName(String type, List<InterviewDTO> interviews){
+        InterviewerType interviewerType = InterviewerType.valueOf(type.toUpperCase());
+        return interviews.stream()
+                .map(InterviewDTO::getInterviewer)
+                .filter(interviewer -> interviewer.getType() == interviewerType)
+                .map(InterviewerResponseDTO::getName)
+                .findFirst()
+                .orElse(null);
+    }
+
+    default String getInterviewerSurname(String type, List<InterviewDTO> interviews){
+        InterviewerType interviewerType = InterviewerType.valueOf(type.toUpperCase());
+        return interviews.stream()
+                .map(InterviewDTO::getInterviewer)
+                .filter(interviewer -> interviewer.getType() == interviewerType)
+                .map(InterviewerResponseDTO::getSurname)
+                .findFirst()
                 .orElse(null);
     }
 }
