@@ -14,5 +14,9 @@
             "<span th:text="${internship.title}"></span>" with some subjects like your last or current one.</div>
         <div>It was published and will start soon. Additional details are on the link below.</div>
         <a th:href="@{${internshipUrl}}">Link to the announced <span th:text="${internship.internshipType.getType()}"></span></a>
+        <br>
+        <form method="POST" th:action="@{${traineeUrl}}">
+            <button type="submit" name="submit" value="value" class="link-button">To unsubscribe from our news click</button>
+        </form>
     </body>
 </html>

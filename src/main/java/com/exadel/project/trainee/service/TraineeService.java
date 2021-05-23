@@ -39,6 +39,7 @@ public class TraineeService extends BaseService<Trainee, TraineeRepository> {
     private final TraineeValidator traineeValidator;
     private final AdditionalInfoRepository additionalInfoRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
+    private final JwtTraineeService jwtTraineeService;
 
     @Override
     public RsqlSpecification getRsqlSpecification() {
@@ -118,4 +119,11 @@ public class TraineeService extends BaseService<Trainee, TraineeRepository> {
         return interviewPeriods;
     }
 
+    public void unsubscribeTrainee(String encryptedId){
+        jwtTraineeService.validateToken(encryptedId);
+        Long traineeId = Long.parseLong(jwtTraineeService.getIdFromToken(encryptedId));
+        Trainee trainee = traineeRepository.findById(traineeId).orElseThrow(EntityNotFoundException::new);
+        trainee.setRecipient(false);
+        traineeRepository.save(trainee);
+    }
 }

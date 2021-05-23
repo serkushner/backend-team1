@@ -19,7 +19,7 @@ public interface EmailService {
 
     void sendHTMLInternshipAnnouncementEmail(Internship internship,
                                              Trainee trainee,
-                                             String internshipUrl);
+                                             String internshipUrl, String traineeUrl);
 
     void sendHTMLInterviewReminderEmail(Interview interview);
 

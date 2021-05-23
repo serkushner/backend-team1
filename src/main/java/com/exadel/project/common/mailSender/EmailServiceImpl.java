@@ -66,11 +66,12 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendHTMLInternshipAnnouncementEmail(Internship internship, Trainee trainee, String internshipUrl) {
+    public void sendHTMLInternshipAnnouncementEmail(Internship internship, Trainee trainee, String internshipUrl, String traineeUrl) {
         Context context = new Context();
         context.setVariable("internship", internship);
         context.setVariable("trainee", trainee);
         context.setVariable("internshipUrl", internshipUrl);
+        context.setVariable("traineeUrl", traineeUrl);
         String process = templateEngine.process("internshipAnnouncement.html", context);
         sendHTMLMessageUsingTemplate(trainee.getEmail(), "Exadel internship announcement", process);
     }
