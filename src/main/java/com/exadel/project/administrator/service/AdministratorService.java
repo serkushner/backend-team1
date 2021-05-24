@@ -4,6 +4,7 @@ import com.exadel.project.administrator.dto.AdministratorDto;
 import com.exadel.project.administrator.dto.ChangeRoleDto;
 import com.exadel.project.administrator.dto.CredentialsDto;
 import com.exadel.project.administrator.entity.Administrator;
+import com.exadel.project.administrator.entity.LoginLogoutResponse;
 import com.exadel.project.administrator.entity.Role;
 import com.exadel.project.administrator.mapper.AdministratorMapper;
 import com.exadel.project.administrator.repository.AdministratorRepository;
@@ -69,8 +70,11 @@ public class AdministratorService extends BaseService<Administrator, Administrat
         throw new UnsupportedOperationException();
     }
 
-    public String login(CredentialsDto dto) {
+    public LoginLogoutResponse login(CredentialsDto dto) {
         List<Role> roleList = new ArrayList<>(administratorRepository.findAdministratorByLogin(dto.getUsername()).getRoles());
+        List<String> roles =  roleList
+                .stream().map(roleName -> roleName.toString())
+                .collect(Collectors.toList());
         List<GrantedAuthority> authorities =  roleList
                 .stream().map(roleName -> "ROLE_" + roleName)
                 .map(SimpleGrantedAuthority::new)
@@ -82,14 +86,14 @@ public class AdministratorService extends BaseService<Administrator, Administrat
             SecurityContext securityContext = SecurityContextHolder.getContext();
             securityContext.setAuthentication(authentication);
             System.out.println(SecurityContextHolder.getContext().getAuthentication().getAuthorities());
-            return "login success";
+            return new LoginLogoutResponse("success login", roles);
 
         } catch (BadCredentialsException ex) {
             throw new EntityNotFoundException();
         }
     }
 
-    public String logout() {
+    public LoginLogoutResponse logout() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
             new SecurityContextLogoutHandler().logout(
@@ -97,7 +101,7 @@ public class AdministratorService extends BaseService<Administrator, Administrat
                     httpServletResponse,
                     authentication);
         }
-        return "logout success";
+        return new LoginLogoutResponse("logout success");
     }
 
     public List<AdministratorDto> findBySpecification(String search, String sortFields) {
