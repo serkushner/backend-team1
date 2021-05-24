@@ -2,7 +2,9 @@ package com.exadel.project.administrator.service;
 
 import com.exadel.project.administrator.dto.AdministratorDto;
 import com.exadel.project.administrator.dto.ChangeRoleDto;
+import com.exadel.project.administrator.dto.CredentialsDto;
 import com.exadel.project.administrator.entity.Administrator;
+import com.exadel.project.administrator.entity.Role;
 import com.exadel.project.administrator.mapper.AdministratorMapper;
 import com.exadel.project.administrator.repository.AdministratorRepository;
 import com.exadel.project.administrator.repository.RoleRepository;
@@ -16,10 +18,24 @@ import com.exadel.project.trainee.entity.Trainee;
 import com.exadel.project.trainee.repository.TraineeRepository;
 import com.exadel.project.trainee.service.TraineeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -36,6 +52,13 @@ public class AdministratorService extends BaseService<Administrator, Administrat
     private final RoleRepository roleRepository;
     private final TraineeService traineeService;
 
+    @Autowired
+    AuthenticationManager authenticationManager;
+    @Autowired
+    private HttpServletRequest httpServletRequest;
+    @Autowired
+    private HttpServletResponse httpServletResponse;
+
     {
         defaultSortingField = "surname";
         defaultSortingDirection = "asc";
@@ -44,6 +67,37 @@ public class AdministratorService extends BaseService<Administrator, Administrat
     @Override
     public RsqlSpecification getRsqlSpecification() {
         throw new UnsupportedOperationException();
+    }
+
+    public String login(CredentialsDto dto) {
+        List<Role> roleList = new ArrayList<>(administratorRepository.findAdministratorByLogin(dto.getUsername()).getRoles());
+        List<GrantedAuthority> authorities =  roleList
+                .stream().map(roleName -> "ROLE_" + roleName)
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+        UsernamePasswordAuthenticationToken authenticationTokenRequest = new
+                UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword(), authorities);
+        try {
+            Authentication authentication = this.authenticationManager.authenticate(authenticationTokenRequest);
+            SecurityContext securityContext = SecurityContextHolder.getContext();
+            securityContext.setAuthentication(authentication);
+            System.out.println(SecurityContextHolder.getContext().getAuthentication().getAuthorities());
+            return "login success";
+
+        } catch (BadCredentialsException ex) {
+            throw new EntityNotFoundException();
+        }
+    }
+
+    public String logout() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            new SecurityContextLogoutHandler().logout(
+                    httpServletRequest,
+                    httpServletResponse,
+                    authentication);
+        }
+        return "logout success";
     }
 
     public List<AdministratorDto> findBySpecification(String search, String sortFields) {

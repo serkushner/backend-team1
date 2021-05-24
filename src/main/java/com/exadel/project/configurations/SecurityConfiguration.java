@@ -12,13 +12,17 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.sql.DataSource;
+import java.util.Arrays;
 
 @Configuration
-@EnableGlobalMethodSecurity(securedEnabled = true)
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
@@ -34,28 +38,41 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().httpBasic().and().authorizeRequests().antMatchers("/internship/**", "/signin/**", "/email/**", "interview/token/**", "/")
+        http.cors().configurationSource(corsConfigurationSource()).and().httpBasic().and().authorizeRequests().antMatchers("/internship/**", "/signin/**", "/login", "/email/**", "interview/token/**", "/")
                 .permitAll().and()//.formLogin().loginPage("/signin").permitAll().and()
                 .authorizeRequests()
                 .anyRequest()
                 .authenticated()
-                .and()
+                /*.and()
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/internship")
                 .deleteCookies("JSESSIONID")
                 .clearAuthentication(true)
                 .invalidateHttpSession(true)
-                .permitAll()
+                .permitAll()*/
                 .and()
                 .csrf().disable();
     }
 
-    @Override
+    /*@Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:4200")
                 .allowedMethods("*");
+    }*/
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200",
+                "http://front-internship.s3-website.eu-central-1.amazonaws.com"));
+        configuration.setAllowedMethods(Arrays.asList("*"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
     @Autowired
@@ -66,7 +83,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
                 .passwordEncoder(new BCryptPasswordEncoder());
     }
 
-    @Bean
+    @Bean("authenticationManager")
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
