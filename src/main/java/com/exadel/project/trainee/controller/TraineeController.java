@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.util.List;
@@ -66,9 +67,9 @@ public class TraineeController {
     }
 
     @PostMapping("unsubscribe/{encryptedId}")
-    public ResponseEntity<String> unsubscribeTrainee(@PathVariable String encryptedId){
+    public ModelAndView unsubscribeTrainee(@PathVariable String encryptedId){
         traineeService.unsubscribeTrainee(encryptedId);
-        return ResponseEntity.ok("thanks for being with us");
+        return new ModelAndView("unsubscribe");
     }
 
     @PostMapping("notify")
