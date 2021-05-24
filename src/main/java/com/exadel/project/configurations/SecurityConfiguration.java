@@ -34,8 +34,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.httpBasic().and().authorizeRequests().antMatchers("/internship/**", "/signin/**", "/email/**", "/")
-                .permitAll().and().formLogin().loginPage("/signin").permitAll().and()
+        http.cors().and().httpBasic().and().authorizeRequests().antMatchers("/internship/**", "/signin/**", "/email/**", "interview/token/**", "/")
+                .permitAll().and()//.formLogin().loginPage("/signin").permitAll().and()
                 .authorizeRequests()
                 .anyRequest()
                 .authenticated()
