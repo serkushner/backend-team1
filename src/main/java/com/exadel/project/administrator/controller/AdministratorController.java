@@ -6,7 +6,7 @@ import com.exadel.project.administrator.service.AdministratorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,7 +31,7 @@ public class AdministratorController {
         return ResponseEntity.ok(administratorService.getById(id));
     }
 
-    @Secured("ROLE_SUPERADMIN")
+    @PreAuthorize("hasAuthority('SUPERADMIN')")
     @DeleteMapping(value = ID)
     public ResponseEntity<Void> deleteAdmin(@PathVariable Long id) {
         administratorService.deleteAdministratorById(id);
@@ -48,7 +48,7 @@ public class AdministratorController {
         return ResponseEntity.ok(administratorService.updateAdministrator(id, dto));
     }
 
-    @Secured("ROLE_SUPERADMIN")
+    @PreAuthorize("hasAuthority('SUPERADMIN')")
     @PutMapping(value ="/role" + ID)
     public ResponseEntity<AdministratorDto> changeAdministratorRole(@PathVariable Long id, @RequestBody ChangeRoleDto role) {
         return ResponseEntity.ok(administratorService.changeAdministratorRole(id, role));

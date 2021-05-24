@@ -22,4 +22,9 @@ public class Role {
     @ManyToMany(mappedBy = "roles")
     private List<Administrator> administratorList = new ArrayList<>();
 
+    @Override
+    public String toString() {
+        return roleName;
+    }
+
 }
