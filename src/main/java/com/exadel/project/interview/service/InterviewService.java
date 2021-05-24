@@ -72,9 +72,11 @@ public class InterviewService extends BaseService<Interview, InterviewRepository
     @Transactional
     public void changeTraineeStatusAfterAddInterview(Interview interview){
         AdditionalInfo additionalInfo = additionalInfoRepository.findAdditionalInfoByInternshipAndTrainee(interview.getInternship(), interview.getTrainee());
-        TraineeStatus traineeStatus = TraineeStatus.getNextStatus(additionalInfo.getTraineeStatus(), true);
-        additionalInfo.setTraineeStatus(traineeStatus);
-        additionalInfoRepository.save(additionalInfo);
+        if (additionalInfo.getTraineeStatus() == TraineeStatus.REGISTERED || additionalInfo.getTraineeStatus() == TraineeStatus.RECRUITER_INTERVIEW_PASSED){
+            TraineeStatus traineeStatus = TraineeStatus.getNextStatus(additionalInfo.getTraineeStatus(), true);
+            additionalInfo.setTraineeStatus(traineeStatus);
+            additionalInfoRepository.save(additionalInfo);
+        }
     }
 
     public InterviewDTO getInterviewById(Long id) throws EntityNotFoundException {
