@@ -14,6 +14,7 @@ import com.exadel.project.interview.mapper.InterviewFormMapper;
 import com.exadel.project.interview.mapper.InterviewMapper;
 import com.exadel.project.interview.repository.InterviewRepository;
 import com.exadel.project.interviewer.entity.Interviewer;
+import com.exadel.project.interviewer.entity.InterviewerType;
 import com.exadel.project.interviewer.service.InterviewerService;
 import com.exadel.project.trainee.entity.AdditionalInfo;
 import com.exadel.project.trainee.entity.EnglishLevel;
@@ -28,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -55,11 +57,22 @@ public class InterviewService extends BaseService<Interview, InterviewRepository
 
     @Transactional
     public InterviewAppointmentDTO addInterview(InterviewAppointmentDTO interviewAppointmentDTO) throws EntityAlreadyExistsException {
-        Interview interview = new Interview();
-        interview.setInternship(internshipService.getEntityById(interviewAppointmentDTO.getInternshipId()));
-        interview.setTrainee(traineeService.getEntityById(interviewAppointmentDTO.getTraineeId()));
-        interview.setInterviewTime(interviewTimeService.getEntityById(interviewAppointmentDTO.getInterviewTimeId()));
+        List<Interview> interviews = interviewRepository.findAllByTraineeIdAndInternshipId(interviewAppointmentDTO.getTraineeId(), interviewAppointmentDTO.getInternshipId());
         Interviewer interviewer = interviewerService.getEntityById(interviewAppointmentDTO.getInterviewerId());
+        InterviewerType interviewerType = interviewer.getType();
+        Optional<Interview> interviewOptional = interviews.stream().filter(interview -> interview.getInterviewer().getType() == interviewerType).findAny();
+        Interview interview;
+        if (interviewOptional.isPresent()){
+            interview = interviewOptional.get();
+            Interviewer oldInterviewer = interview.getInterviewer();
+            oldInterviewer.getInterviewTimes().add(interview.getInterviewTime());
+        }else {
+            interview = new Interview();
+            interview.setInternship(internshipService.getEntityById(interviewAppointmentDTO.getInternshipId()));
+            interview.setTrainee(traineeService.getEntityById(interviewAppointmentDTO.getTraineeId()));
+        }
+
+        interview.setInterviewTime(interviewTimeService.getEntityById(interviewAppointmentDTO.getInterviewTimeId()));
         interviewerService.deleteInterview(interviewer, interviewTimeService.getEntityById(interviewAppointmentDTO.getInterviewTimeId()));
         interview.setInterviewer(interviewer);
         interviewRepository.save(interview);
