@@ -34,6 +34,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -74,12 +75,14 @@ public class InterviewerService extends BaseService<Interviewer, InterviewerRepo
     }
 
     public List<InterviewTimeAppointmentDTO> getAllAvailable(String search) {
+        LocalDateTime now = LocalDateTime.now();
         Sort sort = getSort(defaultSortingField);
         List<Interviewer> interviewers = findBySpecifications(search, sort);
         Map<InterviewTime, List<Interviewer>> interviewTimes = new TreeMap<>(Comparator.comparing(InterviewTime::getStartDate));
 
         interviewers
                 .forEach(interviewer -> interviewer.getInterviewTimes()
+                        .stream().filter(interviewTime -> interviewTime.getStartDate().isAfter(now))
                         .forEach(interviewTime -> {
                             if (interviewTimes.containsKey(interviewTime)){
                                 interviewTimes.get(interviewTime).add(interviewer);
