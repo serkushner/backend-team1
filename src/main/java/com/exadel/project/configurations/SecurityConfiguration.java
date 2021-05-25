@@ -68,7 +68,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200",
                 "http://front-internship.s3-website.eu-central-1.amazonaws.com"));
         configuration.setAllowedMethods(Arrays.asList("*"));
-        //configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
