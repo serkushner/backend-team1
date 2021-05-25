@@ -37,15 +37,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
     }*/
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.cors().configurationSource(corsConfigurationSource()).and().httpBasic().and().authorizeRequests().antMatchers("/internship/**", "/signin/**", "/login", "/email/**", "interview/token/**", "/")
+    protected void configure(HttpSecurity http) throws Exception {//.cors().configurationSource(corsConfigurationSource())
+        http.httpBasic().and().cors().configurationSource(corsConfigurationSource()).and().authorizeRequests().antMatchers("/internship/**", "/signin/**", "/login", "/email/**", "interview/token/**", "/")
                 .permitAll().and()//.formLogin().loginPage("/signin").permitAll().and()
                 .authorizeRequests()
                 .anyRequest()
                 .authenticated()
                 /*.and()
                 .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutRequestMatcher(new AntPathRequestMatcher("/authout"))
                 .logoutSuccessUrl("/internship")
                 .deleteCookies("JSESSIONID")
                 .clearAuthentication(true)
@@ -55,12 +55,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
                 .csrf().disable();
     }
 
-    /*@Override
+    @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:4200")
                 .allowedMethods("*");
-    }*/
+    }
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
@@ -68,7 +68,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200",
                 "http://front-internship.s3-website.eu-central-1.amazonaws.com"));
         configuration.setAllowedMethods(Arrays.asList("*"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
+        //configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
